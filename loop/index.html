@@ -106,9 +106,6 @@
   .dot.on{background:var(--pass);animation:p 1.1s infinite}
   @keyframes p{50%{opacity:.25}}
   .hint{font-size:11.5px;color:var(--dim);width:100%;margin-top:-2px}
-  pre.console{background:#0a0d12;border:1px solid var(--line);border-radius:8px;
-      padding:12px 14px;font:11.5px/1.5 var(--mono);color:#b9c4cf;
-      max-height:260px;overflow:auto;margin:0 0 20px;white-space:pre-wrap}
 
   .decide{border:1px solid var(--line);border-radius:10px;
           background:var(--panel);margin-bottom:24px;overflow:hidden}
@@ -259,7 +256,6 @@
     </div>
   </div>
 
-  <pre class="console" id="console" hidden></pre>
   <div id="banner"></div>
   <div class="summary" id="summary"></div>
   <div id="rounds"></div>
@@ -797,14 +793,6 @@ async function poll(){
     `<span class="dot ${s.running ? "on" : ""}"></span>` +
     esc(s.running ? "running — " + s.label : "idle");
 
-  const con = $("console");
-  if (s.console) {
-    con.hidden = false;
-    const atBottom =
-      con.scrollTop + con.clientHeight >= con.scrollHeight - 30;
-    con.textContent = s.console;
-    if (atBottom) con.scrollTop = con.scrollHeight;
-  }
   if (wasRunning && !s.running) tick();   // final refresh when a run ends
   wasRunning = s.running;
 }
