@@ -42,9 +42,11 @@ fi
 echo "[1/2] design loop  -> http://localhost:8000  (proxied at /design)"
 ( cd loop && "$PY_BIN" serve.py ) &
 
-if [ ! -d bioreact-app/node_modules ]; then
+if [ ! -x bioreact-app/node_modules/.bin/tsx ]; then
   echo "      installing bioreact-app dependencies (first run only)..."
-  ( cd bioreact-app && npm install --silent )
+  if ! ( cd bioreact-app && npm install --no-audit --no-fund ); then
+    echo "npm install failed - see the error above"; exit 1
+  fi
 fi
 
 echo "[2/2] bioREACT app -> http://localhost:3000   <-- OPEN THIS"
