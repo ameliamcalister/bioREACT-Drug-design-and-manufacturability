@@ -16,6 +16,12 @@ Designer agent ──candidates──▶ Synthesisability critic ──▶ Proce
 That feedback arrow is the point. Most systems are a straight line:
 design → check → done. This one is a circle.
 
+<img width="1432" height="780" alt="Screenshot 2026-11-08 at 15 54 41" src="https://github.com/user-attachments/assets/737d860f-bf7d-4fbf-8752-863246874fc8" />
+
+<img width="1432" height="780" alt="Screenshot 2026-11-08 at 15 55 12" src="https://github.com/user-attachments/assets/ea30b2e2-87a9-4760-8076-ad6265706107" />
+<img width="1432" height="780" alt="Screenshot 2026-11-08 at 15 56 28" src="https://github.com/user-attachments/assets/13717763-e85f-4c67-8c7d-2401044f1388" />
+<img width="1432" height="780" alt="Screenshot 2026-11-08 at 15 56 45" src="https://github.com/user-attachments/assets/b8a7a297-35fe-447b-98dc-783702e6212d" />
+
 ---
 
 ## Quickstart
