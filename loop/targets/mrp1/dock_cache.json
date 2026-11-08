@@ -178,5 +178,20 @@
     "affinity": -10.41,
     "pose_path": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/mrp1/poses/anilide.pdbqt",
     "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(cc2)-c2ccccc2)cc1": {
+    "affinity": -11.13,
+    "pose_path": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/mrp1/poses/biphenyl.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(CNC(=O)c2ccc(F)cc2)cc1": {
+    "affinity": -11.48,
+    "pose_path": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/mrp1/poses/fbenzamide.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(NC(=O)Cc2ccc(Cl)cc2)cc1": {
+    "affinity": -10.85,
+    "pose_path": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/mrp1/poses/anilide.pdbqt",
+    "source": "vina"
   }
 }

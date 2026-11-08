@@ -299,7 +299,7 @@ export default function App() {
   useEffect(() => {
     const isOtrDeficit = physicsResult.otrMmolPerLHour < physicsResult.ourMmolPerLHour;
     const deficit = Math.max(0, physicsResult.ourMmolPerLHour - physicsResult.otrMmolPerLHour);
-    const warningMsg = `POST-SIGN-OFF AGENT VALIDATION WARNING: Oxygen balance remains unclosed despite human approval (OTR = ${physicsResult.otrMmolPerLHour.toFixed(1)} mmol/L/h < OUR = ${physicsResult.ourMmolPerLHour.toFixed(1)} mmol/L/h; deficit = ${deficit.toFixed(1)} mmol/L/h at ${strParams.workingVolumeL} L).`;
+    const warningMsg = `WARNING \u2014 APPROVED ANYWAY: a person signed this off, but the tank still cannot supply enough oxygen (${physicsResult.otrMmolPerLHour.toFixed(1)} supplied vs ${physicsResult.ourMmolPerLHour.toFixed(1)} needed, short by ${deficit.toFixed(1)}, at ${strParams.workingVolumeL} L).`;
 
     setSafetyGates((prev) => {
       let changed = false;
@@ -876,7 +876,7 @@ export default function App() {
 
     if (status === 'Approved' && isBioreactorGate && isScaleUpInfeasible) {
       const blockedReason = isOtrDeficit
-        ? `APPROVAL BLOCKED BY OXYGEN-TRANSFER INTERLOCK: Operating point at ${strParams.workingVolumeL} L is physically infeasible (OTR = ${physicsResult.otrMmolPerLHour.toFixed(1)} mmol/L/h < OUR = ${physicsResult.ourMmolPerLHour.toFixed(1)} mmol/L/h; deficit = ${deficit.toFixed(1)} mmol/L/h). Resolve the oxygen limitation in Scale-Up Physics before approving.`
+        ? `BLOCKED \u2014 NOT ENOUGH OXYGEN: at ${strParams.workingVolumeL} L the tank can supply ${physicsResult.otrMmolPerLHour.toFixed(1)} units of oxygen but the cells need ${physicsResult.ourMmolPerLHour.toFixed(1)} \u2014 short by ${deficit.toFixed(1)}. The cells would suffocate. Fix the oxygen supply before approving.`
         : `APPROVAL BLOCKED BY HYDRODYNAMIC INTERLOCK: Operating point at ${strParams.workingVolumeL} L violates physical constraints (${physicsResult.limitingFactors.join('; ')}).`;
 
       setSafetyGates((prev) =>
@@ -902,7 +902,7 @@ export default function App() {
 
     const approvedWhileDeficit = status === 'Approved' && isOtrDeficit;
     const validationWarning = approvedWhileDeficit
-      ? `POST-SIGN-OFF AGENT VALIDATION WARNING: Oxygen balance remains unclosed despite human approval (OTR = ${physicsResult.otrMmolPerLHour.toFixed(1)} mmol/L/h < OUR = ${physicsResult.ourMmolPerLHour.toFixed(1)} mmol/L/h; deficit = ${deficit.toFixed(1)} mmol/L/h at ${strParams.workingVolumeL} L).`
+      ? `WARNING \u2014 APPROVED ANYWAY: a person signed this off, but the tank still cannot supply enough oxygen (${physicsResult.otrMmolPerLHour.toFixed(1)} supplied vs ${physicsResult.ourMmolPerLHour.toFixed(1)} needed, short by ${deficit.toFixed(1)}, at ${strParams.workingVolumeL} L).`
       : undefined;
 
     setSafetyGates((prev) =>
@@ -932,7 +932,7 @@ export default function App() {
     const deficit = Math.max(0, physicsResult.ourMmolPerLHour - physicsResult.otrMmolPerLHour);
 
     if (isScaleUpInfeasible) {
-      const blockedWarning = `APPROVAL BLOCKED BY OXYGEN/PHYSICS INTERLOCK: Cannot approve Gates 02–05 while 500 L operating point is infeasible (OTR = ${physicsResult.otrMmolPerLHour.toFixed(1)} mmol/L/h < OUR = ${physicsResult.ourMmolPerLHour.toFixed(1)} mmol/L/h; deficit = ${deficit.toFixed(1)} mmol/L/h).`;
+      const blockedWarning = `BLOCKED — NOT ENOUGH OXYGEN: cannot approve steps 2–5 while a 500 L tank supplies only ${physicsResult.otrMmolPerLHour.toFixed(1)} against the ${physicsResult.ourMmolPerLHour.toFixed(1)} the cells need (short by ${deficit.toFixed(1)}).`;
       setSafetyGates((prev) =>
         prev.map((g) =>
           g.id === 'gate1_candidate'
@@ -1352,7 +1352,7 @@ export default function App() {
                 </span>
                 <span className="text-slate-300">·</span>
                 <span>
-                  500 L Oxygen:{' '}
+                  Oxygen in a 500 L tank:{' '}
                   <strong
                     className={
                       physicsResult.otrMmolPerLHour >= physicsResult.ourMmolPerLHour
@@ -1360,8 +1360,8 @@ export default function App() {
                         : 'text-rose-700'
                     }
                   >
-                    OTR {physicsResult.otrMmolPerLHour.toFixed(1)} vs OUR{' '}
-                    {physicsResult.ourMmolPerLHour.toFixed(1)} mmol/L/h
+                    can supply {physicsResult.otrMmolPerLHour.toFixed(1)}, cells need{' '}
+                    {physicsResult.ourMmolPerLHour.toFixed(1)}
                   </strong>
                 </span>
               </div>
@@ -1373,45 +1373,45 @@ export default function App() {
                 [
                   {
                     id: 'workflow_safety',
-                    step: 'SHARED GOVERNANCE',
-                    title: '1. Workflow & Safety',
-                    sub: `${approvedGatesCount}/5 Gates Approved`,
+                    step: 'APPROVALS',
+                    title: '1. Who signs off',
+                    sub: `${approvedGatesCount} of 5 approvals given`,
                   },
                   {
                     id: 'dissertation_3d',
-                    step: 'ROUTE A · MOLECULAR',
-                    title: '2. Molecular Design & Feasibility',
-                    sub: 'Three.js 3D · Docking & Critics',
+                    step: 'THE MOLECULE',
+                    title: '2. Design the molecule',
+                    sub: 'See it in 3D · check it can be made',
                   },
                   {
                     id: 'streams',
-                    step: 'ROUTE B · EVIDENCE',
-                    title: '3. Evidence & Candidate Profile',
-                    sub: `PRISMA (${prisma.recordsIncluded}) · Provenance Audit`,
+                    step: 'EVIDENCE',
+                    title: '3. Check the evidence',
+                    sub: `${prisma.recordsIncluded} papers reviewed · every number traced to its source`,
                   },
                   {
                     id: 'screening',
-                    step: 'ROUTE GATE & HOSTS',
-                    title: '4. Manufacturing Route & Reactor Screening',
+                    step: 'HOW TO MAKE IT',
+                    title: '4. Pick how to make it',
                     sub: `${isReactorSignedOff ? 'Approved' : 'Provisional'}: ${selectedReactor.shortName}`,
                   },
                   {
                     id: 'mass_balance',
-                    step: 'ANIMATED BIOREACTOR · 500 L',
-                    title: '5. Engineering Feasibility',
-                    sub: `Interactive Cutaway · OTR/OUR · Shear`,
+                    step: 'INSIDE THE TANK · 500 L',
+                    title: '5. Will the tank cope?',
+                    sub: `Look inside · oxygen supply vs demand · stirring force`,
                   },
                   {
                     id: 'optimiser',
-                    step: 'NEXT EXPERIMENTS',
-                    title: '6. Process Optimisation',
-                    sub: `Constrained BO & Ranked Recipes`,
+                    step: 'WHAT TO TRY NEXT',
+                    title: '6. What to try next',
+                    sub: `Best settings to test, ranked`,
                   },
                   {
                     id: 'brief',
-                    step: 'SHARED DOSSIER',
-                    title: '7. Results & Recommendations',
-                    sub: `CMC Brief & Export (${formatCogsHeadline(downstreamCogs.cogsPerGramUsd)})`,
+                    step: 'HAND-OVER',
+                    title: '7. The write-up',
+                    sub: `Summary to hand over (${formatCogsHeadline(downstreamCogs.cogsPerGramUsd)})`,
                   },
                 ] as const
               ).map((tab) => {

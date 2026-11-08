@@ -648,7 +648,7 @@ export const INITIAL_SAFETY_GATES: HumanSafetyGate[] = [
     whatMustBeApproved:
       'Feasibility assumptions, OTR ≥ OUR oxygen balance closure at 500 L, separation of STR+ATF filter vs Hollow-Fibre culture cartridge, and single-reactor sign-off.',
     status: 'Changes Requested',
-    reviewerName: 'AUTOMATIC SAFETY INTERLOCK (Oxygen Deficit Detected)',
+    reviewerName: 'AUTOMATIC SAFETY STOP (not enough oxygen)',
     timestamp: 'Blocked — Awaiting Engineering Redesign',
     justification:
       'REJECTED BY AGENT: At 500 L with open-pipe sparging, OTR = 3.2 mmol/L/h < OUR = 13.9 mmol/L/h (Oxygen deficit = 10.7 mmol/L/h). Operating point cannot be approved until kLa / sparger / O₂ / VCD balance is resolved and reviewed.',
@@ -681,10 +681,10 @@ export const INITIAL_SAFETY_GATES: HumanSafetyGate[] = [
     whatMustBeApproved:
       'Whether the proposed next wet-lab condition (2.35 VVD, 48% DO, 33.5 °C) satisfies all modelled constraints (OTR ≥ OUR, τ ≤ τ_crit, t_m ≤ 60 s) and includes mandatory CQA assays.',
     status: 'Changes Requested',
-    reviewerName: 'AUTOMATIC SAFETY INTERLOCK (Oxygen Deficit Detected)',
+    reviewerName: 'AUTOMATIC SAFETY STOP (not enough oxygen)',
     timestamp: 'Blocked — Awaiting Engineering Redesign',
     justification:
-      'REJECTED BY AGENT: Present 500 L operating point fails oxygen balance (OTR 3.2 < OUR 13.9 mmol/L/h). Experimental testing cannot be recommended until a feasible redesign is verified and approved by a human engineer.',
+      'REJECTED: at 500 L the tank can only supply 3.2 units of oxygen but the cells need 13.9. Experimental testing cannot be recommended until a feasible redesign is verified and approved by a human engineer.',
     automaticRiskFlags: [
       'CQA & Hypoxia Risk: 10.7 mmol/L/h oxygen deficit causes severe dissolved oxygen collapse, lactate spike, and abnormal Fc glycosylation.',
     ],

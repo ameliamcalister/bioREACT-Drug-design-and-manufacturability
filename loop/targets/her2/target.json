@@ -1,0 +1,23 @@
+{
+  "name": "Her2",
+  "slug": "her2",
+  "description": "",
+  "receptor": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/her2/receptor.pdbqt",
+  "grid": {
+    "center_x": 160.907,
+    "size_x": 40.0,
+    "center_y": 1.652,
+    "size_y": 40.0,
+    "center_z": 27.201,
+    "size_z": 40.0
+  },
+  "grid_source": "whole receptor (blind docking \u2014 no reference ligand)",
+  "reference": {
+    "name": "reference ligand",
+    "smiles": null,
+    "affinity": null
+  },
+  "cache": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/her2/dock_cache.json",
+  "poses": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/her2/poses",
+  "receptor_atoms": 7475
+}
