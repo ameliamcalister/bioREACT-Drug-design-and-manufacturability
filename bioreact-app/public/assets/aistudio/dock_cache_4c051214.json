@@ -1,0 +1,167 @@
+{
+  "CC(C(C)c1ccc(NC2CCCCC2C(=O)CCSC(SCCc2ccc(F)c(S(=O(=O)O)c2C(=O)O)c2ccc3ccccc3c2/C=C/C2=CC=CC3=CC=CC4=C(C(=O)O)C=CC(=C23)C4)cc1": {
+    "affinity": -9.12,
+    "pose_path": null,
+    "source": "runs.db"
+  },
+  "CC(C)(C)c1ccc(NC2CCCCC2C(=O)CCSC(SCCc2ccc(F)c(S(=O)(=O)O)c2C(=O)O)c2ccc3ccccc3c2/C=C/C2=CC=CC3=CC=CC4=C(C(=O)O)C=CC(=C23)C4)cc1": {
+    "affinity": -9.12,
+    "pose_path": null,
+    "source": "runs.db"
+  },
+  "CC(C)(C)NC(=O)c1ccc(F)c(-c2c(F)cccc2F)n1": {
+    "affinity": -8.22,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/c4b103c479f5/c1_s1_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "CC(C)c1ccc(NC2CCCCC2)cc1": {
+    "affinity": -6.92,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/da1b2b746101/c1_s1_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "O=C(O)c1cc2ccc(F)cc2cc1SC(=S)CCNC1CCCCC1Nc1ccc(CC(C)C)cc1": {
+    "affinity": -9.73,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/da1b2b746101/c1_s2_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1": {
+    "affinity": -12.32,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/25e70dc6d963/c1_s1_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "CC(c1ccc(NC2CCCCC2C(=O)CCCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)C1CC1": {
+    "affinity": -9.54,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/25e70dc6d963/c1_s2_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)N4CCOCC4)C(C(=O)O)=C3)cc1)C": {
+    "affinity": -9.66,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/25e70dc6d963/c1_s3_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1": {
+    "affinity": -11.2,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/facd93b1b029/c1_s1_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1": {
+    "affinity": -12.9,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/facd93b1b029/c1_s2_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "O=C1NC(=O)c2[nH]c(-c3cccc(CCC(=O)NCc4ccc(C(C)[C@@H]5CCCC[C@H]5NC(C)(C)C)cc4)c3)cc21": {
+    "affinity": -10.48,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/facd93b1b029/c1_s3_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "OC(=O)c1cc2ccccc2cc1": {
+    "affinity": -6.53,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/89ce2df14328/c1_s1_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "NC(=O)[C@@H]4CC[C@@H](C(F)(F)F)CC4": {
+    "affinity": -5.89,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/89ce2df14328/c1_s3_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "SCCC1=CC=C(F)C=C1": {
+    "affinity": -4.53,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/data/poses/89ce2df14328/c1_s4_docked.pdbqt",
+    "source": "runs.db"
+  },
+  "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1": {
+    "affinity": -9.78,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_1.pdbqt",
+    "source": "vina"
+  },
+  "C[C@H]1CC[C@@H]([C@H](C)[C@@H]1NC(=O)c1ccc(cc1)C(F)(F)F)[C@@H]1CC[C@H](O)CC1": {
+    "affinity": -9.61,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_2.pdbqt",
+    "source": "vina"
+  },
+  "O=C1NCCOCCOCCOCCNC(=O)C2(CC2)c2ccc(cc2)C1": {
+    "affinity": -9.23,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_3.pdbqt",
+    "source": "vina"
+  },
+  "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1": {
+    "affinity": -8.51,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_2.pdbqt",
+    "source": "vina"
+  },
+  "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F": {
+    "affinity": -9.32,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_3.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc2ccc(F)cc2cc1C(=O)NCCNc1ccc(Cc2ccc3ccccc3c2)cc1": {
+    "affinity": -10.74,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/A.pdbqt",
+    "source": "vina"
+  },
+  "O=C(O)c1cc2ccc(F)cc2cc1NC(=O)CCNc1ccc(CNC(=O)Cc2ccc(F)cc2)cc1": {
+    "affinity": -9.51,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/B.pdbqt",
+    "source": "vina"
+  },
+  "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N(Cc1ccccc1)c1ccncc1": {
+    "affinity": -9.94,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/C.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1ccccc1C(=O)NCCNc1ccc(Cc2ccc(F)cc2)cc1": {
+    "affinity": -9.84,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/A.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1": {
+    "affinity": -10.82,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/B.pdbqt",
+    "source": "vina"
+  },
+  "O=C(O)c1ccccc1SCCC(=O)Nc1ccc(Cc2ccc(F)cc2)cc1": {
+    "affinity": -9.47,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/C.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(Cl)cc2Cl)cc1": {
+    "affinity": -10.59,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/dcl.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(cc1)-c1ccc(cc1)C(=O)O": {
+    "affinity": -10.74,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/biaryl_acid.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(CCc2ccc(F)cc2)cc1": {
+    "affinity": -10.53,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/phenethyl.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(Cl)cc2)cc1": {
+    "affinity": -10.5,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/cl_benzyl.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1C(=O)O": {
+    "affinity": -10.44,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/acid.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc3ccccc3c2)cc1": {
+    "affinity": -11.63,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/c1.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(CNC(=O)c2ccccc2)cc1": {
+    "affinity": -11.29,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/c2.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(C(=O)c2ccc(Cl)cc2)cc1": {
+    "affinity": -10.62,
+    "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/c3.pdbqt",
+    "source": "vina"
+  }
+}

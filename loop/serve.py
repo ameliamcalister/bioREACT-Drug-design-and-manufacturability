@@ -351,6 +351,28 @@ class Handler(http.server.SimpleHTTPRequestHandler):
                 "label": JOB.label,
                 "console": "\n".join(JOB.lines[-200:]),
             })
+        if parsed.path == "/bioreact.json":
+            # Hand the current run to the bioREACT bioprocess app, in the
+            # ClosedLoopRunDataset shape it already declares. Built fresh so
+            # it always reflects the latest run rather than a copied figure.
+            try:
+                import bioreact_export
+                data = bioreact_export.build()
+            except SystemExit as e:
+                return self._json({"ok": False, "error": str(e)}, 404)
+            except Exception as e:
+                return self._json(
+                    {"ok": False, "error": f"{type(e).__name__}: {e}"}, 500)
+            body = json.dumps(data, indent=2, default=str).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Disposition",
+                             'attachment; filename="bioreact_handoff.json"')
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if parsed.path == "/targets":
             active = target.active_target()
             return self._json({

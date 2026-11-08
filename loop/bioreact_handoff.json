@@ -1,0 +1,1051 @@
+{
+  "id": "mrp1-live",
+  "name": "Closed-loop run exported from the design tool",
+  "modeLabel": "CACHE \u00b7 mock (scripted)",
+  "target": "MRP1",
+  "targetName": "ABCC1, a multidrug-resistance efflux transporter. Blocking it is intended to restore the activity of chemotherapy agents the transporter pumps out of tumour cells.",
+  "referenceLigand": "MK-571",
+  "referenceAffinity": -9.1,
+  "converged": true,
+  "total_rounds": 2,
+  "tool_calls_used": 7,
+  "docks_used": 3,
+  "elapsed_s": 2.6,
+  "rounds": [
+    {
+      "round": 1,
+      "agent_notes": "round 1 taken from the generative pool (best docking scores)",
+      "submitted_count": 3,
+      "pass_count": 0,
+      "flag_count": 0,
+      "fail_count": 3,
+      "candidates": [
+        {
+          "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+          "label": "",
+          "rationale": "generative pipeline output, ranked by docking score",
+          "dock_affinity": -12.9,
+          "dock_source": "AutoDock Vina",
+          "overall_verdict": "fail",
+          "sa_score": 4.26,
+          "stereocentres": 4,
+          "estimated_steps": 18,
+          "cost_band": "specialist",
+          "route_complexity": "specialist",
+          "mw": 682.3,
+          "logp": null,
+          "tpsa": null,
+          "rejections": [
+            {
+              "criterion": "estimated_steps",
+              "value": 18,
+              "threshold": 14,
+              "level": "fail",
+              "reason": "estimated 18-step linear sequence is too long to be practical",
+              "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+            },
+            {
+              "criterion": "sa_score",
+              "value": 4.26,
+              "threshold": 4.0,
+              "level": "flag",
+              "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+              "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+            },
+            {
+              "criterion": "stereocentres",
+              "value": 4,
+              "threshold": 2,
+              "level": "flag",
+              "reason": "4 stereocentres require asymmetric synthesis or resolution",
+              "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+            },
+            {
+              "criterion": "fused_ring_systems",
+              "value": 4,
+              "threshold": 3,
+              "level": "flag",
+              "reason": "4 fused ring systems imply a long linear sequence",
+              "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+            },
+            {
+              "criterion": "heavy_atoms",
+              "value": 48,
+              "threshold": 40,
+              "level": "flag",
+              "reason": "48 heavy atoms, which implies a high total step count",
+              "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+            },
+            {
+              "criterion": "rotatable_bonds",
+              "value": 11,
+              "threshold": 10,
+              "level": "flag",
+              "reason": "11 rotatable bonds, which complicates purification",
+              "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+            }
+          ],
+          "manufacturing": {
+            "route": "chemical_synthesis",
+            "route_label": "Route A \u2014 organic chemical synthesis",
+            "cho_bioreactor_eligible": false,
+            "route_reason": "682 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+          },
+          "assessment": {
+            "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+            "overall_verdict": "fail",
+            "synthesisability": {
+              "verdict": "fail",
+              "sa_score": 4.26,
+              "stereocentres": 4,
+              "unassigned_stereo": null,
+              "fused_ring_systems": 4,
+              "max_ring_size": null,
+              "spiro_atoms": 0,
+              "bridgehead_atoms": null,
+              "rejections": [
+                {
+                  "criterion": "sa_score",
+                  "value": 4.26,
+                  "threshold": 4.0,
+                  "level": "flag",
+                  "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+                  "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+                },
+                {
+                  "criterion": "stereocentres",
+                  "value": 4,
+                  "threshold": 2,
+                  "level": "flag",
+                  "reason": "4 stereocentres require asymmetric synthesis or resolution",
+                  "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+                },
+                {
+                  "criterion": "fused_ring_systems",
+                  "value": 4,
+                  "threshold": 3,
+                  "level": "flag",
+                  "reason": "4 fused ring systems imply a long linear sequence",
+                  "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+                },
+                {
+                  "criterion": "estimated_steps",
+                  "value": 18,
+                  "threshold": 14,
+                  "level": "fail",
+                  "reason": "estimated 18-step linear sequence is too long to be practical",
+                  "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+                }
+              ]
+            },
+            "process_chemistry": {
+              "verdict": "flag",
+              "mw": 682.3,
+              "logp": null,
+              "tpsa": null,
+              "heavy_atoms": 48,
+              "rotatable_bonds": 11,
+              "aromatic_rings": null,
+              "fsp3": null,
+              "halogen_density": 0.021,
+              "estimated_steps": 18,
+              "route_complexity": "specialist",
+              "alerts": [],
+              "rejections": [
+                {
+                  "criterion": "heavy_atoms",
+                  "value": 48,
+                  "threshold": 40,
+                  "level": "flag",
+                  "reason": "48 heavy atoms, which implies a high total step count",
+                  "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+                },
+                {
+                  "criterion": "rotatable_bonds",
+                  "value": 11,
+                  "threshold": 10,
+                  "level": "flag",
+                  "reason": "11 rotatable bonds, which complicates purification",
+                  "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+                },
+                {
+                  "criterion": "stereocentres",
+                  "value": 4,
+                  "threshold": 2,
+                  "level": "flag",
+                  "reason": "4 stereocentres require asymmetric synthesis or resolution",
+                  "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+                },
+                {
+                  "criterion": "sa_score",
+                  "value": 4.26,
+                  "threshold": 4.0,
+                  "level": "flag",
+                  "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+                  "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+                }
+              ]
+            },
+            "all_rejections": [
+              {
+                "criterion": "estimated_steps",
+                "value": 18,
+                "threshold": 14,
+                "level": "fail",
+                "reason": "estimated 18-step linear sequence is too long to be practical",
+                "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+              },
+              {
+                "criterion": "sa_score",
+                "value": 4.26,
+                "threshold": 4.0,
+                "level": "flag",
+                "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+                "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+              },
+              {
+                "criterion": "stereocentres",
+                "value": 4,
+                "threshold": 2,
+                "level": "flag",
+                "reason": "4 stereocentres require asymmetric synthesis or resolution",
+                "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+              },
+              {
+                "criterion": "fused_ring_systems",
+                "value": 4,
+                "threshold": 3,
+                "level": "flag",
+                "reason": "4 fused ring systems imply a long linear sequence",
+                "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+              },
+              {
+                "criterion": "heavy_atoms",
+                "value": 48,
+                "threshold": 40,
+                "level": "flag",
+                "reason": "48 heavy atoms, which implies a high total step count",
+                "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+              },
+              {
+                "criterion": "rotatable_bonds",
+                "value": 11,
+                "threshold": 10,
+                "level": "flag",
+                "reason": "11 rotatable bonds, which complicates purification",
+                "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+              }
+            ],
+            "summary": "Not practically makeable. SA 4.26, ~18 steps. Blocked on: estimated_steps."
+          }
+        },
+        {
+          "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+          "label": "",
+          "rationale": "generative pipeline output, ranked by docking score",
+          "dock_affinity": -12.32,
+          "dock_source": "AutoDock Vina",
+          "overall_verdict": "fail",
+          "sa_score": 4.09,
+          "stereocentres": 3,
+          "estimated_steps": 16,
+          "cost_band": "specialist",
+          "route_complexity": "specialist",
+          "mw": 700.2,
+          "logp": null,
+          "tpsa": null,
+          "rejections": [
+            {
+              "criterion": "estimated_steps",
+              "value": 16,
+              "threshold": 14,
+              "level": "fail",
+              "reason": "estimated 16-step linear sequence is too long to be practical",
+              "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+            },
+            {
+              "criterion": "sa_score",
+              "value": 4.09,
+              "threshold": 4.0,
+              "level": "flag",
+              "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+              "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+            },
+            {
+              "criterion": "stereocentres",
+              "value": 3,
+              "threshold": 2,
+              "level": "flag",
+              "reason": "3 stereocentres require asymmetric synthesis or resolution",
+              "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+            },
+            {
+              "criterion": "heavy_atoms",
+              "value": 49,
+              "threshold": 40,
+              "level": "flag",
+              "reason": "49 heavy atoms, which implies a high total step count",
+              "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+            },
+            {
+              "criterion": "rotatable_bonds",
+              "value": 12,
+              "threshold": 10,
+              "level": "flag",
+              "reason": "12 rotatable bonds, which complicates purification",
+              "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+            }
+          ],
+          "manufacturing": {
+            "route": "chemical_synthesis",
+            "route_label": "Route A \u2014 organic chemical synthesis",
+            "cho_bioreactor_eligible": false,
+            "route_reason": "700 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+          },
+          "assessment": {
+            "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+            "overall_verdict": "fail",
+            "synthesisability": {
+              "verdict": "fail",
+              "sa_score": 4.09,
+              "stereocentres": 3,
+              "unassigned_stereo": null,
+              "fused_ring_systems": 3,
+              "max_ring_size": null,
+              "spiro_atoms": 0,
+              "bridgehead_atoms": null,
+              "rejections": [
+                {
+                  "criterion": "sa_score",
+                  "value": 4.09,
+                  "threshold": 4.0,
+                  "level": "flag",
+                  "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+                  "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+                },
+                {
+                  "criterion": "stereocentres",
+                  "value": 3,
+                  "threshold": 2,
+                  "level": "flag",
+                  "reason": "3 stereocentres require asymmetric synthesis or resolution",
+                  "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+                },
+                {
+                  "criterion": "estimated_steps",
+                  "value": 16,
+                  "threshold": 14,
+                  "level": "fail",
+                  "reason": "estimated 16-step linear sequence is too long to be practical",
+                  "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+                }
+              ]
+            },
+            "process_chemistry": {
+              "verdict": "flag",
+              "mw": 700.2,
+              "logp": null,
+              "tpsa": null,
+              "heavy_atoms": 49,
+              "rotatable_bonds": 12,
+              "aromatic_rings": null,
+              "fsp3": null,
+              "halogen_density": 0.02,
+              "estimated_steps": 16,
+              "route_complexity": "specialist",
+              "alerts": [],
+              "rejections": [
+                {
+                  "criterion": "heavy_atoms",
+                  "value": 49,
+                  "threshold": 40,
+                  "level": "flag",
+                  "reason": "49 heavy atoms, which implies a high total step count",
+                  "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+                },
+                {
+                  "criterion": "rotatable_bonds",
+                  "value": 12,
+                  "threshold": 10,
+                  "level": "flag",
+                  "reason": "12 rotatable bonds, which complicates purification",
+                  "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+                },
+                {
+                  "criterion": "stereocentres",
+                  "value": 3,
+                  "threshold": 2,
+                  "level": "flag",
+                  "reason": "3 stereocentres require asymmetric synthesis or resolution",
+                  "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+                },
+                {
+                  "criterion": "sa_score",
+                  "value": 4.09,
+                  "threshold": 4.0,
+                  "level": "flag",
+                  "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+                  "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+                }
+              ]
+            },
+            "all_rejections": [
+              {
+                "criterion": "estimated_steps",
+                "value": 16,
+                "threshold": 14,
+                "level": "fail",
+                "reason": "estimated 16-step linear sequence is too long to be practical",
+                "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+              },
+              {
+                "criterion": "sa_score",
+                "value": 4.09,
+                "threshold": 4.0,
+                "level": "flag",
+                "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+                "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+              },
+              {
+                "criterion": "stereocentres",
+                "value": 3,
+                "threshold": 2,
+                "level": "flag",
+                "reason": "3 stereocentres require asymmetric synthesis or resolution",
+                "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+              },
+              {
+                "criterion": "heavy_atoms",
+                "value": 49,
+                "threshold": 40,
+                "level": "flag",
+                "reason": "49 heavy atoms, which implies a high total step count",
+                "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+              },
+              {
+                "criterion": "rotatable_bonds",
+                "value": 12,
+                "threshold": 10,
+                "level": "flag",
+                "reason": "12 rotatable bonds, which complicates purification",
+                "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+              }
+            ],
+            "summary": "Not practically makeable. SA 4.09, ~16 steps. Blocked on: estimated_steps."
+          }
+        },
+        {
+          "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+          "label": "",
+          "rationale": "generative pipeline output, ranked by docking score",
+          "dock_affinity": -11.2,
+          "dock_source": "AutoDock Vina",
+          "overall_verdict": "fail",
+          "sa_score": 3.94,
+          "stereocentres": 3,
+          "estimated_steps": 15,
+          "cost_band": "demanding",
+          "route_complexity": "demanding",
+          "mw": 644.3,
+          "logp": null,
+          "tpsa": null,
+          "rejections": [
+            {
+              "criterion": "estimated_steps",
+              "value": 15,
+              "threshold": 14,
+              "level": "fail",
+              "reason": "estimated 15-step linear sequence is too long to be practical",
+              "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+            },
+            {
+              "criterion": "stereocentres",
+              "value": 3,
+              "threshold": 2,
+              "level": "flag",
+              "reason": "3 stereocentres require asymmetric synthesis or resolution",
+              "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+            },
+            {
+              "criterion": "heavy_atoms",
+              "value": 46,
+              "threshold": 40,
+              "level": "flag",
+              "reason": "46 heavy atoms, which implies a high total step count",
+              "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+            },
+            {
+              "criterion": "rotatable_bonds",
+              "value": 12,
+              "threshold": 10,
+              "level": "flag",
+              "reason": "12 rotatable bonds, which complicates purification",
+              "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+            }
+          ],
+          "manufacturing": {
+            "route": "chemical_synthesis",
+            "route_label": "Route A \u2014 organic chemical synthesis",
+            "cho_bioreactor_eligible": false,
+            "route_reason": "644 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+          },
+          "assessment": {
+            "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+            "overall_verdict": "fail",
+            "synthesisability": {
+              "verdict": "fail",
+              "sa_score": 3.94,
+              "stereocentres": 3,
+              "unassigned_stereo": null,
+              "fused_ring_systems": 2,
+              "max_ring_size": null,
+              "spiro_atoms": 0,
+              "bridgehead_atoms": null,
+              "rejections": [
+                {
+                  "criterion": "stereocentres",
+                  "value": 3,
+                  "threshold": 2,
+                  "level": "flag",
+                  "reason": "3 stereocentres require asymmetric synthesis or resolution",
+                  "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+                },
+                {
+                  "criterion": "estimated_steps",
+                  "value": 15,
+                  "threshold": 14,
+                  "level": "fail",
+                  "reason": "estimated 15-step linear sequence is too long to be practical",
+                  "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+                }
+              ]
+            },
+            "process_chemistry": {
+              "verdict": "flag",
+              "mw": 644.3,
+              "logp": null,
+              "tpsa": null,
+              "heavy_atoms": 46,
+              "rotatable_bonds": 12,
+              "aromatic_rings": null,
+              "fsp3": null,
+              "halogen_density": 0.043,
+              "estimated_steps": 15,
+              "route_complexity": "demanding",
+              "alerts": [],
+              "rejections": [
+                {
+                  "criterion": "heavy_atoms",
+                  "value": 46,
+                  "threshold": 40,
+                  "level": "flag",
+                  "reason": "46 heavy atoms, which implies a high total step count",
+                  "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+                },
+                {
+                  "criterion": "rotatable_bonds",
+                  "value": 12,
+                  "threshold": 10,
+                  "level": "flag",
+                  "reason": "12 rotatable bonds, which complicates purification",
+                  "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+                },
+                {
+                  "criterion": "stereocentres",
+                  "value": 3,
+                  "threshold": 2,
+                  "level": "flag",
+                  "reason": "3 stereocentres require asymmetric synthesis or resolution",
+                  "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+                }
+              ]
+            },
+            "all_rejections": [
+              {
+                "criterion": "estimated_steps",
+                "value": 15,
+                "threshold": 14,
+                "level": "fail",
+                "reason": "estimated 15-step linear sequence is too long to be practical",
+                "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+              },
+              {
+                "criterion": "stereocentres",
+                "value": 3,
+                "threshold": 2,
+                "level": "flag",
+                "reason": "3 stereocentres require asymmetric synthesis or resolution",
+                "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+              },
+              {
+                "criterion": "heavy_atoms",
+                "value": 46,
+                "threshold": 40,
+                "level": "flag",
+                "reason": "46 heavy atoms, which implies a high total step count",
+                "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+              },
+              {
+                "criterion": "rotatable_bonds",
+                "value": 12,
+                "threshold": 10,
+                "level": "flag",
+                "reason": "12 rotatable bonds, which complicates purification",
+                "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+              }
+            ],
+            "summary": "Not practically makeable. SA 3.94, ~15 steps. Blocked on: estimated_steps."
+          }
+        }
+      ],
+      "feedback_sent": null
+    },
+    {
+      "round": 2,
+      "agent_notes": "removed all stereocentres (chiral decalin -> flat anisole), opened the macrocycle to a linear biaryl, and deleted the spiro centre. Addresses: stereocentres, macrocycle_size, spiro_atoms.",
+      "submitted_count": 3,
+      "pass_count": 3,
+      "flag_count": 0,
+      "fail_count": 0,
+      "candidates": [
+        {
+          "smiles": "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1",
+          "label": "",
+          "rationale": "kept: achiral biaryl sulfonamide, passed both critics",
+          "dock_affinity": -9.78,
+          "dock_source": "AutoDock Vina",
+          "overall_verdict": "pass",
+          "sa_score": 1.95,
+          "stereocentres": 0,
+          "estimated_steps": 5,
+          "cost_band": "straightforward",
+          "route_complexity": "straightforward",
+          "mw": 409.1,
+          "logp": null,
+          "tpsa": null,
+          "rejections": [],
+          "manufacturing": {
+            "route": "chemical_synthesis",
+            "route_label": "Route A \u2014 organic chemical synthesis",
+            "cho_bioreactor_eligible": false,
+            "route_reason": "409 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+          },
+          "assessment": {
+            "smiles": "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1",
+            "overall_verdict": "pass",
+            "synthesisability": {
+              "verdict": "pass",
+              "sa_score": 1.95,
+              "stereocentres": 0,
+              "unassigned_stereo": null,
+              "fused_ring_systems": 0,
+              "max_ring_size": null,
+              "spiro_atoms": 0,
+              "bridgehead_atoms": null,
+              "rejections": []
+            },
+            "process_chemistry": {
+              "verdict": "pass",
+              "mw": 409.1,
+              "logp": null,
+              "tpsa": null,
+              "heavy_atoms": 29,
+              "rotatable_bonds": 5,
+              "aromatic_rings": null,
+              "fsp3": null,
+              "halogen_density": 0.0,
+              "estimated_steps": 5,
+              "route_complexity": "straightforward",
+              "alerts": [],
+              "rejections": []
+            },
+            "all_rejections": [],
+            "summary": "Buildable. SA 1.95, ~5 steps."
+          }
+        },
+        {
+          "smiles": "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1",
+          "label": "",
+          "rationale": "replaced the decalin stereocentres with a flat anisole; morpholine in place of the chiral cyclohexanol (addresses: stereocentres)",
+          "dock_affinity": -8.51,
+          "dock_source": "AutoDock Vina",
+          "overall_verdict": "pass",
+          "sa_score": 1.75,
+          "stereocentres": 0,
+          "estimated_steps": 4,
+          "cost_band": "straightforward",
+          "route_complexity": "straightforward",
+          "mw": 376.1,
+          "logp": null,
+          "tpsa": null,
+          "rejections": [],
+          "manufacturing": {
+            "route": "chemical_synthesis",
+            "route_label": "Route A \u2014 organic chemical synthesis",
+            "cho_bioreactor_eligible": false,
+            "route_reason": "376 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+          },
+          "assessment": {
+            "smiles": "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1",
+            "overall_verdict": "pass",
+            "synthesisability": {
+              "verdict": "pass",
+              "sa_score": 1.75,
+              "stereocentres": 0,
+              "unassigned_stereo": null,
+              "fused_ring_systems": 0,
+              "max_ring_size": null,
+              "spiro_atoms": 0,
+              "bridgehead_atoms": null,
+              "rejections": []
+            },
+            "process_chemistry": {
+              "verdict": "pass",
+              "mw": 376.1,
+              "logp": null,
+              "tpsa": null,
+              "heavy_atoms": 26,
+              "rotatable_bonds": 5,
+              "aromatic_rings": null,
+              "fsp3": null,
+              "halogen_density": 0.0,
+              "estimated_steps": 4,
+              "route_complexity": "straightforward",
+              "alerts": [],
+              "rejections": []
+            },
+            "all_rejections": [],
+            "summary": "Buildable. SA 1.75, ~4 steps."
+          }
+        },
+        {
+          "smiles": "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F",
+          "label": "",
+          "rationale": "opened the macrocycle to a linear biaryl and removed the spiro centre (addresses: macrocycle_size, spiro_atoms)",
+          "dock_affinity": -9.32,
+          "dock_source": "AutoDock Vina",
+          "overall_verdict": "pass",
+          "sa_score": 2.04,
+          "stereocentres": 0,
+          "estimated_steps": 5,
+          "cost_band": "straightforward",
+          "route_complexity": "straightforward",
+          "mw": 413.1,
+          "logp": null,
+          "tpsa": null,
+          "rejections": [],
+          "manufacturing": {
+            "route": "chemical_synthesis",
+            "route_label": "Route A \u2014 organic chemical synthesis",
+            "cho_bioreactor_eligible": false,
+            "route_reason": "413 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+          },
+          "assessment": {
+            "smiles": "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F",
+            "overall_verdict": "pass",
+            "synthesisability": {
+              "verdict": "pass",
+              "sa_score": 2.04,
+              "stereocentres": 0,
+              "unassigned_stereo": null,
+              "fused_ring_systems": 0,
+              "max_ring_size": null,
+              "spiro_atoms": 0,
+              "bridgehead_atoms": null,
+              "rejections": []
+            },
+            "process_chemistry": {
+              "verdict": "pass",
+              "mw": 413.1,
+              "logp": null,
+              "tpsa": null,
+              "heavy_atoms": 28,
+              "rotatable_bonds": 4,
+              "aromatic_rings": null,
+              "fsp3": null,
+              "halogen_density": 0.107,
+              "estimated_steps": 5,
+              "route_complexity": "straightforward",
+              "alerts": [],
+              "rejections": []
+            },
+            "all_rejections": [],
+            "summary": "Buildable. SA 2.04, ~5 steps."
+          }
+        }
+      ],
+      "feedback_sent": "Rejected 3 candidate(s). Must fix: estimated_steps"
+    }
+  ],
+  "tool_trace": [
+    {
+      "round": 1,
+      "tool": "generative_pool",
+      "args": {
+        "n": 3
+      },
+      "result_summary": "[{'smiles': 'CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1', 'affinity': -12.9, 'rationale': 'generative pipeline output, ranked by docking score'}, {'smiles':"
+    },
+    {
+      "round": 2,
+      "tool": "seed_scaffolds",
+      "args": {
+        "n": 3
+      },
+      "result_summary": "{'scaffolds': [{'smiles': 'CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1', 'affinity': -12.9}, {'smiles': 'CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C("
+    },
+    {
+      "round": 2,
+      "tool": "propose_candidates",
+      "args": {
+        "candidates": [
+          {
+            "smiles": "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1",
+            "rationale": "kept: achiral biaryl sulfonamide, passed both critics"
+          },
+          {
+            "smiles": "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1",
+            "rationale": "replaced the decalin stereocentres with a flat anisole; morpholine in place of the chiral cyclohexanol (addresses: stereocentres)"
+          },
+          {
+            "smiles": "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F",
+            "rationale": "opened the macrocycle to a linear biaryl and removed the spiro centre (addresses: macrocycle_size, spiro_atoms)"
+          }
+        ],
+        "avoid": [
+          "stereocentres",
+          "sa_score",
+          "fused_ring_systems",
+          "heavy_atoms",
+          "rotatable_bonds",
+          "estimated_steps"
+        ]
+      },
+      "result_summary": "{'registered': [{'smiles': 'CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1', 'rationale': 'kept: achiral biaryl sulfonamide, passed both critics', 'valid': True, 'properties': {'MW': 409.15, 'cL"
+    },
+    {
+      "round": 2,
+      "tool": "dock",
+      "args": {
+        "smiles": "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1",
+        "name": "mock_r_1"
+      },
+      "result_summary": "{'smiles': 'CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1', 'affinity': -9.78, 'pose_path': '/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_1.pdbqt', 'source': 'cache', 'secon"
+    },
+    {
+      "round": 2,
+      "tool": "dock",
+      "args": {
+        "smiles": "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1",
+        "name": "mock_r_2"
+      },
+      "result_summary": "{'smiles': 'COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1', 'affinity': -8.51, 'pose_path': '/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_2.pdbqt', 'source': 'cache', 'seconds': 0."
+    },
+    {
+      "round": 2,
+      "tool": "dock",
+      "args": {
+        "smiles": "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F",
+        "name": "mock_r_3"
+      },
+      "result_summary": "{'smiles': 'O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F', 'affinity': -9.32, 'pose_path': '/Users/ameliamcalister/Downloads/dockingapp2.0/loop/poses/mock_r_3.pdbqt', 'source': 'cache', 'second"
+    },
+    {
+      "round": 2,
+      "tool": "submit",
+      "args": {
+        "candidates": [
+          {
+            "smiles": "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1",
+            "rationale": "kept: achiral biaryl sulfonamide, passed both critics"
+          },
+          {
+            "smiles": "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1",
+            "rationale": "replaced the decalin stereocentres with a flat anisole; morpholine in place of the chiral cyclohexanol (addresses: stereocentres)"
+          },
+          {
+            "smiles": "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F",
+            "rationale": "opened the macrocycle to a linear biaryl and removed the spiro centre (addresses: macrocycle_size, spiro_atoms)"
+          }
+        ],
+        "changes_made": "removed all stereocentres (chiral decalin -> flat anisole), opened the macrocycle to a linear biaryl, and deleted the spiro centre. Addresses: stereocentres, macrocycle_size, spiro_atoms."
+      },
+      "result_summary": "{'submitted': [{'smiles': 'CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1', 'rationale': 'kept: achiral biaryl sulfonamide, passed both critics', 'affinity': -9.78}, {'smiles': 'COc1ccc(cc1)C(=O"
+    }
+  ],
+  "final_shortlist": [
+    {
+      "smiles": "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1",
+      "label": "",
+      "rationale": "kept: achiral biaryl sulfonamide, passed both critics",
+      "dock_affinity": -9.78,
+      "dock_source": "AutoDock Vina",
+      "overall_verdict": "pass",
+      "sa_score": 1.95,
+      "stereocentres": 0,
+      "estimated_steps": 5,
+      "cost_band": "straightforward",
+      "route_complexity": "straightforward",
+      "mw": 409.1,
+      "logp": null,
+      "tpsa": null,
+      "rejections": [],
+      "manufacturing": {
+        "route": "chemical_synthesis",
+        "route_label": "Route A \u2014 organic chemical synthesis",
+        "cho_bioreactor_eligible": false,
+        "route_reason": "409 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+      },
+      "assessment": {
+        "smiles": "CC(C)(C)c1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)Nc1ccncc1",
+        "overall_verdict": "pass",
+        "synthesisability": {
+          "verdict": "pass",
+          "sa_score": 1.95,
+          "stereocentres": 0,
+          "unassigned_stereo": null,
+          "fused_ring_systems": 0,
+          "max_ring_size": null,
+          "spiro_atoms": 0,
+          "bridgehead_atoms": null,
+          "rejections": []
+        },
+        "process_chemistry": {
+          "verdict": "pass",
+          "mw": 409.1,
+          "logp": null,
+          "tpsa": null,
+          "heavy_atoms": 29,
+          "rotatable_bonds": 5,
+          "aromatic_rings": null,
+          "fsp3": null,
+          "halogen_density": 0.0,
+          "estimated_steps": 5,
+          "route_complexity": "straightforward",
+          "alerts": [],
+          "rejections": []
+        },
+        "all_rejections": [],
+        "summary": "Buildable. SA 1.95, ~5 steps."
+      }
+    },
+    {
+      "smiles": "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F",
+      "label": "",
+      "rationale": "opened the macrocycle to a linear biaryl and removed the spiro centre (addresses: macrocycle_size, spiro_atoms)",
+      "dock_affinity": -9.32,
+      "dock_source": "AutoDock Vina",
+      "overall_verdict": "pass",
+      "sa_score": 2.04,
+      "stereocentres": 0,
+      "estimated_steps": 5,
+      "cost_band": "straightforward",
+      "route_complexity": "straightforward",
+      "mw": 413.1,
+      "logp": null,
+      "tpsa": null,
+      "rejections": [],
+      "manufacturing": {
+        "route": "chemical_synthesis",
+        "route_label": "Route A \u2014 organic chemical synthesis",
+        "cho_bioreactor_eligible": false,
+        "route_reason": "413 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+      },
+      "assessment": {
+        "smiles": "O=C(Nc1ccc(cc1)S(=O)(=O)N1CCNCC1)c1ccc(cc1)C(F)(F)F",
+        "overall_verdict": "pass",
+        "synthesisability": {
+          "verdict": "pass",
+          "sa_score": 2.04,
+          "stereocentres": 0,
+          "unassigned_stereo": null,
+          "fused_ring_systems": 0,
+          "max_ring_size": null,
+          "spiro_atoms": 0,
+          "bridgehead_atoms": null,
+          "rejections": []
+        },
+        "process_chemistry": {
+          "verdict": "pass",
+          "mw": 413.1,
+          "logp": null,
+          "tpsa": null,
+          "heavy_atoms": 28,
+          "rotatable_bonds": 4,
+          "aromatic_rings": null,
+          "fsp3": null,
+          "halogen_density": 0.107,
+          "estimated_steps": 5,
+          "route_complexity": "straightforward",
+          "alerts": [],
+          "rejections": []
+        },
+        "all_rejections": [],
+        "summary": "Buildable. SA 2.04, ~5 steps."
+      }
+    },
+    {
+      "smiles": "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1",
+      "label": "",
+      "rationale": "replaced the decalin stereocentres with a flat anisole; morpholine in place of the chiral cyclohexanol (addresses: stereocentres)",
+      "dock_affinity": -8.51,
+      "dock_source": "AutoDock Vina",
+      "overall_verdict": "pass",
+      "sa_score": 1.75,
+      "stereocentres": 0,
+      "estimated_steps": 4,
+      "cost_band": "straightforward",
+      "route_complexity": "straightforward",
+      "mw": 376.1,
+      "logp": null,
+      "tpsa": null,
+      "rejections": [],
+      "manufacturing": {
+        "route": "chemical_synthesis",
+        "route_label": "Route A \u2014 organic chemical synthesis",
+        "cho_bioreactor_eligible": false,
+        "route_reason": "376 Da synthetic small molecule. Produced by organic synthesis, not mammalian cell culture \u2014 a CHO bioreactor cannot express a non-biologic."
+      },
+      "assessment": {
+        "smiles": "COc1ccc(cc1)C(=O)Nc1ccc(cc1)S(=O)(=O)N1CCOCC1",
+        "overall_verdict": "pass",
+        "synthesisability": {
+          "verdict": "pass",
+          "sa_score": 1.75,
+          "stereocentres": 0,
+          "unassigned_stereo": null,
+          "fused_ring_systems": 0,
+          "max_ring_size": null,
+          "spiro_atoms": 0,
+          "bridgehead_atoms": null,
+          "rejections": []
+        },
+        "process_chemistry": {
+          "verdict": "pass",
+          "mw": 376.1,
+          "logp": null,
+          "tpsa": null,
+          "heavy_atoms": 26,
+          "rotatable_bonds": 5,
+          "aromatic_rings": null,
+          "fsp3": null,
+          "halogen_density": 0.0,
+          "estimated_steps": 4,
+          "route_complexity": "straightforward",
+          "alerts": [],
+          "rejections": []
+        },
+        "all_rejections": [],
+        "summary": "Buildable. SA 1.75, ~4 steps."
+      }
+    }
+  ],
+  "manufacturing_route": {
+    "route": "chemical_synthesis",
+    "cho_bioreactor_eligible": false,
+    "reason": "Every candidate here is a synthetic small molecule (<1 kDa). These are made by organic synthesis. A CHO mammalian bioreactor produces biologics and cannot express them \u2014 refusing the bioreactor gate for these candidates is the correct behaviour, not an error.",
+    "handoff_to": "process chemistry / route scouting"
+  },
+  "generated_at": "2026-11-08T12:20:10",
+  "source": "closed-loop design tool"
+}

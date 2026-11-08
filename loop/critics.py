@@ -109,8 +109,20 @@ def descriptors(smiles: str) -> dict | None:
     heavy = mol.GetNumHeavyAtoms() or 1
     n_hal = sum(1 for a in mol.GetAtoms()
                 if a.GetSymbol() in ("F", "Cl", "Br", "I"))
+    # extra descriptors consumed by the bioREACT handoff (see bioreact_export)
+    unassigned = len([c for c in Chem.FindMolChiralCenters(
+        mol, includeUnassigned=True, useLegacyImplementation=False)
+        if c[1] == "?"])
+
     return {
         "halogen_density": round(n_hal / heavy, 3),
+        "logp": round(Descriptors.MolLogP(mol), 2),
+        "tpsa": round(Descriptors.TPSA(mol), 1),
+        "aromatic_rings": rdMolDescriptors.CalcNumAromaticRings(mol),
+        "fsp3": round(rdMolDescriptors.CalcFractionCSP3(mol), 3),
+        "bridgehead_atoms": rdMolDescriptors.CalcNumBridgeheadAtoms(mol),
+        "unassigned_stereo": unassigned,
+        "max_ring_size": largest,
         "sa_score": round(sascorer.calculateScore(mol), 2),
         "stereocentres": len(Chem.FindMolChiralCenters(
             mol, includeUnassigned=True, useLegacyImplementation=False)),

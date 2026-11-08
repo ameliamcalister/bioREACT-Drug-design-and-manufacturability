@@ -407,7 +407,12 @@ function decisionTable(rows, ref){
     : "";
 
   return `<div class="decide">
-    <h2>Which one should you make?
+    <h2><a href="/bioreact.json" download
+         style="float:right;font:11px var(--mono);color:var(--accent);
+                text-decoration:none;border:1px solid var(--line);
+                border-radius:6px;padding:4px 9px;font-weight:600"
+         title="Download this run in the bioREACT ClosedLoopRunDataset format"
+         >\u2193 Export for bioREACT</a>Which one should you make?
       <small>${note}more negative binds better \u00b7 steps and route
         complexity are estimates, not a costing</small></h2>
     <div class="dtwrap"><table class="dt">

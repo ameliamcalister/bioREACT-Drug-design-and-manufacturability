@@ -1,0 +1,6 @@
+{
+  "name": "bioREACT — Bioprocess Screening & Bayesian Optimisation Workbench",
+  "description": "Multi-stream scientific database evidence aggregator, bioreactor configuration screener, and constrained Bayesian optimisation workbench for biochemical engineers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
