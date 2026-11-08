@@ -168,5 +168,15 @@
     "affinity": -10.81,
     "pose_path": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/targets/mrp1/poses/c1.pdbqt",
     "source": "vina"
+  },
+  "OC(=O)CCc1ccc(cc1)N1CCN(CC1)C(=O)c1ccc(F)cc1S(C)(=O)=O": {
+    "affinity": -9.16,
+    "pose_path": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/mrp1/poses/acid.pdbqt",
+    "source": "vina"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(cc1)C(=O)Nc1ccccc1": {
+    "affinity": -10.41,
+    "pose_path": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/mrp1/poses/anilide.pdbqt",
+    "source": "vina"
   }
 }
