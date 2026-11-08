@@ -1,24 +1,41 @@
-# Closed-loop molecule design
+# bioREACT — Drug Design and Manufacture
 
-**Generative chemistry outputs molecules nobody can manufacture. We close the
-loop with a process-chemistry critic.**
+**Generative chemistry designs molecules nobody can manufacture. bioREACT
+closes the loop.**
 
-A design agent proposes molecules and docks them. Two critics judge whether
-they could actually be made. When they can't, the agent is told *exactly
-which property to fix* — and tries again.
+Researchers have to decide which molecule to make first. Today that means
+sending a long list to a process chemist and waiting weeks. bioREACT makes
+that decision in minutes, with the reasoning attached.
 
-```
-Designer agent ──candidates──▶ Synthesisability critic ──▶ Process critic
-      ▲                                                          │
-      └──────────── structured rejection reasons ◀───────────────┘
-```
+Two halves, one product:
 
-That feedback arrow is the point. Most systems are a straight line:
-design → check → done. This one is a circle.
+| | |
+|---|---|
+| **Design loop** (`loop/`) | An agent designs molecules, docks them with AutoDock Vina, and two critics judge whether they can actually be made. Rejections are structured, and the agent redesigns against them. |
+| **Bioprocess workbench** (`bioreact-app/`) | Takes a candidate and works out how to manufacture it — route selection, reactor screening, oxygen balance, optimisation, and human sign-off gates. |
+
+They meet at a **routing gate**: small molecules go to chemical synthesis,
+biologics to a CHO bioreactor. The gate refuses to put a 409 Da small
+molecule into a bioreactor, because mammalian cells cannot express one.
+That refusal is designed behaviour, not a gap.
 
 ---
 
-## Quickstart
+## Run it
+
+```bash
+./start.sh
+```
+
+Then open **http://localhost:3000**.
+
+One command starts both halves. The bioprocess workbench is the front door;
+the design loop is proxied behind it at `/design`, reachable from the
+**Design Loop →** button in the Research Workbench nav. Ctrl-C stops both.
+
+Re-running `start.sh` is safe — it frees both ports first.
+
+### First run on a new machine
 
 ```bash
 pip install -r loop/requirements.txt
@@ -28,22 +45,8 @@ pip install -r loop/requirements.txt
 cd loop && python3 doctor.py
 ```
 
-`doctor.py` checks everything and prints the exact fix for anything missing.
-When it says **Ready**:
-
-```bash
-cd loop && python3 serve.py
-```
-
-Open **http://localhost:8000** and press **Run loop**.
-
-> Open it at that address — not by double-clicking `index.html`. A page
-> opened as a file has no http origin, so none of its buttons work.
-
-### Nothing to install? Try it offline first
-
-Pick **mock** mode and press Run. No API key, no docking, ~5 seconds, and
-it still shows the real loop using cached results committed to this repo.
+`doctor.py` checks every dependency and prints the exact command to fix
+anything missing. `start.sh` installs the Node packages itself on first run.
 
 ---
 
@@ -51,37 +54,19 @@ it still shows the real loop using cached results committed to this repo.
 
 | | why | install |
 |---|---|---|
-| Python 3.10+ | | python.org |
-| `rdkit` | molecules, descriptors, drawing | `pip install -r loop/requirements.txt` |
-| `httpx` | Claude API calls | same |
-| **Open Babel** | SMILES → 3D structure | `conda install -c conda-forge openbabel` or `brew install open-babel` |
-| **AutoDock Vina** | the docking engine | `brew install autodock-vina` |
-| Claude API key | only for the real designer | `cp loop/.env.example loop/.env`, add your key |
+| Python 3.10+ with **rdkit**, **httpx** | molecules, descriptors, API calls | `pip install -r loop/requirements.txt` |
+| **Node 18+** | the bioprocess workbench | `brew install node` |
+| **Open Babel** | SMILES → 3D structure | `conda install -c conda-forge openbabel` |
+| **AutoDock Vina** | docking | `brew install autodock-vina` |
+| Claude API key | only for the live designer | `cp loop/.env.example loop/.env`, add your key |
 
-The last two can't be installed by pip. `doctor.py` will tell you if they're
-missing and where to get them. If they live somewhere unusual, set
-`VINA_PATH` / `OBABEL_PATH`.
-
-**You can run the whole demo without an API key** using mock mode, and
-without Vina using cache mode.
+**You can run the whole demo without an API key and without Vina.** Pick
+**mock** mode: it uses docking results committed to this repo. About five
+seconds, fully offline.
 
 ---
 
-## Run modes
-
-| mode | needs | time | what it is |
-|------|-------|------|-----------|
-| **live** | key + Vina | ~90 s | the real thing |
-| **cache** | key | instant | real designer, pre-computed poses |
-| **mock** | nothing | ~5 s | scripted designer, cached poses — fully offline |
-| **fresh** | key + Vina | ~90 s | designer invents round 1 too |
-
-`live`, `cache` and `mock` start round 1 from real generative output that
-docks well and cannot be made. That's the demo.
-
----
-
-## What it does
+## Results
 
 | round | source | manufacturable | best |
 |-------|--------|---------------|------|
@@ -95,44 +80,10 @@ far shorter route.
 The three best-docking molecules in the source data are the three the
 critics reject.
 
-Every run ends with a **decision table** — each candidate ranked with
-explicit strengths and concerns and a call of `MAKE FIRST`, `MAKE`,
-`BACKUP`, `REDESIGN` or `DO NOT MAKE` — also written to
-`loop/candidates.csv`.
-
-### Critic accuracy
-
-| tier | accuracy |
-|------|----------|
-| classic drugs vs natural products | 23/23 = 100% |
-| **hard: complex marketed drugs vs plausible rejects** | 7/11 = 64% |
-| combined | 30/34 = 88% |
-
-Press **Run evaluation** to reproduce it. Tier 1 at 100% is not impressive
-and you should say so — those two groups separate on molecular weight
-alone. Tier 2 is the honest number, and every miss is printed by name.
-
----
-
-## Your own protein
-
-Press **+ New target**, upload a receptor (`.pdb` is converted for you) and
-a reference ligand.
-
-**The reference ligand decides where on the protein you dock.** Give it a
-pose file — the ligand from the crystal structure as `.pdb`/`.sdf`/`.mol2` —
-and the grid is boxed tightly around it. Without one it docks blind against
-the whole protein: slower and far less reliable. SMILES alone is not
-enough; it has no coordinates.
-
-If the ligand is inside your PDB already:
-
-```bash
-grep "^HETATM" structure.pdb | grep " ATP " > ligand.pdb
-```
-
-Verified on a second protein (an 8,540-atom ATP-binding structure): **0/1 →
-3/3**, with no code changed.
+Critic accuracy: 23/23 on an easy tier, **7/11 on a deliberately hard one**,
+30/34 (88%) combined. Press **Run evaluation** to reproduce it. The easy
+tier is unimpressive and the tool says so — those groups separate on
+molecular weight alone.
 
 ---
 
@@ -140,30 +91,54 @@ Verified on a second protein (an 8,540-atom ATP-binding structure): **0/1 →
 
 | path | what |
 |------|------|
-| `loop/orchestrator.py` | the loop and the feedback edge |
-| `loop/designer_agent.py` | the agent: tools, budget, run log |
-| `loop/critics.py` | **the rubric** — edit `RUBRIC` here |
-| `loop/compare.py` | the decision table |
-| `loop/eval_set.py` | ground truth and confusion matrix |
-| `loop/pipeline_adapter.py` | the only seam to the chemistry |
-| `loop/chemistry.py` | vendored chemistry, so a clone runs standalone |
-| `loop/index.html`, `serve.py` | the web UI |
-| `docking_pipeline.py` | the original full pipeline (used if present) |
+| `start.sh` | starts both halves |
+| `loop/` | the design loop — see [loop/README.md](loop/README.md) |
+| `loop/doctor.py` | dependency check with fixes |
+| `loop/critics.py` | **the rubric** — edit thresholds here |
+| `loop/serve.py`, `index.html` | the design UI and its API |
+| `loop/bioreact_export.py` | the handoff — see [loop/INTEGRATION.md](loop/INTEGRATION.md) |
+| `bioreact-app/` | the bioprocess workbench (React + Express) |
+| `bioreact-app/server.ts` | serves the app and proxies `/design` |
+| `docking_pipeline.py` | the original full pipeline, used if present |
+
+---
+
+## Troubleshooting
+
+**`ModuleNotFoundError: No module named 'rdkit'`** — Homebrew's `python3`
+is ahead of Anaconda's on your PATH and does not have rdkit. `start.sh`
+pins the right interpreter; if running by hand, use the full path:
+`~/anaconda3/bin/python3 serve.py`.
+
+**`EADDRINUSE` / `Address already in use`** — servers from a previous run
+are still going. `./start.sh` clears both ports, so just run it again.
+
+**Every button fails, or "could not reach the server"** — the page is open
+as a local file. It must be served: use `http://localhost:3000`, never
+double-click `index.html`.
+
+**"Design tool not reachable"** — the Python half is still starting (it
+loads rdkit, a few seconds). Wait and reload.
+
+**`npm install` fails on peer dependencies** — use
+`npm install --legacy-peer-deps`, then `npm install-scripts approve esbuild`.
 
 ---
 
 ## Honest limitations
 
 - `estimated_steps` is a heuristic from rings, stereocentres and heavy
-  atoms — **not** a retrosynthesis. Labelled an estimate everywhere.
-- **No costing.** Route complexity is reported
-  (`straightforward`/`moderate`/`demanding`/`specialist`); pricing per gram
-  depends on the real route, scale and supplier quotes and is the process
-  chemist's call, not something to guess from a SMILES string.
+  atoms, **not a retrosynthesis**. Labelled an estimate everywhere.
+- Docking **ranks**; it does not predict affinity. Rigid receptor, one grid,
+  no rescoring. Vina is stochastic — repeat runs varied by 0.17 kcal/mol for
+  a rigid candidate, 1.51 for the flexible reference.
+- **No cost estimates.** Route complexity is reported; price per gram
+  depends on the real route, scale and supplier quotes, and is the process
+  chemist's call.
 - Building-block availability is approximated by element and halogen
-  checks, not a supplier catalogue. Obvious next step.
-- Docking is rigid-receptor Vina on one grid. Scores **rank**; they do not
-  predict affinity. Vina is also stochastic — repeat runs of one molecule
-  varied by 0.17 kcal/mol (rigid) to 1.51 (flexible) here.
-- The critics are deterministic rules, not an LLM — deliberately, so every
-  rejection points at a number and a threshold you can defend.
+  checks, not a supplier catalogue.
+- The designer is a language model proposing structures, not a trained
+  molecular generator. The bioprocess model is CHO-specific and abstains
+  outside that distribution.
+- **No synthesis is ever executed.** The output is a proposal; a person
+  approves at every gate.
