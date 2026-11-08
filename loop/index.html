@@ -432,7 +432,6 @@ async function tick(){
     d = await (await fetch("run_log.json?" + Date.now())).json();
   } catch { return; }
 
-  if (d.target) $("h1").textContent = d.target + " \u2014 closed-loop design";
   document.getElementById("meta").innerHTML =
     `${esc(d.status)}<br>designer ${esc(d.model || "?")}
      &middot; docking ${esc(d.dock_mode || "?")}`;
