@@ -1,0 +1,22 @@
+{
+  "name": "MRP1",
+  "slug": "mrp1",
+  "description": "ABCC1, a multidrug-resistance efflux transporter. Blocking it is intended to restore the activity of chemotherapy agents the transporter pumps out of tumour cells.",
+  "receptor": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/targets/mrp1/receptor.pdbqt",
+  "grid": {
+    "center_x": 97.497,
+    "center_y": 62.007,
+    "center_z": 57.852,
+    "size_x": 24.0,
+    "size_y": 24.0,
+    "size_z": 24.0
+  },
+  "grid_source": "docked MK-571 pose",
+  "reference": {
+    "name": "MK-571",
+    "smiles": "CC(C)(C)c1ccc(cc1)/C=C/c1cc(ccn1)CSC(CC(=O)O)SCCc1ccccc1",
+    "affinity": -9.1
+  },
+  "cache": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/targets/mrp1/dock_cache.json",
+  "poses": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/targets/mrp1/poses"
+}

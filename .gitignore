@@ -1,0 +1,24 @@
+# Secrets — never commit
+.env
+loop/.env
+
+# Per-run output, regenerated every time
+loop/run_log.json
+loop/eval_results.json
+loop/candidates.csv
+
+# Uploaded source files for targets (the prepared receptor IS committed)
+loop/targets/*/uploads/
+
+# Python
+__pycache__/
+*.pyc
+.DS_Store
+
+# NOTE: loop/targets/mrp1/ IS committed on purpose — the prepared receptor,
+# the docking cache and the saved poses together are ~1 MB and let anyone
+# who clones this run the demo offline, with no docking and no API key.
+# Deleting them does not break the tool, but it does break `--mock` mode.
+
+# Superseded first-draft code — kept locally, not worth publishing
+_superseded/

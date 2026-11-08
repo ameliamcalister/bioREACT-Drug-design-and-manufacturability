@@ -1,0 +1,9 @@
+# Python packages. Install with:  pip install -r requirements.txt
+#
+# You also need two external programs that pip cannot install:
+#   obabel  (Open Babel)      conda install -c conda-forge openbabel
+#   vina    (AutoDock Vina)   brew install autodock-vina
+# Run `python3 doctor.py` to check both.
+
+rdkit>=2023.9.1      # molecules, descriptors, SA score, structure drawing
+httpx>=0.27          # Claude API calls (no SDK — see llm.py for why)
