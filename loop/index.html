@@ -261,9 +261,9 @@
 
   <pre class="console" id="console" hidden></pre>
   <div id="banner"></div>
-  <div id="decide"></div>
   <div class="summary" id="summary"></div>
   <div id="rounds"></div>
+  <div id="decide"></div>
 </main>
 
 <div class="modal" id="modal">
@@ -392,10 +392,8 @@ function decisionTable(rows, ref){
     <tr>
       <td class="n">${r.rank}</td>
       <td class="struct2"><img src="${svgURL(r.smiles)}" alt="" loading="lazy"></td>
-      <td><span class="rec ${esc(r.recommendation)}"
-           >${esc(r.recommendation_label)}</span>
-        <div style="color:var(--dim);font-size:11px;margin-top:4px"
-          >${esc(r.recommendation_why)}</div></td>
+      <td><span class="verdict ${esc(r.verdict)}"
+           >${esc((r.verdict || "").toUpperCase())}</span></td>
       <td class="n">${esc(aff(r))}</td>
       <td class="n">${esc(r.sa_score)}</td>
       <td class="n">${esc(r.estimated_steps)}</td>
@@ -418,7 +416,7 @@ function decisionTable(rows, ref){
         complexity are estimates, not a costing</small></h2>
     <div class="dtwrap"><table class="dt">
       <thead><tr>
-        <th>#</th><th></th><th>recommendation</th><th>affinity</th>
+        <th>#</th><th></th><th>critics</th><th>affinity</th>
         <th>SA</th><th>steps</th><th>chiral</th><th>route</th>
         <th>strengths and concerns</th>
       </tr></thead>

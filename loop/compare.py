@@ -5,8 +5,8 @@ The loop produces candidates. A researcher then has to answer one question:
 **which of these do I actually make first?**
 
 Scattered verdicts and rejection lists do not answer that. This turns every
-candidate into an explicit set of pros and cons plus a single
-recommendation, and ranks them so the top row is the one to put in a flask.
+candidate into an explicit set of pros and cons, ranked so the strongest makeable candidate
+is the top row. It states the evidence and leaves the call to the chemist.
 
 Deliberately NOT here: anything about cost or price per gram. Costing a
 route is the process chemist's job, informed by the actual route, the scale
@@ -129,7 +129,7 @@ def _recommend(a: dict, rank: int, ref_aff: float | None) -> str:
 
 def decision_table(assessed: list[dict], ref: dict | None = None) -> list[dict]:
     """
-    Rank candidates and attach pros, cons and a recommendation.
+    Rank candidates and attach their pros and cons.
 
     `assessed` is a list of critics.assess() results with `affinity` added
     (and optionally `affinity_sd` / `affinity_n` from replicate docking).
@@ -179,9 +179,6 @@ def decision_table(assessed: list[dict], ref: dict | None = None) -> list[dict]:
 def render(table: list[dict], ref: dict | None = None, colour=None) -> str:
     C = colour or {k: "" for k in
                    ("b", "d", "r", "green", "yellow", "red", "cyan")}
-    tint = {"make_first": C["green"], "make": C["green"],
-            "backup": C["cyan"], "redesign": C["yellow"], "drop": C["red"]}
-
     L = []
     L.append(f"{C['b']}WHICH ONE SHOULD YOU MAKE?{C['r']}")
     if ref and ref.get("affinity") is not None:
@@ -190,18 +187,19 @@ def render(table: list[dict], ref: dict | None = None, colour=None) -> str:
                  f"· steps and complexity are estimates{C['r']}")
     L.append("")
 
-    head = (f"{'#':<3}{'recommendation':<14}{'affinity':>12}{'SA':>6}"
+    head = (f"{'#':<3}{'critics':<8}{'affinity':>12}{'SA':>6}"
             f"{'steps':>7}{'chiral':>8}  {'route':<15}")
     L.append(f"{C['b']}{head}{C['r']}")
-    L.append(C["d"] + "-" * 76 + C["r"])
+    L.append(C["d"] + "-" * 70 + C["r"])
 
     for row in table:
         aff = (f"{row['affinity']:.2f}" if row["affinity"] is not None
                else "n/a")
         if row.get("affinity_sd") is not None:
             aff += f"±{row['affinity_sd']:.2f}"
-        t = tint.get(row["recommendation"], "")
-        L.append(f"{row['rank']:<3}{t}{row['recommendation_label']:<14}{C['r']}"
+        vt = {"pass": C["green"], "flag": C["yellow"],
+              "fail": C["red"]}.get(row["verdict"], "")
+        L.append(f"{row['rank']:<3}{vt}{(row['verdict'] or '-'):<8}{C['r']}"
                  f"{aff:>12}{str(row['sa_score']):>6}"
                  f"{str(row['estimated_steps']):>7}"
                  f"{str(row['stereocentres']):>8}  "
@@ -209,9 +207,10 @@ def render(table: list[dict], ref: dict | None = None, colour=None) -> str:
     L.append("")
 
     for row in table:
-        t = tint.get(row["recommendation"], "")
-        L.append(f"{C['b']}[{row['rank']}] {t}{row['recommendation_label']}"
-                 f"{C['r']} {C['d']}— {row['recommendation_why']}{C['r']}")
+        vt = {"pass": C["green"], "flag": C["yellow"],
+              "fail": C["red"]}.get(row["verdict"], "")
+        L.append(f"{C['b']}[{row['rank']}]{C['r']} "
+                 f"{vt}{(row['verdict'] or '').upper()}{C['r']}")
         L.append(f"    {C['d']}{row['smiles'][:70]}{C['r']}")
         for p in row["pros"]:
             L.append(f"    {C['green']}+{C['r']} {p}")
@@ -226,7 +225,7 @@ def to_csv(table: list[dict]) -> str:
     import csv
     import io
     buf = io.StringIO()
-    cols = ["rank", "recommendation_label", "smiles", "affinity",
+    cols = ["rank", "smiles", "affinity",
             "affinity_sd", "affinity_n", "sa_score", "estimated_steps",
             "stereocentres", "rotatable_bonds", "mw", "route_complexity",
             "verdict"]
