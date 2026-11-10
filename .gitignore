@@ -6,19 +6,27 @@ loop/.env
 loop/run_log.json
 loop/eval_results.json
 loop/candidates.csv
+loop/manufacture_report.json
+loop/bioreact_run.json
 
-# Uploaded source files for targets (the prepared receptor IS committed)
+# Uploaded source files for a target (the prepared receptor IS committed)
 loop/targets/*/uploads/
 
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+build/
+*.log
+
 .DS_Store
 
-# NOTE: loop/targets/mrp1/ IS committed on purpose — the prepared receptor,
-# the docking cache and the saved poses together are ~1 MB and let anyone
-# who clones this run the demo offline, with no docking and no API key.
-# Deleting them does not break the tool, but it does break `--mock` mode.
-
-# Superseded first-draft code — kept locally, not worth publishing
-_superseded/
+# NOTE: loop/targets/mrp1/ is committed on purpose. The prepared receptor,
+# the docking cache, the saved poses and the ChEMBL cache are ~1.5 MB
+# together and are what let a fresh clone run the whole loop offline, with
+# no docking software and no API key.
+.claude/

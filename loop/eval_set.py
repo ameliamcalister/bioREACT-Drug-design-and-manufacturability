@@ -273,7 +273,7 @@ def run_eval(verbose: bool = True, tier: str = "easy") -> dict:
     if verbose:
         print(f"\n{C['b']}CONFUSION MATRIX{C['r']}  (n={n})")
         print(f"                        {C['d']}predicted{C['r']}")
-        print(f"                   makeable    not makeable")
+        print("                   makeable    not makeable")
         print(f"  {C['d']}truth{C['r']} makeable        {tp:>4}        {fn:>8}")
         print(f"        not makeable    {fp:>4}        {tn:>8}")
         print(f"\n  accuracy  {correct}/{n} = {accuracy:.0%}")

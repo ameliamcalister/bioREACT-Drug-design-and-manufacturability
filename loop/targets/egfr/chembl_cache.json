@@ -1,0 +1,71 @@
+{
+  "actives:CHEMBL203:3": {
+    "fetched_at": 1794267342.222605,
+    "payload": {
+      "target_chembl_id": "CHEMBL203",
+      "compounds": [
+        {
+          "chembl_id": "CHEMBL5270693",
+          "name": "CHEMBL5270693",
+          "smiles": "COc1cc(N2CCC(N(C)C)CC2)ccc1Nc1ncc(C(=O)Oc2ccccc2)c(-c2c[nH]c3ccccc23)n1",
+          "pchembl": 11.0,
+          "assay_type": "IC50",
+          "potency_nm": 0.01,
+          "assay_description": "Inhibition of wild type EGFR (unknown origin)"
+        },
+        {
+          "chembl_id": "CHEMBL176582",
+          "name": "CHEMBL176582",
+          "smiles": "Cn1cnc2cc3ncnc(Nc4cccc(Br)c4)c3cc21",
+          "pchembl": 11.0,
+          "assay_type": "IC50",
+          "potency_nm": 0.01,
+          "assay_description": "Inhibition of tyrosine kinase activity of Epidermal growth factor receptor from human A431 carcinoma cells"
+        },
+        {
+          "chembl_id": "CHEMBL4650319",
+          "name": "MOBOCERTINIB",
+          "smiles": "C=CC(=O)Nc1cc(Nc2ncc(C(=O)OC(C)C)c(-c3cn(C)c4ccccc34)n2)c(OC)cc1N(C)CCN(C)C",
+          "pchembl": 11.0,
+          "assay_type": "IC50",
+          "potency_nm": 0.01,
+          "assay_description": "Inhibition of EGFR L858R mutant (unknown origin) using TK-substrate preincubated with enzyme for 30 mins followed by substrate and ATP addition for 15 mins by H"
+        }
+      ],
+      "count": 3,
+      "ok": true,
+      "from_cache": false,
+      "source": "ChEMBL REST API (EBI), CC-BY-SA 3.0"
+    }
+  },
+  "actives:CHEMBL3004:2": {
+    "fetched_at": 1794267342.546238,
+    "payload": {
+      "target_chembl_id": "CHEMBL3004",
+      "compounds": [
+        {
+          "chembl_id": "CHEMBL58",
+          "name": "MITOXANTRONE",
+          "smiles": "O=C1c2c(O)ccc(O)c2C(=O)c2c(NCCNCCO)ccc(NCCNCCO)c21",
+          "pchembl": 8.82,
+          "assay_type": "IC50",
+          "potency_nm": 1.51,
+          "assay_description": "TP_TRANSPORTER: cell accumulation in MCF7/MRP1-M24 cells"
+        },
+        {
+          "chembl_id": "CHEMBL28629",
+          "name": "CHEMBL28629",
+          "smiles": "Cn1c2ccnc(N3CCOCC3)c2c2ncnc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c21",
+          "pchembl": 8.0,
+          "assay_type": "IC50",
+          "potency_nm": 10.0,
+          "assay_description": "Inhibitory activity against MRP1 (Multidrug resistance associated protein 1) expressed in COR.L23/R cell line in single-dose potentiation assay"
+        }
+      ],
+      "count": 2,
+      "ok": true,
+      "from_cache": false,
+      "source": "ChEMBL REST API (EBI), CC-BY-SA 3.0"
+    }
+  }
+}

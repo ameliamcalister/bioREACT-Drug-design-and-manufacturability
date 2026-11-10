@@ -109,7 +109,7 @@ def descriptors(smiles: str) -> dict | None:
     heavy = mol.GetNumHeavyAtoms() or 1
     n_hal = sum(1 for a in mol.GetAtoms()
                 if a.GetSymbol() in ("F", "Cl", "Br", "I"))
-    # extra descriptors consumed by the bioREACT handoff (see bioreact_export)
+    # extra descriptors carried into the export (see export_run.py)
     unassigned = len([c for c in Chem.FindMolChiralCenters(
         mol, includeUnassigned=True, useLegacyImplementation=False)
         if c[1] == "?"])

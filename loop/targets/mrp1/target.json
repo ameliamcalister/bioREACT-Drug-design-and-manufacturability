@@ -18,5 +18,7 @@
     "affinity": -9.1
   },
   "cache": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/targets/mrp1/dock_cache.json",
-  "poses": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/targets/mrp1/poses"
+  "poses": "/Users/ameliamcalister/Downloads/dockingapp2.0/loop/targets/mrp1/poses",
+  "chembl_target_id": "CHEMBL3004",
+  "chembl_target_name": "Multidrug resistance-associated protein 1"
 }

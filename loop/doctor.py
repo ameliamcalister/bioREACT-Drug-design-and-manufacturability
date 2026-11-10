@@ -1,5 +1,5 @@
 """
-doctor.py — check this machine can run the loop, and say exactly how to fix
+doctor.py — check this machine can run bioREACT, and say exactly how to fix
 whatever is missing.
 
     python3 doctor.py
@@ -56,6 +56,10 @@ def main() -> int:
          "pip install rdkit\n  (or: conda install -c conda-forge rdkit)"),
         ("httpx", "talking to the Claude API",
          "pip install httpx"),
+        ("numpy", "the cavity grid",
+         "pip install numpy"),
+        ("scipy", "nearest-neighbour search for the cavity analysis",
+         "pip install scipy"),
     ]:
         try:
             m = importlib.import_module(mod)
@@ -124,9 +128,35 @@ def main() -> int:
         except Exception as e:
             check("target", FAIL, f"{type(e).__name__}: {e}")
 
+    # ── The interface ────────────────────────────────────────────────────
+    node = shutil.which("node")
+    if node:
+        try:
+            out = subprocess.run([node, "--version"], capture_output=True,
+                                 text=True, timeout=10)
+            version = (out.stdout or "").strip()
+        except Exception:
+            version = ""
+        check("program: node", OK, f"{node}  {version}  (runs the interface)")
+    else:
+        check("program: node", WARN,
+              "the interface needs it; the loop itself does not",
+              "brew install node\n"
+              "  the command line still works without it: "
+              "python3 orchestrator.py --warm-start")
+
+    modules = HERE.parent / "bioreact-app" / "node_modules"
+    if node:
+        check("interface dependencies",
+              OK if modules.is_dir() else WARN,
+              "installed" if modules.is_dir() else "not installed yet",
+              "./start.sh installs them on the first run, or:\n"
+              "  cd bioreact-app && npm install")
+
     # ── API key ──────────────────────────────────────────────────────────
     try:
-        import llm
+        import llm  # loads loop/.env, which is where a key usually lives
+        _ = llm.BACKEND
         if os.environ.get("ANTHROPIC_API_KEY"):
             check("Claude API key", OK, "set (the designer can run for real)")
         else:
@@ -160,15 +190,15 @@ def main() -> int:
             print(f"\n{G}{B}You can still run the offline demo right now.{X}")
             print(f"  {D}Cached docking results are committed to this "
                   f"repo, so no docking is needed:{X}\n")
-            print(f"    {B}python3 serve.py{X}   "
-                  f"{D}then pick 'mock' mode and press Run loop{X}")
+            print(f"    {B}./start.sh{X}   "
+                  f"{D}then pick the offline demo mode and press Run loop{X}")
             print(f"  {D}or: python3 orchestrator.py "
                   f"--warm-start --cache-only --mock{X}")
         return 1
 
-    print(f"{G}{B}Ready.{X}  Start it with:\n")
-    print(f"    {B}python3 serve.py{X}")
-    print(f"\n  then open {B}http://localhost:8000{X} and press Run loop.")
+    print(f"{G}{B}Ready.{X}  Start everything with:\n")
+    print(f"    {B}./start.sh{X}   {D}(from the repository root){X}")
+    print(f"\n  then open {B}http://localhost:3000{X} and press Run loop.")
     if warns:
         print(f"\n{Y}{len(warns)} warning(s) — not blocking, see above.{X}")
     return 0

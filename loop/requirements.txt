@@ -3,7 +3,10 @@
 # You also need two external programs that pip cannot install:
 #   obabel  (Open Babel)      conda install -c conda-forge openbabel
 #   vina    (AutoDock Vina)   brew install autodock-vina
-# Run `python3 doctor.py` to check both.
+# Run `python3 doctor.py` to check both, and Node 18+ for the interface.
 
 rdkit>=2023.9.1      # molecules, descriptors, SA score, structure drawing
 httpx>=0.27          # Claude API calls (no SDK — see llm.py for why)
+numpy>=1.24          # the cavity grid
+scipy>=1.10          # nearest-neighbour search for the cavity analysis
+pytest>=7.0          # the test suite in tests/ (not needed to run the app)

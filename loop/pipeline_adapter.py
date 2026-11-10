@@ -32,19 +32,16 @@ HERE = Path(__file__).resolve().parent
 
 def _load_chemistry():
     """
-    Prefer the full docking_pipeline.py if the user has it; otherwise use
-    the vendored copy in chemistry.py so a fresh clone just works.
+    Use chemistry.py, the copy vendored here, so a fresh clone just works.
 
-    Set DOCKING_PROJECT to point at a checkout of the full pipeline.
+    If you have the larger pipeline this project grew out of, point
+    DOCKING_PROJECT at that checkout and its docking_pipeline.py is used
+    instead — the five functions below have the same signatures in both, so
+    results do not drift between them.
     """
     env = os.environ.get("DOCKING_PROJECT")
-    roots = []
     if env:
-        roots.append(Path(env).expanduser())
-    roots += [HERE.parent, HERE.parent.parent,
-              Path.home() / "Downloads" / "dockingapp2.0"]
-
-    for root in roots:
+        root = Path(env).expanduser()
         if (root / "docking_pipeline.py").is_file():
             sys.path.insert(0, str(root))
             try:
@@ -72,19 +69,22 @@ import target as tgt  # noqa: E402
 # CONFIG
 #
 # The receptor, grid and reference ligand all come from the active target
-# (see target.py), so the loop works for any protein. If no target has been
-# set up yet we fall back to the original MRP1 files, so nothing that worked
-# before stops working.
+# (see target.py), so the loop works for any protein. The fallback below is
+# the MRP1 setup committed to this repository, used when no target has been
+# selected yet — which is the state a fresh clone starts in.
 # ─────────────────────────────────────────────────────────────────────────────
 EXHAUSTIVENESS = int(os.environ.get("VINA_EXHAUSTIVENESS", "8"))
 DOCK_MODE = os.environ.get("DOCK_MODE", "hybrid").lower()
+# Previously docked molecules from an external pipeline checkout, if one is
+# configured. The generative output this demo starts from is committed here
+# in targets/mrp1/dock_cache.json, so nothing external is required.
 RUNS_DB = (PROJECT / "data" / "runs.db") if PROJECT else None
 
 _FALLBACK = {
     "name": "MRP1",
     "slug": "mrp1",
     "description": "ABCC1, a multidrug-resistance efflux transporter.",
-    "receptor": str(HERE / "Receptor_MRP1.pdbqt"),
+    "receptor": str(HERE / "targets" / "mrp1" / "receptor.pdbqt"),
     "grid": {"center_x": 97.497, "center_y": 62.007, "center_z": 57.852,
              "size_x": 24.0, "size_y": 24.0, "size_z": 24.0},
     "grid_source": "docked MK-571 pose",
@@ -92,8 +92,8 @@ _FALLBACK = {
         "name": "MK-571", "affinity": -9.1,
         "smiles": "CC(C)(C)c1ccc(cc1)/C=C/c1cc(ccn1)CSC(CC(=O)O)SCCc1ccccc1",
     },
-    "cache": str(HERE / "dock_cache.json"),
-    "poses": str(HERE / "poses"),
+    "cache": str(HERE / "targets" / "mrp1" / "dock_cache.json"),
+    "poses": str(HERE / "targets" / "mrp1" / "poses"),
 }
 
 
@@ -108,7 +108,7 @@ def _cfg(key: str):
 
 # Kept as module-level names because other modules and the README use them.
 def _receptor() -> Path:
-    return Path(os.environ.get("MRP1_RECEPTOR") or _cfg("receptor"))
+    return Path(_cfg("receptor"))
 
 
 def _cache_path() -> Path:
@@ -143,6 +143,29 @@ REFERENCE_LIGAND = _Lazy(lambda: _cfg("reference"))
 # ─────────────────────────────────────────────────────────────────────────────
 # CACHE
 # ─────────────────────────────────────────────────────────────────────────────
+def pose_rel(path: str | Path) -> str:
+    """
+    Store pose paths relative to this folder.
+
+    An absolute path is correct only on the machine that wrote it; the
+    committed cache has to survive being cloned, so anything under loop/ is
+    recorded as a relative path and resolved again on read.
+    """
+    p = Path(path)
+    try:
+        return str(p.resolve().relative_to(HERE.resolve()))
+    except ValueError:
+        return str(p)
+
+
+def pose_abs(path: str | None) -> Path | None:
+    """Resolve what `pose_rel` stored, relative or absolute."""
+    if not path:
+        return None
+    p = Path(path)
+    return p if p.is_absolute() else (HERE / p)
+
+
 def _load_cache() -> dict:
     cp = _cache_path()
     if cp.exists():
@@ -161,7 +184,11 @@ def _save_cache(cache: dict) -> None:
 
 def seed_cache_from_runs_db() -> int:
     """
-    Pull previously docked (smiles -> score) pairs out of data/runs.db.
+    Pull previously docked (smiles -> score) pairs out of an external
+    pipeline's data/runs.db, when DOCKING_PROJECT points at one.
+
+    A clone needs none of this: the generative output the demo starts from
+    is committed to targets/mrp1/dock_cache.json with the same scores.
 
     Those scores were produced against MRP1, so they are meaningless for any
     other protein. Only seed the MRP1 target — otherwise a new target would
@@ -186,7 +213,7 @@ def seed_cache_from_runs_db() -> int:
             continue
         cache[key] = {
             "affinity": round(float(score), 2),
-            "pose_path": pose,
+            "pose_path": pose_rel(pose) if pose else None,
             "source": "runs.db",
         }
         added += 1
@@ -275,8 +302,9 @@ def dock(smiles: str, name: str = "cand") -> dict:
             if docked is not None:
                 poses = Path(_cfg("poses"))
                 poses.mkdir(exist_ok=True)
-                pose_path = str(poses / f"{name}.pdbqt")
-                Path(pose_path).write_bytes(Path(docked).read_bytes())
+                dest = poses / f"{name}.pdbqt"
+                dest.write_bytes(Path(docked).read_bytes())
+                pose_path = pose_rel(dest)
     except Exception as e:  # never let a bad candidate kill the run
         return {
             "smiles": smiles, "affinity": None,
@@ -292,6 +320,7 @@ def dock(smiles: str, name: str = "cand") -> dict:
             "source": "vina",
         }
         _save_cache(cache)
+        _record_reference_affinity(smiles, round(float(affinity), 2))
 
     return {
         "smiles": smiles,
@@ -301,6 +330,32 @@ def dock(smiles: str, name: str = "cand") -> dict:
         "seconds": elapsed,
         **({} if affinity is not None else {"error": "Vina returned no score"}),
     }
+
+
+def _record_reference_affinity(smiles: str, affinity: float) -> None:
+    """
+    The first time the reference ligand is docked, remember its score.
+
+    A new target starts with no number for its reference, which leaves
+    every table saying "binds better than —". The reference is docked like
+    any other molecule, so the score exists; this just writes it back into
+    the target so the comparison column means something from then on.
+    """
+    config = tgt.active_target()
+    if not config or not config.get("slug"):
+        return
+    reference = config.get("reference") or {}
+    if reference.get("affinity") is not None:
+        return
+    if (reference.get("smiles") or "").strip() != smiles.strip():
+        return
+    try:
+        path = tgt.TARGETS / config["slug"] / "target.json"
+        stored = json.loads(path.read_text())
+        stored.setdefault("reference", {})["affinity"] = affinity
+        path.write_text(json.dumps(stored, indent=2))
+    except Exception:
+        pass            # a missing comparison is not worth failing a dock
 
 
 def seed_scaffolds(n: int = 3, generative_only: bool = False) -> list[dict]:

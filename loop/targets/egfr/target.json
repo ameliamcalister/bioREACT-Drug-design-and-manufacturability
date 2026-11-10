@@ -1,0 +1,25 @@
+{
+  "name": "EGFR",
+  "slug": "egfr",
+  "description": "The kinase domain of the epidermal growth factor receptor. Inhibiting it blocks the growth signalling that drives several cancers.",
+  "receptor": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/egfr/receptor.pdbqt",
+  "grid": {
+    "center_x": 21.697,
+    "size_x": 35.7,
+    "center_y": 0.303,
+    "size_y": 24.7,
+    "center_z": 52.093,
+    "size_z": 27.1
+  },
+  "grid_source": "reference ligand",
+  "reference": {
+    "name": "erlotinib",
+    "smiles": "COCCOc1cc2ncnc(Nc3cccc(C#C)c3)c2cc1OCCOC",
+    "affinity": -6.99
+  },
+  "cache": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/egfr/dock_cache.json",
+  "poses": "/Users/ameliamcalister/Downloads/UCLxGemini_hackathon/loop/targets/egfr/poses",
+  "receptor_atoms": 2560,
+  "chembl_target_id": "CHEMBL203",
+  "chembl_target_name": "Epidermal growth factor receptor"
+}

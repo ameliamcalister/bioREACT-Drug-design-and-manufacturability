@@ -297,8 +297,13 @@ def set_active(slug: str) -> dict:
 
 
 def seed_mrp1_target() -> dict:
-    """Recreate the original MRP1 setup, so the old demo still works."""
-    rec = HERE / "Receptor_MRP1.pdbqt"
+    """
+    Rebuild the MRP1 target from the receptor committed to this repository.
+
+    Only needed if targets/mrp1/target.json is deleted or corrupted; the
+    prepared target is committed, so a clone does not have to run this.
+    """
+    rec = TARGETS / "mrp1" / "receptor.pdbqt"
     if not rec.exists():
         raise TargetError(f"{rec} not found")
     cfg = build_target(

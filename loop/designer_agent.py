@@ -8,7 +8,18 @@ We decide none of that. What we control is the tool surface and the budget.
 
 Tools the agent can call:
     seed_scaffolds      - the reference ligand and anything already docked
+    binding_site_gaps   - the unoccupied regions of the cavity next to a
+                          docked pose: volume, lining residues, what to put
+                          there. This is what makes the design strategy
+                          "grow into the empty space" rather than "make it
+                          bigger and hope"
+    known_binders       - published binders of this target from ChEMBL,
+                          with measured potency
+    find_analogues      - ChEMBL molecules similar to one of ours, so the
+                          agent can see whether a scaffold is already known
     properties          - RDKit descriptors, cheap, no docking
+    property_screen     - Lipinski, Veber, Ghose, Egan, QED and structural
+                          alerts, with each rule named
     dock                - AutoDock Vina against the target (~12 s live)
     propose_candidates  - register candidate SMILES, validated
     submit              - finish the round
@@ -29,14 +40,18 @@ import os
 import time
 from pathlib import Path
 
+import admet
+import chembl
 import llm
 import pipeline_adapter as pipe
+import pocket
+import poses
 
 HERE = Path(__file__).resolve().parent
 RUN_LOG = HERE / "run_log.json"
 
 MODEL = os.environ.get("DESIGNER_MODEL", "claude-sonnet-5-5")
-MAX_TOOL_CALLS = int(os.environ.get("MAX_TOOL_CALLS", "18"))
+MAX_TOOL_CALLS = int(os.environ.get("MAX_TOOL_CALLS", "24"))
 MAX_DOCKS_PER_ROUND = int(os.environ.get("MAX_DOCKS", "4"))
 
 SYSTEM_TEMPLATE = """\
@@ -46,15 +61,31 @@ of %(target)s.%(about)s
 Your job each round: propose a small set of candidate molecules, dock them, \
 and submit the best ones.
 
+THE DESIGN STRATEGY
+Start from a small known binder and grow it into the parts of the cavity it \
+does not yet occupy, so that shape complementarity improves rather than the \
+molecule simply getting heavier. binding_site_gaps tells you where those \
+regions are, how large they are and which residues line them; design into \
+them specifically, and say which gap each change is aimed at.
+
 HOW TO WORK
 1. Call seed_scaffolds first to see the reference ligand and anything already
    docked against this target, with its score.
-2. Design NEW molecules by modifying those scaffolds. Do not resubmit a seed
-   unchanged.
-3. Use properties() to screen cheaply before spending a docking run.
-4. Dock your best candidates. You have at most %(max_docks)d docking runs this
+2. Call binding_site_gaps on the best-docking seed. Read the volume, the
+   lining residues and the suggested chemistry for each unoccupied region.
+3. Call known_binders once to see what has already been made against this
+   protein and how potent it was. Use it as structural inspiration; never
+   resubmit a published molecule as your own candidate.
+4. Design NEW molecules by growing those scaffolds into the gaps. Do not
+   resubmit a seed unchanged. Match the chemistry to the lining: lipophilic
+   groups into hydrophobic regions, hydrogen-bonding groups towards polar
+   residues.
+5. Use properties() or property_screen() to screen cheaply before spending a
+   docking run, and find_analogues() if you want to know whether a scaffold
+   is already known.
+6. Dock your best candidates. You have at most %(max_docks)d docking runs this
    round, so choose deliberately rather than docking everything.
-5. Call submit() with your final candidates once you have docking scores. You
+7. Call submit() with your final candidates once you have docking scores. You
    MUST call submit to finish. A round with no submit is a failed round.
 
 A good candidate: binding affinity better (more negative) than %(target_aff).1f \
@@ -106,6 +137,60 @@ TOOLS = [
             "properties": {"n": {"type": "integer",
                                  "description": "how many to return (1-5)"}},
             "required": [],
+        },
+    },
+    {
+        "name": "binding_site_gaps",
+        "description": "The unoccupied regions of the binding cavity next to "
+                       "a docked pose: volume in Å³, distance from the "
+                       "ligand, the residues lining each one and what kind "
+                       "of group would fill it. Use this to decide WHERE to "
+                       "grow a scaffold. The molecule must have been docked "
+                       "already.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "smiles": {"type": "string",
+                           "description": "a molecule that has been docked, "
+                                          "usually the best seed"},
+            },
+            "required": ["smiles"],
+        },
+    },
+    {
+        "name": "known_binders",
+        "description": "Published binders of this target from ChEMBL, most "
+                       "potent first, with measured IC50/Ki and the ChEMBL "
+                       "id. Structural inspiration — what has been made and "
+                       "measured against this protein.",
+        "input_schema": {
+            "type": "object",
+            "properties": {"n": {"type": "integer",
+                                 "description": "how many to return (1-8)"}},
+            "required": [],
+        },
+    },
+    {
+        "name": "find_analogues",
+        "description": "ChEMBL molecules similar to a SMILES you give, with "
+                       "their Tanimoto similarity. Tells you whether a "
+                       "scaffold is already known and, if so, what was done "
+                       "with it.",
+        "input_schema": {
+            "type": "object",
+            "properties": {"smiles": {"type": "string"}},
+            "required": ["smiles"],
+        },
+    },
+    {
+        "name": "property_screen",
+        "description": "Lipinski, Veber, Ghose and Egan rule sets, QED, and "
+                       "PAINS/Brenk structural alerts, each named. Rules "
+                       "over descriptors, not a trained ADMET model.",
+        "input_schema": {
+            "type": "object",
+            "properties": {"smiles": {"type": "string"}},
+            "required": ["smiles"],
         },
     },
     {
@@ -263,12 +348,21 @@ class RunLog:
 class ToolBox:
     """Executes tools and enforces the docking budget."""
 
-    def __init__(self, max_docks: int = MAX_DOCKS_PER_ROUND):
+    def __init__(self, max_docks: int = MAX_DOCKS_PER_ROUND,
+                 offline: bool = False):
         self.max_docks = max_docks
         self.docks_used = 0
         self.proposed: list[dict] = []
         self.dock_results: dict[str, float] = {}
         self.avoided: list[str] = []
+        # Void detection takes a couple of seconds per pose, and the agent
+        # tends to ask about the same seed twice.
+        self.void_cache: dict[str, dict] = {}
+        self.gap_nudged = False
+        # In offline mode the ChEMBL tools answer from the committed cache
+        # and say so, rather than reporting a network failure as "nothing
+        # found" — which an agent would read as "this scaffold is novel".
+        self.offline = offline
 
     def run(self, name: str, args: dict):
         try:
@@ -280,12 +374,96 @@ class ToolBox:
             return {"error": f"{type(e).__name__}: {e}"}
 
     def _seed_scaffolds(self, args):
+        """
+        The seeds, and — for the best of them — the cavity space it leaves
+        empty.
+
+        The gap analysis is returned here rather than waiting to be asked
+        for, because the design strategy depends on it: a model that has
+        already seen where the room is designs into it, while one that has
+        to remember to ask often does not. It costs about two seconds, once
+        a round.
+        """
         n = min(max(int(args.get("n", 3)), 1), 5)
-        return {"scaffolds": pipe.seed_scaffolds(n),
-                "reference": pipe.REFERENCE_LIGAND}
+        scaffolds = pipe.seed_scaffolds(n)
+        payload = {"scaffolds": scaffolds, "reference": pipe.REFERENCE_LIGAND}
+
+        for seed in scaffolds:
+            gaps = self._binding_site_gaps({"smiles": seed["smiles"]})
+            if "error" not in gaps:
+                payload["unoccupied_space_beside_the_best_seed"] = {
+                    "smiles": seed["smiles"],
+                    "regions": gaps["unoccupied_regions"],
+                    "summary": gaps["summary"],
+                    "caveat": gaps["caveat"],
+                }
+                payload["design_instruction"] = (
+                    "Grow this seed into the regions above, matching the "
+                    "chemistry to each lining, and say in each candidate's "
+                    "rationale which region it fills. Ask for "
+                    "binding_site_gaps on another docked molecule if you "
+                    "want to compare.")
+                break
+        return payload
 
     def _properties(self, args):
         return pipe.properties(args["smiles"])
+
+    def _property_screen(self, args):
+        result = admet.screen(args["smiles"])
+        if not result.get("ok"):
+            return result
+        return {
+            "verdict": result["verdict"],
+            "descriptors": result["descriptors"],
+            "rule_sets": [{"name": s["name"], "pass": s["pass"],
+                           "violations": [c["requirement"] for c in s["checks"]
+                                          if not c["pass"]]}
+                          for s in result["rule_sets"]],
+            "alerts": [f"{a['family']}: {a['name']}" for a in result["alerts"]],
+            "qed": result["qed"],
+            "disclaimer": result["disclaimer"],
+        }
+
+    def _binding_site_gaps(self, args):
+        smiles = (args.get("smiles") or "").strip()
+        if smiles in self.void_cache:
+            return self.void_cache[smiles]
+        pose = poses.pose_for(smiles)
+        if not pose.get("ok"):
+            return {"error": f"{pose.get('error')} — dock it first, then ask "
+                             f"where the gaps are"}
+        t = pipe.TARGET()
+        result = pocket.find_voids(t["receptor"], pose["pdb"], dict(t["grid"]))
+        payload = {
+            "smiles": smiles,
+            "affinity_of_this_pose": pose.get("affinity"),
+            "unoccupied_regions": result.get("voids", []),
+            "total_unoccupied_volume_a3": result.get("unoccupied_volume_a3"),
+            "summary": pocket.summarise_for_agent(result),
+            "method": result.get("method"),
+            "caveat": result.get("caveat"),
+        }
+        self.void_cache[smiles] = payload
+        return payload
+
+    def _known_binders(self, args):
+        n = min(max(int(args.get("n", 6)), 1), 8)
+        target_name = pipe.TARGET().get("name", "")
+        chembl_id = (pipe.TARGET().get("chembl_target_id")
+                     or chembl.resolve_target_id(target_name,
+                                                 offline=self.offline))
+        if not chembl_id:
+            return {"error": f"no ChEMBL target found for '{target_name}' — "
+                             f"design from the seeds and the cavity instead"}
+        result = chembl.known_actives(chembl_id, limit=n, offline=self.offline)
+        if result.get("ok"):
+            result["summary"] = chembl.summarise_actives(result)
+        return result
+
+    def _find_analogues(self, args):
+        return chembl.analogues((args.get("smiles") or "").strip(),
+                                offline=self.offline)
 
     def _dock(self, args):
         if self.docks_used >= self.max_docks:
@@ -299,6 +477,21 @@ class ToolBox:
         return res
 
     def _propose_candidates(self, args):
+        # The strategy is to grow into the empty parts of the cavity, so the
+        # agent is asked once to look at them before it draws anything. One
+        # nudge, not a hard block: if the pose analysis is unavailable the
+        # round must still be able to finish.
+        if not self.void_cache and not self.gap_nudged:
+            self.gap_nudged = True
+            return {
+                "error": "call binding_site_gaps on the seed you are growing "
+                         "before proposing candidates, so the changes are "
+                         "aimed at the unoccupied regions of the cavity "
+                         "rather than added anywhere",
+                "then": "re-propose with each candidate's rationale naming "
+                        "the gap it fills",
+            }
+
         avoid = args.get("avoid") or []
         self.avoided = list(dict.fromkeys(self.avoided + avoid))
         out = []
@@ -374,7 +567,10 @@ def design_round(
     log = log or RunLog()
     log.start_round(round_num, feedback)
 
-    box = ToolBox()
+    # mock mode and cache-only docking are the offline configurations: in
+    # both, the network tools must answer from the committed cache.
+    box = ToolBox(offline=(llm.BACKEND == "mock"
+                           or os.environ.get("OFFLINE") == "1"))
 
     task = (
         f"Round {round_num}. Design {n_candidates} candidate "

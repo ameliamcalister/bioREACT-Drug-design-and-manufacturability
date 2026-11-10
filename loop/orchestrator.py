@@ -103,11 +103,13 @@ def pool_round(n: int, log: designer.RunLog) -> dict:
     """
     Round 1 from the real generative pool instead of the designer.
 
-    This is the honest version of the demo. The molecules in data/runs.db are
-    actual outputs of the generative pipeline, and the best-docking ones are
-    precisely the ones the critics reject. Starting here means round 1's
-    rejections are real data, not a scripted setup — and the anti-correlation
-    between docking score and manufacturability is the whole argument.
+    This is the honest version of the demo. Those molecules are actual
+    output of the generative pipeline this project grew out of, committed
+    to the target's docking cache with their real Vina scores, and the
+    best-docking ones are precisely the ones the critics reject. Starting
+    here means round 1's rejections are real data rather than a scripted
+    setup — and the anti-correlation between docking score and
+    manufacturability is the whole argument.
     """
     log.start_round(1, None)
     pool = pipe.seed_scaffolds(n, generative_only=True)
@@ -131,14 +133,16 @@ def pool_round(n: int, log: designer.RunLog) -> dict:
 def closed_loop(max_rounds: int = MAX_ROUNDS, n_candidates: int = 3,
                 warm_start: bool = False) -> dict:
     log = designer.RunLog()
-    seeded = pipe.seed_cache_from_runs_db()
+    pipe.seed_cache_from_runs_db()      # only if DOCKING_PROJECT is set
+    cached = len(pipe._load_cache())
 
     t = pipe.TARGET()
     print(f"{C['b']}{t['name']} — closed-loop design{C['r']}")
     print(f"{C['d']}site     : {t.get('grid_source', 'unknown')}")
     print(f"{C['d']}designer : {llm.backend_name()}")
-    print(f"docking  : mode={pipe.DOCK_MODE}  exhaustiveness={pipe.EXHAUSTIVENESS}  "
-          f"cache={seeded} poses from runs.db")
+    print(f"docking  : mode={pipe.DOCK_MODE}  "
+          f"exhaustiveness={pipe.EXHAUSTIVENESS}  "
+          f"{cached} molecules already in this target's cache")
     print(f"target   : affinity <= {AFFINITY_TARGET} kcal/mol, manufacturable")
     print(f"rounds   : hard cap {max_rounds} (design choice — the loop must "
           f"terminate){C['r']}")
