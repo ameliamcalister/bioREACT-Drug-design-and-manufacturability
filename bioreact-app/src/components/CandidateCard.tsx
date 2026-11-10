@@ -30,10 +30,10 @@ export function CandidateCard({
   const verdict = candidate.verdict;
   const edge =
     verdict === 'pass'
-      ? 'border-l-emerald-500'
+      ? 'border-l-pass'
       : verdict === 'flag'
-        ? 'border-l-amber-500'
-        : 'border-l-rose-500';
+        ? 'border-l-flag'
+        : 'border-l-fail';
   const beatsReference =
     candidate.affinity !== null &&
     referenceAffinity !== null &&
@@ -42,9 +42,9 @@ export function CandidateCard({
 
   return (
     <article
-      className={`flex flex-col overflow-hidden rounded-lg border border-slate-200 border-l-4 bg-white ${edge}`}
+      className={`flex flex-col overflow-hidden rounded-lg border border-line border-l-4 bg-surface ${edge}`}
     >
-      <div className="flex items-center justify-center border-b border-slate-100 bg-white p-2">
+      <div className="flex items-center justify-center border-b border-line bg-surface-2 p-2">
         <StructureImage smiles={candidate.smiles} width={320} height={190} />
       </div>
 
@@ -54,9 +54,9 @@ export function CandidateCard({
             {verdict}
           </Chip>
           {candidate.affinity !== null && (
-            <span className="font-mono text-sm tabular-nums text-slate-900">
+            <span className="font-mono text-sm tabular-nums text-ink">
               {candidate.affinity.toFixed(2)}
-              <span className="ml-1 text-[11px] font-normal text-slate-500">kcal/mol</span>
+              <span className="ml-1 text-[11px] font-normal text-ink-3">kcal/mol</span>
             </span>
           )}
           {beatsReference && (
@@ -85,22 +85,22 @@ export function CandidateCard({
         </dl>
 
         {candidate.rationale && (
-          <p className="text-xs italic leading-relaxed text-slate-600">
+          <p className="text-xs italic leading-relaxed text-ink-2">
             designer: {candidate.rationale}
           </p>
         )}
 
         {candidate.rejections.length > 0 && (
-          <div className="space-y-2 border-t border-slate-100 pt-2">
+          <div className="space-y-2 border-t border-line pt-2">
             {candidate.rejections.slice(0, 4).map((rejection, index) => (
               <div key={`${rejection.criterion}-${index}`} className="text-xs">
                 <div className="flex items-baseline gap-1.5">
                   <Chip tone={rejection.level === 'fail' ? 'fail' : 'flag'}>
                     {rejection.criterion}
                   </Chip>
-                  <span className="text-slate-700">{rejection.reason}</span>
+                  <span className="text-ink-2">{rejection.reason}</span>
                 </div>
-                <div className="mt-0.5 pl-1 text-[11px] leading-relaxed text-sky-800">
+                <div className="mt-0.5 pl-1 text-[11px] leading-relaxed text-accent">
                   → {rejection.suggest}
                 </div>
               </div>
@@ -136,10 +136,10 @@ function Metric({
 }) {
   return (
     <div title={help} className="min-w-0">
-      <dt className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+      <dt className="truncate text-[10px] font-semibold uppercase tracking-wide text-ink-3">
         {label}
       </dt>
-      <dd className="truncate font-mono text-xs tabular-nums text-slate-900">{value}</dd>
+      <dd className="truncate font-mono text-xs tabular-nums text-ink">{value}</dd>
     </div>
   );
 }

@@ -1,0 +1,872 @@
+{
+ "ok": true,
+ "status": "finished",
+ "progress": {
+  "done": 3,
+  "total": 3
+ },
+ "generated_at": "2026-11-09T23:37:42",
+ "mode": "agent",
+ "model": "api:claude-sonnet-5-5",
+ "scale_g": 1000.0,
+ "scale_label": "1 kg",
+ "overrides": {},
+ "assumptions": [
+  {
+   "key": "step_yield",
+   "value": 0.8,
+   "default": 0.8,
+   "overridden": false,
+   "unit": "fraction",
+   "min": 0.65,
+   "max": 0.9,
+   "provenance": "rule of thumb",
+   "note": "Average isolated yield per step. Overall yield is this raised to the number of steps, which is why step count dominates everything downstream."
+  },
+  {
+   "key": "pmi_per_step",
+   "value": 8.0,
+   "default": 8.0,
+   "overridden": false,
+   "unit": "kg input / kg product / step",
+   "min": 5,
+   "max": 15,
+   "provenance": "rule of thumb",
+   "note": "Process mass intensity contributed by one step at 100% yield \u2014 solvents, reagents, water, work-up. Divided by overall yield to give the route's PMI."
+  },
+  {
+   "key": "material_cost_per_kg",
+   "value": 150.0,
+   "default": 150.0,
+   "overridden": false,
+   "unit": "USD / kg input",
+   "min": 60,
+   "max": 400,
+   "provenance": "uncalibrated",
+   "note": "Blended cost of everything that goes in, at 10 kg scale: building blocks, reagents, solvent, and its disposal. Scaled for smaller campaigns by procurement_scale_exponent."
+  },
+  {
+   "key": "operator_day_cost",
+   "value": 1800.0,
+   "default": 1800.0,
+   "overridden": false,
+   "unit": "USD / operator-day",
+   "min": 900,
+   "max": 3000,
+   "provenance": "uncalibrated",
+   "note": "Fully loaded cost of one person-day in a kilo-lab, including plant time, analytics and overhead. A CRO quote sits at the top of this range; an academic lab far below."
+  },
+  {
+   "key": "days_per_step",
+   "value": 3.0,
+   "default": 3.0,
+   "overridden": false,
+   "unit": "operator-days / step / batch",
+   "min": 1.5,
+   "max": 6,
+   "provenance": "rule of thumb",
+   "note": "Charge, react, quench, work up, isolate. Purification is charged separately."
+  },
+  {
+   "key": "purification_days",
+   "value": 1.5,
+   "default": 1.5,
+   "overridden": false,
+   "unit": "operator-days / step / batch",
+   "min": 0.5,
+   "max": 4,
+   "provenance": "rule of thumb",
+   "note": "Crystallisation if you are lucky. Chromatography costs more and is charged a premium on top."
+  },
+  {
+   "key": "batch_size_kg",
+   "value": 2.0,
+   "default": 2.0,
+   "overridden": false,
+   "unit": "kg product / batch",
+   "min": 0.5,
+   "max": 20,
+   "provenance": "convention",
+   "note": "Kilo-lab batch size. More product means repeat batches, which is why cost per gram falls sub-linearly with scale."
+  },
+  {
+   "key": "batch_learning_exponent",
+   "value": 0.8,
+   "default": 0.8,
+   "overridden": false,
+   "unit": "exponent",
+   "min": 0.6,
+   "max": 1.0,
+   "provenance": "rule of thumb",
+   "note": "Operator time for n batches goes as n^exponent: the second batch of the same step is quicker than the first."
+  },
+  {
+   "key": "procurement_scale_exponent",
+   "value": -0.12,
+   "default": -0.12,
+   "overridden": false,
+   "unit": "exponent",
+   "min": -0.3,
+   "max": 0.0,
+   "provenance": "uncalibrated",
+   "note": "Material cost per kg against scale. Buying 10\u00d7 more material makes it modestly cheaper per kg."
+  },
+  {
+   "key": "chiral_resolution_premium",
+   "value": 1.35,
+   "default": 1.35,
+   "overridden": false,
+   "unit": "multiplier per resolved centre",
+   "min": 1.1,
+   "max": 2.0,
+   "provenance": "rule of thumb",
+   "note": "Classical resolution throws away at least half the material and needs a separation; asymmetric catalysis trades that for catalyst cost."
+  },
+  {
+   "key": "precious_metal_premium",
+   "value": 1.18,
+   "default": 1.18,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.05,
+   "max": 1.5,
+   "provenance": "uncalibrated",
+   "note": "Palladium-catalysed coupling: catalyst and ligand, plus metal scavenging and ICP-MS release testing."
+  },
+  {
+   "key": "chromatography_premium",
+   "value": 1.25,
+   "default": 1.25,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.1,
+   "max": 1.8,
+   "provenance": "rule of thumb",
+   "note": "Charged when the structure gives little hope of a crystalline intermediate: silica, solvent and time."
+  },
+  {
+   "key": "specialist_building_block_premium",
+   "value": 1.3,
+   "default": 1.3,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.05,
+   "max": 2.5,
+   "provenance": "uncalibrated",
+   "note": "Densely halogenated or unusual-element cores must be bought rather than made, and often cannot be bought at all."
+  },
+  {
+   "key": "enzyme_cost_per_kg_product",
+   "value": 900.0,
+   "default": 900.0,
+   "overridden": false,
+   "unit": "USD / kg product",
+   "min": 200,
+   "max": 4000,
+   "provenance": "uncalibrated",
+   "note": "Immobilised enzyme consumed per kg of product in a biocatalytic step, assuming it is recycled a few times."
+  },
+  {
+   "key": "enzyme_development_cost",
+   "value": 80000.0,
+   "default": 80000.0,
+   "overridden": false,
+   "unit": "USD, one-off",
+   "min": 20000,
+   "max": 400000,
+   "provenance": "uncalibrated",
+   "note": "Screening a panel and, if needed, a round of directed evolution to make one step work on your substrate. Paid once, not per gram."
+  },
+  {
+   "key": "biocatalysis_step_yield",
+   "value": 0.88,
+   "default": 0.88,
+   "overridden": false,
+   "unit": "fraction",
+   "min": 0.75,
+   "max": 0.96,
+   "provenance": "rule of thumb",
+   "note": "An enzymatic step that works tends to be high-yielding and selective, which is the point of using one."
+  },
+  {
+   "key": "fermentation_titre_g_per_l",
+   "value": 0.5,
+   "default": 0.5,
+   "overridden": false,
+   "unit": "g / L broth",
+   "min": 0.05,
+   "max": 5.0,
+   "provenance": "uncalibrated",
+   "note": "Titre of a secondary metabolite in an engineered host after initial strain work. Orders of magnitude of headroom exist here, which is why the cost range is wide."
+  },
+  {
+   "key": "fermenter_volume_l",
+   "value": 2000.0,
+   "default": 2000.0,
+   "overridden": false,
+   "unit": "L",
+   "min": 100,
+   "max": 20000,
+   "provenance": "convention",
+   "note": "Working volume of the vessel assumed for a campaign."
+  },
+  {
+   "key": "fermentation_batch_cost",
+   "value": 45000.0,
+   "default": 45000.0,
+   "overridden": false,
+   "unit": "USD / batch",
+   "min": 15000,
+   "max": 150000,
+   "provenance": "uncalibrated",
+   "note": "Media, utilities, sterilisation, operators and QC for one fermentation, excluding recovery."
+  },
+  {
+   "key": "downstream_recovery",
+   "value": 0.45,
+   "default": 0.45,
+   "overridden": false,
+   "unit": "fraction",
+   "min": 0.2,
+   "max": 0.75,
+   "provenance": "rule of thumb",
+   "note": "Fraction of the titre that survives extraction and purification to isolated compound."
+  },
+  {
+   "key": "downstream_cost_fraction",
+   "value": 0.7,
+   "default": 0.7,
+   "overridden": false,
+   "unit": "fraction of fermentation cost",
+   "min": 0.3,
+   "max": 1.5,
+   "provenance": "uncalibrated",
+   "note": "Recovery and purification cost, as a fraction of the fermentation cost it follows."
+  },
+  {
+   "key": "strain_development_cost",
+   "value": 350000.0,
+   "default": 350000.0,
+   "overridden": false,
+   "unit": "USD, one-off",
+   "min": 100000,
+   "max": 2000000,
+   "provenance": "uncalibrated",
+   "note": "Pathway assembly, host engineering and titre improvement to reach the assumed titre. Paid once."
+  },
+  {
+   "key": "release_testing_weeks",
+   "value": 3.0,
+   "default": 3.0,
+   "overridden": false,
+   "unit": "weeks",
+   "min": 2,
+   "max": 8,
+   "provenance": "rule of thumb",
+   "note": "Analytical release of the final batch: identity, assay, impurities, residual solvent and metals."
+  },
+  {
+   "key": "uncertainty_factor",
+   "value": 2.2,
+   "default": 2.2,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.5,
+   "max": 4.0,
+   "provenance": "convention",
+   "note": "The quoted range is the point estimate divided and multiplied by this. It is deliberately wide: an uncalibrated model with a narrow error bar would be worse than no number at all."
+  }
+ ],
+ "candidates": [
+  {
+   "ok": true,
+   "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+   "scale_g": 1000.0,
+   "scale_label": "1 kg",
+   "verdict": "route_identified",
+   "verdict_note": "A production route fits this structure; the numbers below are order-of-magnitude estimates from the stated assumptions.",
+   "critic_verdict": "pass",
+   "manufacturable": true,
+   "estimated_steps": 6,
+   "sa_score": 2.09,
+   "route_complexity": "straightforward",
+   "route": "chemical_synthesis",
+   "route_label": "Organic chemical synthesis",
+   "route_fit": "recommended",
+   "route_reasons": [
+    "452 Da synthetic small molecule: made by organic synthesis, in roughly 6 steps on this estimate",
+    "achiral, so no stereochemical control is needed"
+   ],
+   "route_caveats": [],
+   "enzymes": [],
+   "route_options": [
+    {
+     "route": "chemical_synthesis",
+     "label": "Organic chemical synthesis",
+     "fit": "recommended",
+     "reasons": [
+      "452 Da synthetic small molecule: made by organic synthesis, in roughly 6 steps on this estimate",
+      "achiral, so no stereochemical control is needed"
+     ],
+     "enzymes": [],
+     "caveats": [],
+     "recommended": true
+    }
+   ],
+   "alternatives": [],
+   "cost": {
+    "route": "chemical_synthesis",
+    "scale_g": 1000.0,
+    "steps": 6,
+    "overall_yield": 0.2621,
+    "pmi_kg_per_kg": 183.1,
+    "cost_per_gram_usd": {
+     "point": 100.07,
+     "low": 45.49,
+     "high": 220.16
+    },
+    "batch_total_usd": {
+     "point": 100072.26,
+     "low": 45487.39,
+     "high": 220158.98
+    },
+    "one_off_development_usd": 0,
+    "breakdown": [
+     {
+      "item": "materials, solvent and waste",
+      "usd_per_gram": 42.72,
+      "basis": "PMI 183 kg/kg \u00d7 $198/kg"
+     },
+     {
+      "item": "processing, labour and plant",
+      "usd_per_gram": 57.35,
+      "basis": "27 operator-days over 1 batch(es) \u00d7 $1800/day"
+     }
+    ],
+    "premiums": [
+     {
+      "label": "palladium-catalysed coupling",
+      "factor": 1.18,
+      "detail": "A biaryl or aryl\u2013amine bond is almost always made by Suzuki or Buchwald coupling. That brings catalyst cost, palladium scavenging and a metal specification on the final compound."
+     }
+    ],
+    "viable": true,
+    "viability_note": null,
+    "method": "Cost per gram = (PMI \u00d7 material cost + operator-days \u00d7 day rate) \u00f7 1000 g, \u00d7 1.18 for the operations this structure forces. PMI = 8 kg/kg/step \u00d7 6 steps \u00f7 26.2% overall yield."
+   },
+   "time": {
+    "route": "chemical_synthesis",
+    "scale_g": 1000.0,
+    "phases": [
+     {
+      "phase": "route development",
+      "weeks": 9.6,
+      "detail": "find and demonstrate a workable route to a 6-step target; this is a route-scouting estimate, not a planned synthesis"
+     },
+     {
+      "phase": "campaign execution",
+      "weeks": 5.4,
+      "detail": "6 steps \u00d7 1 batch(es) at five operator-days per week"
+     },
+     {
+      "phase": "release testing",
+      "weeks": 3.0,
+      "detail": "identity, assay, impurities, residual solvent and metals on the final batch"
+     }
+    ],
+    "total_weeks": {
+     "point": 18.0,
+     "low": 10.0,
+     "high": 32.4
+    },
+    "total_months": {
+     "point": 4.14,
+     "low": 2.3,
+     "high": 7.46
+    },
+    "method": "Phase durations are heuristics keyed to step count, stereocentre count and batch count. They assume one campaign with no failed step and no repeat batch, which is the optimistic case."
+   },
+   "process_flags": [
+    {
+     "key": "precious_metal_coupling",
+     "label": "palladium-catalysed coupling",
+     "detail": "A biaryl or aryl\u2013amine bond is almost always made by Suzuki or Buchwald coupling. That brings catalyst cost, palladium scavenging and a metal specification on the final compound."
+    }
+   ],
+   "limitations": [
+    "The model prices a one-off early-phase campaign in a kilo-lab or at a contract manufacturer. It is not steady-state commercial production: a compound made by the tonne in a dedicated plant costs orders of magnitude less per gram than this, and nothing here should be read as a market price.",
+    "Step count is a heuristic from rings, stereocentres and heavy atoms, not a retrosynthesis \u2014 no reaction has been proposed.",
+    "Cost factors are uncalibrated defaults inside published ranges for early-phase manufacture, not supplier quotes. Read the ranking, not the absolute number.",
+    "Building-block availability is approximated from elements and halogen density, not a supplier catalogue.",
+    "Biocatalysis is proposed from a substructure match: it says the chemistry is plausible, not that an enzyme accepts this substrate."
+   ],
+   "mode": "agent",
+   "model": "api:claude-sonnet-5-5",
+   "agent": {
+    "headline": "Achiral 452 Da aryl piperazine amide: make it by convergent chemical synthesis, about $100/g (range $45\u2013220) and about 18 weeks (range 10\u201332) to 1 kg.",
+    "justification": "The molecule has no stereocentres, no macrocycle and no enzyme-amenable motif. Chemical synthesis is the only route the rules consider, and no resolution or biocatalytic step is needed. The N-aryl piperazine bond is the forced operation: a Pd-catalysed Buchwald coupling, which adds a 1.18 cost premium plus palladium scavenging. The other key bond is the amide between the piperazine and the 2-methylsulfonyl-4-fluorobenzoic acid. The route is estimated at 6 steps with 26.2% overall yield and a PMI of 183 kg/kg. The tools give $100.07/g (low $45.49, high $220.16) and 18.0 weeks (low 10.0, high 32.4).",
+    "risks": [
+     "Residual palladium after the Buchwald coupling must meet the metals specification on the final compound. A scavenger or crystallisation purge needs to be demonstrated.",
+     "The 4-benzylaniline-derived piperazine intermediates may not crystallise, which would force chromatography at kg scale and raise cost and PMI.",
+     "Amide coupling to the ortho-methylsulfonyl benzoic acid is sterically hindered. Activation may be sluggish, and the 4-fluoro group is open to SNAr side reactions with piperazine, giving regioisomeric impurities.",
+     "The 18-week estimate assumes no failed step and no repeat batch. Route scouting alone is 9.6 weeks, and one repeat would move the timeline toward the 32-week high case."
+    ],
+    "redesign_recommended": false,
+    "routes_costed": [
+     "chemical_synthesis"
+    ]
+   },
+   "trace": [
+    {
+     "t": 1.4,
+     "tool": "molecule_profile",
+     "args": {},
+     "ok": true,
+     "summary": "452.2 Da, ~6 steps, 0 enzyme motif(s), 1 forced operation(s)"
+    },
+    {
+     "t": 1.4,
+     "tool": "route_options",
+     "args": {},
+     "ok": true,
+     "summary": "chemical_synthesis=recommended"
+    },
+    {
+     "t": 2.7,
+     "tool": "estimate_cost",
+     "args": {
+      "route": "chemical_synthesis"
+     },
+     "ok": true,
+     "summary": "chemical_synthesis: $45\u2013220/g at 1000 g"
+    },
+    {
+     "t": 2.7,
+     "tool": "estimate_time",
+     "args": {
+      "route": "chemical_synthesis"
+     },
+     "ok": true,
+     "summary": "chemical_synthesis: 10\u201332 weeks to first delivery"
+    },
+    {
+     "t": 8.3,
+     "tool": "submit_assessment",
+     "args": {
+      "route": "chemical_synthesis",
+      "headline": "Achiral 452 Da aryl piperazine amide: make it by convergent chemical synthesis, about $100/g (range $45\u2013220) and about 18 weeks (range 10\u201332) to 1 kg.",
+      "justification": "The molecule has no stereocentres, no macrocycle and no enzyme-amenable motif. Chemical synthesis is the only route the rules consider, and no resolution or biocatalytic step is needed. The N-aryl piperazine bond is the forced operation: a Pd-catalysed Buchwald coupling, which adds a 1.18 cost premium plus palladium scavenging. The other key bond is the amide between the piperazine and the 2-methylsulfonyl-4-fluorobenzoic acid. The route is estimated at 6 steps with 26.2% overall yield and a PMI of 183 kg/kg. The tools give $100.07/g (low $45.49, high $220.16) and 18.0 weeks (low 10.0, high 32.4).",
+      "risks": [
+       "Residual palladium after the Buchwald coupling must meet the metals specification on the final compound. A scavenger or crystallisation purge needs to be demonstrated.",
+       "The 4-benzylaniline-derived piperazine intermediates may not crystallise, which would force chromatography at kg scale and raise cost and PMI.",
+       "Amide coupling to the ortho-methylsulfonyl benzoic acid is sterically hindered. Activation may be sluggish, and the 4-fluoro group is open to SNAr side reactions with piperazine, giving regioisomeric impurities.",
+       "The 18-week estimate assumes no failed step and no repeat batch. Route scouting alone is 9.6 weeks, and one repeat would move the timeline toward the 32-week high case."
+      ]
+     },
+     "ok": true,
+     "summary": "assessment submitted"
+    }
+   ],
+   "tool_calls": 5,
+   "elapsed_s": 8.3,
+   "affinity": -10.82,
+   "label": "",
+   "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1",
+   "rank": 1
+  },
+  {
+   "ok": true,
+   "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+   "scale_g": 1000.0,
+   "scale_label": "1 kg",
+   "verdict": "route_identified",
+   "verdict_note": "A production route fits this structure; the numbers below are order-of-magnitude estimates from the stated assumptions.",
+   "critic_verdict": "pass",
+   "manufacturable": true,
+   "estimated_steps": 6,
+   "sa_score": 2.25,
+   "route_complexity": "straightforward",
+   "route": "chemical_synthesis",
+   "route_label": "Organic chemical synthesis",
+   "route_fit": "recommended",
+   "route_reasons": [
+    "495 Da synthetic small molecule: made by organic synthesis, in roughly 6 steps on this estimate",
+    "achiral, so no stereochemical control is needed"
+   ],
+   "route_caveats": [],
+   "enzymes": [],
+   "route_options": [
+    {
+     "route": "chemical_synthesis",
+     "label": "Organic chemical synthesis",
+     "fit": "recommended",
+     "reasons": [
+      "495 Da synthetic small molecule: made by organic synthesis, in roughly 6 steps on this estimate",
+      "achiral, so no stereochemical control is needed"
+     ],
+     "enzymes": [],
+     "caveats": [],
+     "recommended": true
+    }
+   ],
+   "alternatives": [],
+   "cost": {
+    "route": "chemical_synthesis",
+    "scale_g": 1000.0,
+    "steps": 6,
+    "overall_yield": 0.2621,
+    "pmi_kg_per_kg": 183.1,
+    "cost_per_gram_usd": {
+     "point": 100.07,
+     "low": 45.49,
+     "high": 220.16
+    },
+    "batch_total_usd": {
+     "point": 100072.26,
+     "low": 45487.39,
+     "high": 220158.98
+    },
+    "one_off_development_usd": 0,
+    "breakdown": [
+     {
+      "item": "materials, solvent and waste",
+      "usd_per_gram": 42.72,
+      "basis": "PMI 183 kg/kg \u00d7 $198/kg"
+     },
+     {
+      "item": "processing, labour and plant",
+      "usd_per_gram": 57.35,
+      "basis": "27 operator-days over 1 batch(es) \u00d7 $1800/day"
+     }
+    ],
+    "premiums": [
+     {
+      "label": "palladium-catalysed coupling",
+      "factor": 1.18,
+      "detail": "A biaryl or aryl\u2013amine bond is almost always made by Suzuki or Buchwald coupling. That brings catalyst cost, palladium scavenging and a metal specification on the final compound."
+     }
+    ],
+    "viable": true,
+    "viability_note": null,
+    "method": "Cost per gram = (PMI \u00d7 material cost + operator-days \u00d7 day rate) \u00f7 1000 g, \u00d7 1.18 for the operations this structure forces. PMI = 8 kg/kg/step \u00d7 6 steps \u00f7 26.2% overall yield."
+   },
+   "time": {
+    "route": "chemical_synthesis",
+    "scale_g": 1000.0,
+    "phases": [
+     {
+      "phase": "route development",
+      "weeks": 9.6,
+      "detail": "find and demonstrate a workable route to a 6-step target; this is a route-scouting estimate, not a planned synthesis"
+     },
+     {
+      "phase": "campaign execution",
+      "weeks": 5.4,
+      "detail": "6 steps \u00d7 1 batch(es) at five operator-days per week"
+     },
+     {
+      "phase": "release testing",
+      "weeks": 3.0,
+      "detail": "identity, assay, impurities, residual solvent and metals on the final batch"
+     }
+    ],
+    "total_weeks": {
+     "point": 18.0,
+     "low": 10.0,
+     "high": 32.4
+    },
+    "total_months": {
+     "point": 4.14,
+     "low": 2.3,
+     "high": 7.46
+    },
+    "method": "Phase durations are heuristics keyed to step count, stereocentre count and batch count. They assume one campaign with no failed step and no repeat batch, which is the optimistic case."
+   },
+   "process_flags": [
+    {
+     "key": "precious_metal_coupling",
+     "label": "palladium-catalysed coupling",
+     "detail": "A biaryl or aryl\u2013amine bond is almost always made by Suzuki or Buchwald coupling. That brings catalyst cost, palladium scavenging and a metal specification on the final compound."
+    }
+   ],
+   "limitations": [
+    "The model prices a one-off early-phase campaign in a kilo-lab or at a contract manufacturer. It is not steady-state commercial production: a compound made by the tonne in a dedicated plant costs orders of magnitude less per gram than this, and nothing here should be read as a market price.",
+    "Step count is a heuristic from rings, stereocentres and heavy atoms, not a retrosynthesis \u2014 no reaction has been proposed.",
+    "Cost factors are uncalibrated defaults inside published ranges for early-phase manufacture, not supplier quotes. Read the ranking, not the absolute number.",
+    "Building-block availability is approximated from elements and halogen density, not a supplier catalogue.",
+    "Biocatalysis is proposed from a substructure match: it says the chemistry is plausible, not that an enzyme accepts this substrate."
+   ],
+   "mode": "agent",
+   "model": "api:claude-sonnet-5-5",
+   "agent": {
+    "headline": "Achiral 495 Da diarylmethane\u2013aryl piperazine amide is made by a roughly 6-step convergent chemical synthesis, about $100/g (range $45\u2013220) and about 18 weeks (range 10\u201332) for 1 kg.",
+    "justification": "The molecule has no stereocentres, no macrocycle and no enzyme-amenable motifs, so the tools offer only chemical synthesis and it needs no resolution or biocatalysis. The aryl\u2013piperazine C\u2013N bond and the diarylmethane link force palladium-catalysed coupling (Buchwald or Suzuki-type), which adds a 1.18 cost factor and a metal specification. The final step would be an amide coupling of the piperazine with the 4-fluoro-2-(methylsulfonyl)benzoic acid fragment. The tools put the route at 26.2% overall yield and PMI 183 kg/kg. The docking score of -10.74 kcal/mol only explains why the molecule was shortlisted. It does not affect route choice, and it is not evidence of activity.",
+    "risks": [
+     "Residual palladium on the final compound: the scavenging and crystallisation steps need to be shown to reach the clinical metal specification, and they may add a step.",
+     "The route is a heuristic step count with no retrosynthesis behind it. The 26.2% overall yield, and so the cost, could move toward the high end of $45\u2013220/g if the coupling or the benzylic C\u2013C bond formation underperforms.",
+     "The aryl fluoride ortho/para to the electron-withdrawing sulfone and carbonyl could undergo SNAr with the piperazine amine during amide formation or coupling, giving regioisomer or dimer impurities that need to be controlled.",
+     "The final API is a primary benzamide with a sulfone and is likely to have low solubility. Crystallisation and polymorph control, and purification without chromatography at kilogram scale, are not yet shown; a chromatography step would raise both cost and time."
+    ],
+    "redesign_recommended": false,
+    "routes_costed": [
+     "chemical_synthesis"
+    ]
+   },
+   "trace": [
+    {
+     "t": 1.2,
+     "tool": "molecule_profile",
+     "args": {},
+     "ok": true,
+     "summary": "495.2 Da, ~6 steps, 0 enzyme motif(s), 1 forced operation(s)"
+    },
+    {
+     "t": 1.2,
+     "tool": "route_options",
+     "args": {},
+     "ok": true,
+     "summary": "chemical_synthesis=recommended"
+    },
+    {
+     "t": 2.6,
+     "tool": "estimate_cost",
+     "args": {
+      "route": "chemical_synthesis"
+     },
+     "ok": true,
+     "summary": "chemical_synthesis: $45\u2013220/g at 1000 g"
+    },
+    {
+     "t": 2.6,
+     "tool": "estimate_time",
+     "args": {
+      "route": "chemical_synthesis"
+     },
+     "ok": true,
+     "summary": "chemical_synthesis: 10\u201332 weeks to first delivery"
+    },
+    {
+     "t": 8.9,
+     "tool": "submit_assessment",
+     "args": {
+      "route": "chemical_synthesis",
+      "headline": "Achiral 495 Da diarylmethane\u2013aryl piperazine amide is made by a roughly 6-step convergent chemical synthesis, about $100/g (range $45\u2013220) and about 18 weeks (range 10\u201332) for 1 kg.",
+      "justification": "The molecule has no stereocentres, no macrocycle and no enzyme-amenable motifs, so the tools offer only chemical synthesis and it needs no resolution or biocatalysis. The aryl\u2013piperazine C\u2013N bond and the diarylmethane link force palladium-catalysed coupling (Buchwald or Suzuki-type), which adds a 1.18 cost factor and a metal specification. The final step would be an amide coupling of the piperazine with the 4-fluoro-2-(methylsulfonyl)benzoic acid fragment. The tools put the route at 26.2% overall yield and PMI 183 kg/kg. The docking score of -10.74 kcal/mol only explains why the molecule was shortlisted. It does not affect route choice, and it is not evidence of activity.",
+      "risks": [
+       "Residual palladium on the final compound: the scavenging and crystallisation steps need to be shown to reach the clinical metal specification, and they may add a step.",
+       "The route is a heuristic step count with no retrosynthesis behind it. The 26.2% overall yield, and so the cost, could move toward the high end of $45\u2013220/g if the coupling or the benzylic C\u2013C bond formation underperforms.",
+       "The aryl fluoride ortho/para to the electron-withdrawing sulfone and carbonyl could undergo SNAr with the piperazine amine during amide formation or coupling, giving regioisomer or dimer impurities that need to be controlled.",
+       "The final API is a primary benzamide with a sulfone and is likely to have low solubility. Crystallisation and polymorph control, and purification without chromatography at kilogram scale, are not yet shown; a chromatography step would raise both cost and time."
+      ]
+     },
+     "ok": true,
+     "summary": "assessment submitted"
+    }
+   ],
+   "tool_calls": 5,
+   "elapsed_s": 8.9,
+   "affinity": -10.74,
+   "label": "",
+   "rationale": "Carboxamide toward polar residues in gaps 1/2; achiral, lower cLogP",
+   "rank": 2
+  },
+  {
+   "ok": true,
+   "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+   "scale_g": 1000.0,
+   "scale_label": "1 kg",
+   "verdict": "route_identified",
+   "verdict_note": "A production route fits this structure; the numbers below are order-of-magnitude estimates from the stated assumptions.",
+   "critic_verdict": "pass",
+   "manufacturable": true,
+   "estimated_steps": 6,
+   "sa_score": 2.15,
+   "route_complexity": "straightforward",
+   "route": "chemical_synthesis",
+   "route_label": "Organic chemical synthesis",
+   "route_fit": "recommended",
+   "route_reasons": [
+    "472 Da synthetic small molecule: made by organic synthesis, in roughly 6 steps on this estimate",
+    "achiral, so no stereochemical control is needed"
+   ],
+   "route_caveats": [],
+   "enzymes": [],
+   "route_options": [
+    {
+     "route": "chemical_synthesis",
+     "label": "Organic chemical synthesis",
+     "fit": "recommended",
+     "reasons": [
+      "472 Da synthetic small molecule: made by organic synthesis, in roughly 6 steps on this estimate",
+      "achiral, so no stereochemical control is needed"
+     ],
+     "enzymes": [],
+     "caveats": [],
+     "recommended": true
+    }
+   ],
+   "alternatives": [],
+   "cost": {
+    "route": "chemical_synthesis",
+    "scale_g": 1000.0,
+    "steps": 6,
+    "overall_yield": 0.2621,
+    "pmi_kg_per_kg": 183.1,
+    "cost_per_gram_usd": {
+     "point": 100.07,
+     "low": 45.49,
+     "high": 220.16
+    },
+    "batch_total_usd": {
+     "point": 100072.26,
+     "low": 45487.39,
+     "high": 220158.98
+    },
+    "one_off_development_usd": 0,
+    "breakdown": [
+     {
+      "item": "materials, solvent and waste",
+      "usd_per_gram": 42.72,
+      "basis": "PMI 183 kg/kg \u00d7 $198/kg"
+     },
+     {
+      "item": "processing, labour and plant",
+      "usd_per_gram": 57.35,
+      "basis": "27 operator-days over 1 batch(es) \u00d7 $1800/day"
+     }
+    ],
+    "premiums": [
+     {
+      "label": "palladium-catalysed coupling",
+      "factor": 1.18,
+      "detail": "A biaryl or aryl\u2013amine bond is almost always made by Suzuki or Buchwald coupling. That brings catalyst cost, palladium scavenging and a metal specification on the final compound."
+     }
+    ],
+    "viable": true,
+    "viability_note": null,
+    "method": "Cost per gram = (PMI \u00d7 material cost + operator-days \u00d7 day rate) \u00f7 1000 g, \u00d7 1.18 for the operations this structure forces. PMI = 8 kg/kg/step \u00d7 6 steps \u00f7 26.2% overall yield."
+   },
+   "time": {
+    "route": "chemical_synthesis",
+    "scale_g": 1000.0,
+    "phases": [
+     {
+      "phase": "route development",
+      "weeks": 9.6,
+      "detail": "find and demonstrate a workable route to a 6-step target; this is a route-scouting estimate, not a planned synthesis"
+     },
+     {
+      "phase": "campaign execution",
+      "weeks": 5.4,
+      "detail": "6 steps \u00d7 1 batch(es) at five operator-days per week"
+     },
+     {
+      "phase": "release testing",
+      "weeks": 3.0,
+      "detail": "identity, assay, impurities, residual solvent and metals on the final batch"
+     }
+    ],
+    "total_weeks": {
+     "point": 18.0,
+     "low": 10.0,
+     "high": 32.4
+    },
+    "total_months": {
+     "point": 4.14,
+     "low": 2.3,
+     "high": 7.46
+    },
+    "method": "Phase durations are heuristics keyed to step count, stereocentre count and batch count. They assume one campaign with no failed step and no repeat batch, which is the optimistic case."
+   },
+   "process_flags": [
+    {
+     "key": "precious_metal_coupling",
+     "label": "palladium-catalysed coupling",
+     "detail": "A biaryl or aryl\u2013amine bond is almost always made by Suzuki or Buchwald coupling. That brings catalyst cost, palladium scavenging and a metal specification on the final compound."
+    }
+   ],
+   "limitations": [
+    "The model prices a one-off early-phase campaign in a kilo-lab or at a contract manufacturer. It is not steady-state commercial production: a compound made by the tonne in a dedicated plant costs orders of magnitude less per gram than this, and nothing here should be read as a market price.",
+    "Step count is a heuristic from rings, stereocentres and heavy atoms, not a retrosynthesis \u2014 no reaction has been proposed.",
+    "Cost factors are uncalibrated defaults inside published ranges for early-phase manufacture, not supplier quotes. Read the ranking, not the absolute number.",
+    "Building-block availability is approximated from elements and halogen density, not a supplier catalogue.",
+    "Biocatalysis is proposed from a substructure match: it says the chemistry is plausible, not that an enzyme accepts this substrate."
+   ],
+   "mode": "agent",
+   "model": "api:claude-sonnet-5-5",
+   "agent": {
+    "headline": "Achiral 472 Da aryl piperazine amide: make it by conventional chemical synthesis, about $100/g point estimate (range $45\u2013220) and 18 weeks (range 10\u201332) to 1 kg.",
+    "justification": "The molecule has no stereocentres, no macrocycle and no enzyme-amenable motif, and chemical synthesis is the only route the rules consider applicable. The decisive bond is the aryl\u2013piperazine N\u2013C bond to the diaryl ether, which forces a Pd-catalysed (Buchwald-type) coupling or an SNAr alternative. The route finishes with amide coupling to the 2-methylsulfonyl-4-fluorobenzoyl piece. With no resolution needed, the 6-step estimate is a short, convergent route. The tool figures are $100.07/g point (low $45.49, high $220.16), PMI 183 kg/kg and 26.2% overall yield. They include a 1.18 premium for the Pd coupling.",
+    "risks": [
+     "Palladium carry-over: the Buchwald coupling needs a scavenging step and a metals specification on the final compound. Run a Pd-removal screen early and consider an SNAr or Ullmann alternative to avoid Pd.",
+     "The 6-step count is a heuristic, not a retrosynthesis. Route scouting could add steps or lower the 26.2% overall yield, which would push cost toward the high case of $220/g.",
+     "The timeline assumes one campaign with no failed step and no repeat batch. The high case is 32.4 weeks.",
+     "logP of 4.12 and a neutral, aromatic-rich structure may make the final API hard to crystallise or purge impurities from, which could force chromatography at kilogram scale. The tools did not model this."
+    ],
+    "redesign_recommended": false,
+    "routes_costed": [
+     "chemical_synthesis"
+    ]
+   },
+   "trace": [
+    {
+     "t": 2.0,
+     "tool": "molecule_profile",
+     "args": {},
+     "ok": true,
+     "summary": "472.1 Da, ~6 steps, 0 enzyme motif(s), 1 forced operation(s)"
+    },
+    {
+     "t": 2.0,
+     "tool": "route_options",
+     "args": {},
+     "ok": true,
+     "summary": "chemical_synthesis=recommended"
+    },
+    {
+     "t": 3.6,
+     "tool": "estimate_cost",
+     "args": {
+      "route": "chemical_synthesis"
+     },
+     "ok": true,
+     "summary": "chemical_synthesis: $45\u2013220/g at 1000 g"
+    },
+    {
+     "t": 3.6,
+     "tool": "estimate_time",
+     "args": {
+      "route": "chemical_synthesis"
+     },
+     "ok": true,
+     "summary": "chemical_synthesis: 10\u201332 weeks to first delivery"
+    },
+    {
+     "t": 9.7,
+     "tool": "submit_assessment",
+     "args": {
+      "route": "chemical_synthesis",
+      "headline": "Achiral 472 Da aryl piperazine amide: make it by conventional chemical synthesis, about $100/g point estimate (range $45\u2013220) and 18 weeks (range 10\u201332) to 1 kg.",
+      "justification": "The molecule has no stereocentres, no macrocycle and no enzyme-amenable motif, and chemical synthesis is the only route the rules consider applicable. The decisive bond is the aryl\u2013piperazine N\u2013C bond to the diaryl ether, which forces a Pd-catalysed (Buchwald-type) coupling or an SNAr alternative. The route finishes with amide coupling to the 2-methylsulfonyl-4-fluorobenzoyl piece. With no resolution needed, the 6-step estimate is a short, convergent route. The tool figures are $100.07/g point (low $45.49, high $220.16), PMI 183 kg/kg and 26.2% overall yield. They include a 1.18 premium for the Pd coupling.",
+      "risks": [
+       "Palladium carry-over: the Buchwald coupling needs a scavenging step and a metals specification on the final compound. Run a Pd-removal screen early and consider an SNAr or Ullmann alternative to avoid Pd.",
+       "The 6-step count is a heuristic, not a retrosynthesis. Route scouting could add steps or lower the 26.2% overall yield, which would push cost toward the high case of $220/g.",
+       "The timeline assumes one campaign with no failed step and no repeat batch. The high case is 32.4 weeks.",
+       "logP of 4.12 and a neutral, aromatic-rich structure may make the final API hard to crystallise or purge impurities from, which could force chromatography at kilogram scale. The tools did not model this."
+      ]
+     },
+     "ok": true,
+     "summary": "assessment submitted"
+    }
+   ],
+   "tool_calls": 5,
+   "elapsed_s": 9.7,
+   "affinity": -10.17,
+   "label": "",
+   "rationale": "Diaryl ether, fluoroaryl in gap 1; achiral",
+   "rank": 3
+  }
+ ],
+ "elapsed_s": 27.2,
+ "method": "One agent per candidate chooses the production route and justifies it; every figure comes from the deterministic model in manufacture.py, which the agent is required to call. Costs are order-of-magnitude estimates from uncalibrated factors \u2014 the ranking is the result, not the absolute number."
+}

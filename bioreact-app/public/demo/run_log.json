@@ -1,0 +1,2771 @@
+{
+ "status": "finished",
+ "started_at": 1794267394.913175,
+ "rounds": [
+  {
+   "round": 1,
+   "feedback_in": [],
+   "trace": [
+    {
+     "t": 0.0,
+     "tool": "generative_pool",
+     "args": {
+      "n": 3
+     },
+     "result": [
+      {
+       "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+       "affinity": -12.9,
+       "rationale": "generative pipeline output, ranked by docking score"
+      },
+      {
+       "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+       "affinity": -12.32,
+       "rationale": "generative pipeline output, ranked by docking score"
+      },
+      {
+       "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+       "affinity": -11.2,
+       "rationale": "generative pipeline output, ranked by docking score"
+      }
+     ]
+    }
+   ],
+   "candidates": [
+    {
+     "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+     "affinity": -12.9,
+     "rationale": "generative pipeline output, ranked by docking score"
+    },
+    {
+     "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+     "affinity": -12.32,
+     "rationale": "generative pipeline output, ranked by docking score"
+    },
+    {
+     "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+     "affinity": -11.2,
+     "rationale": "generative pipeline output, ranked by docking score"
+    }
+   ],
+   "changes_made": "round 1 taken from the generative pool (best docking scores)",
+   "status": "pool",
+   "assessed": [
+    {
+     "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+     "verdict": "fail",
+     "manufacturable": false,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+      "verdict": "fail",
+      "estimated_steps": 18,
+      "sa_score": 4.26,
+      "rejections": [
+       {
+        "criterion": "sa_score",
+        "value": 4.26,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 4,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "4 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "fused_ring_systems",
+        "value": 4,
+        "threshold": 3,
+        "level": "flag",
+        "reason": "4 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "estimated_steps",
+        "value": 18,
+        "threshold": 14,
+        "level": "fail",
+        "reason": "estimated 18-step linear sequence is too long to be practical",
+        "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.021,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.021 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.021,
+       "logp": 9.67,
+       "tpsa": 75.3,
+       "aromatic_rings": 5,
+       "fsp3": 0.325,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 2,
+       "max_ring_size": 6,
+       "sa_score": 4.26,
+       "stereocentres": 4,
+       "fused_ring_systems": 4,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 48,
+       "rotatable_bonds": 11,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 682.3
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+      "verdict": "flag",
+      "route_complexity": "specialist",
+      "route_note": "research-scale chemistry only",
+      "group_flags": [],
+      "rejections": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 48,
+        "threshold": 40,
+        "level": "flag",
+        "reason": "48 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 11,
+        "threshold": 10,
+        "level": "flag",
+        "reason": "11 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 4,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "4 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "sa_score",
+        "value": 4.26,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "passes": [],
+      "metrics": {
+       "halogen_density": 0.021,
+       "logp": 9.67,
+       "tpsa": 75.3,
+       "aromatic_rings": 5,
+       "fsp3": 0.325,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 2,
+       "max_ring_size": 6,
+       "sa_score": 4.26,
+       "stereocentres": 4,
+       "fused_ring_systems": 4,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 48,
+       "rotatable_bonds": 11,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 682.3
+      }
+     },
+     "rejections": [
+      {
+       "criterion": "estimated_steps",
+       "value": 18,
+       "threshold": 14,
+       "level": "fail",
+       "reason": "estimated 18-step linear sequence is too long to be practical",
+       "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+      },
+      {
+       "criterion": "sa_score",
+       "value": 4.26,
+       "threshold": 4.0,
+       "level": "flag",
+       "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+       "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+      },
+      {
+       "criterion": "stereocentres",
+       "value": 4,
+       "threshold": 2,
+       "level": "flag",
+       "reason": "4 stereocentres require asymmetric synthesis or resolution",
+       "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+      },
+      {
+       "criterion": "fused_ring_systems",
+       "value": 4,
+       "threshold": 3,
+       "level": "flag",
+       "reason": "4 fused ring systems imply a long linear sequence",
+       "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+      },
+      {
+       "criterion": "heavy_atoms",
+       "value": 48,
+       "threshold": 40,
+       "level": "flag",
+       "reason": "48 heavy atoms, which implies a high total step count",
+       "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+      },
+      {
+       "criterion": "rotatable_bonds",
+       "value": 11,
+       "threshold": 10,
+       "level": "flag",
+       "reason": "11 rotatable bonds, which complicates purification",
+       "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+      }
+     ],
+     "estimated_steps": 18,
+     "sa_score": 4.26,
+     "route_complexity": "specialist",
+     "rationale": "generative pipeline output, ranked by docking score",
+     "affinity": -12.9,
+     "meets_affinity": true
+    },
+    {
+     "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+     "verdict": "fail",
+     "manufacturable": false,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+      "verdict": "fail",
+      "estimated_steps": 16,
+      "sa_score": 4.09,
+      "rejections": [
+       {
+        "criterion": "sa_score",
+        "value": 4.09,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "estimated_steps",
+        "value": 16,
+        "threshold": 14,
+        "level": "fail",
+        "reason": "estimated 16-step linear sequence is too long to be practical",
+        "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "fused_ring_systems",
+        "value": 3,
+        "threshold": 3,
+        "level": "pass",
+        "reason": "3 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.02,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.02 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.02,
+       "logp": 8.54,
+       "tpsa": 133.7,
+       "aromatic_rings": 5,
+       "fsp3": 0.289,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 3,
+       "max_ring_size": 6,
+       "sa_score": 4.09,
+       "stereocentres": 3,
+       "fused_ring_systems": 3,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 49,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 700.2
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+      "verdict": "flag",
+      "route_complexity": "specialist",
+      "route_note": "research-scale chemistry only",
+      "group_flags": [],
+      "rejections": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 49,
+        "threshold": 40,
+        "level": "flag",
+        "reason": "49 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 12,
+        "threshold": 10,
+        "level": "flag",
+        "reason": "12 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "sa_score",
+        "value": 4.09,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "passes": [],
+      "metrics": {
+       "halogen_density": 0.02,
+       "logp": 8.54,
+       "tpsa": 133.7,
+       "aromatic_rings": 5,
+       "fsp3": 0.289,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 3,
+       "max_ring_size": 6,
+       "sa_score": 4.09,
+       "stereocentres": 3,
+       "fused_ring_systems": 3,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 49,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 700.2
+      }
+     },
+     "rejections": [
+      {
+       "criterion": "estimated_steps",
+       "value": 16,
+       "threshold": 14,
+       "level": "fail",
+       "reason": "estimated 16-step linear sequence is too long to be practical",
+       "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+      },
+      {
+       "criterion": "sa_score",
+       "value": 4.09,
+       "threshold": 4.0,
+       "level": "flag",
+       "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+       "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+      },
+      {
+       "criterion": "stereocentres",
+       "value": 3,
+       "threshold": 2,
+       "level": "flag",
+       "reason": "3 stereocentres require asymmetric synthesis or resolution",
+       "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+      },
+      {
+       "criterion": "heavy_atoms",
+       "value": 49,
+       "threshold": 40,
+       "level": "flag",
+       "reason": "49 heavy atoms, which implies a high total step count",
+       "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+      },
+      {
+       "criterion": "rotatable_bonds",
+       "value": 12,
+       "threshold": 10,
+       "level": "flag",
+       "reason": "12 rotatable bonds, which complicates purification",
+       "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+      }
+     ],
+     "estimated_steps": 16,
+     "sa_score": 4.09,
+     "route_complexity": "specialist",
+     "rationale": "generative pipeline output, ranked by docking score",
+     "affinity": -12.32,
+     "meets_affinity": true
+    },
+    {
+     "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+     "verdict": "fail",
+     "manufacturable": false,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+      "verdict": "fail",
+      "estimated_steps": 15,
+      "sa_score": 3.94,
+      "rejections": [
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "estimated_steps",
+        "value": 15,
+        "threshold": 14,
+        "level": "fail",
+        "reason": "estimated 15-step linear sequence is too long to be practical",
+        "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "sa_score",
+        "value": 3.94,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 3.94 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "fused_ring_systems",
+        "value": 2,
+        "threshold": 3,
+        "level": "pass",
+        "reason": "2 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.043,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.043 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.043,
+       "logp": 8.35,
+       "tpsa": 95.5,
+       "aromatic_rings": 4,
+       "fsp3": 0.324,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 1,
+       "max_ring_size": 6,
+       "sa_score": 3.94,
+       "stereocentres": 3,
+       "fused_ring_systems": 2,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 46,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 5,
+       "mw": 644.3
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+      "verdict": "flag",
+      "route_complexity": "demanding",
+      "route_note": "long route or a chiral separation needed",
+      "group_flags": [],
+      "rejections": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 46,
+        "threshold": 40,
+        "level": "flag",
+        "reason": "46 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 12,
+        "threshold": 10,
+        "level": "flag",
+        "reason": "12 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "sa_score",
+        "value": 3.94,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 3.94 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.043,
+       "logp": 8.35,
+       "tpsa": 95.5,
+       "aromatic_rings": 4,
+       "fsp3": 0.324,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 1,
+       "max_ring_size": 6,
+       "sa_score": 3.94,
+       "stereocentres": 3,
+       "fused_ring_systems": 2,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 46,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 5,
+       "mw": 644.3
+      }
+     },
+     "rejections": [
+      {
+       "criterion": "estimated_steps",
+       "value": 15,
+       "threshold": 14,
+       "level": "fail",
+       "reason": "estimated 15-step linear sequence is too long to be practical",
+       "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+      },
+      {
+       "criterion": "stereocentres",
+       "value": 3,
+       "threshold": 2,
+       "level": "flag",
+       "reason": "3 stereocentres require asymmetric synthesis or resolution",
+       "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+      },
+      {
+       "criterion": "heavy_atoms",
+       "value": 46,
+       "threshold": 40,
+       "level": "flag",
+       "reason": "46 heavy atoms, which implies a high total step count",
+       "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+      },
+      {
+       "criterion": "rotatable_bonds",
+       "value": 12,
+       "threshold": 10,
+       "level": "flag",
+       "reason": "12 rotatable bonds, which complicates purification",
+       "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+      }
+     ],
+     "estimated_steps": 15,
+     "sa_score": 3.94,
+     "route_complexity": "demanding",
+     "rationale": "generative pipeline output, ranked by docking score",
+     "affinity": -11.2,
+     "meets_affinity": true
+    }
+   ]
+  },
+  {
+   "round": 2,
+   "feedback_in": [
+    {
+     "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+     "verdict": "fail",
+     "manufacturable": false,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+      "verdict": "fail",
+      "estimated_steps": 18,
+      "sa_score": 4.26,
+      "rejections": [
+       {
+        "criterion": "sa_score",
+        "value": 4.26,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 4,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "4 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "fused_ring_systems",
+        "value": 4,
+        "threshold": 3,
+        "level": "flag",
+        "reason": "4 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "estimated_steps",
+        "value": 18,
+        "threshold": 14,
+        "level": "fail",
+        "reason": "estimated 18-step linear sequence is too long to be practical",
+        "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.021,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.021 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.021,
+       "logp": 9.67,
+       "tpsa": 75.3,
+       "aromatic_rings": 5,
+       "fsp3": 0.325,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 2,
+       "max_ring_size": 6,
+       "sa_score": 4.26,
+       "stereocentres": 4,
+       "fused_ring_systems": 4,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 48,
+       "rotatable_bonds": 11,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 682.3
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+      "verdict": "flag",
+      "route_complexity": "specialist",
+      "route_note": "research-scale chemistry only",
+      "group_flags": [],
+      "rejections": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 48,
+        "threshold": 40,
+        "level": "flag",
+        "reason": "48 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 11,
+        "threshold": 10,
+        "level": "flag",
+        "reason": "11 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 4,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "4 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "sa_score",
+        "value": 4.26,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "passes": [],
+      "metrics": {
+       "halogen_density": 0.021,
+       "logp": 9.67,
+       "tpsa": 75.3,
+       "aromatic_rings": 5,
+       "fsp3": 0.325,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 2,
+       "max_ring_size": 6,
+       "sa_score": 4.26,
+       "stereocentres": 4,
+       "fused_ring_systems": 4,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 48,
+       "rotatable_bonds": 11,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 682.3
+      }
+     },
+     "rejections": [
+      {
+       "criterion": "estimated_steps",
+       "value": 18,
+       "threshold": 14,
+       "level": "fail",
+       "reason": "estimated 18-step linear sequence is too long to be practical",
+       "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+      },
+      {
+       "criterion": "sa_score",
+       "value": 4.26,
+       "threshold": 4.0,
+       "level": "flag",
+       "reason": "synthetic accessibility score 4.26 (threshold 4.0)",
+       "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+      },
+      {
+       "criterion": "stereocentres",
+       "value": 4,
+       "threshold": 2,
+       "level": "flag",
+       "reason": "4 stereocentres require asymmetric synthesis or resolution",
+       "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+      },
+      {
+       "criterion": "fused_ring_systems",
+       "value": 4,
+       "threshold": 3,
+       "level": "flag",
+       "reason": "4 fused ring systems imply a long linear sequence",
+       "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+      },
+      {
+       "criterion": "heavy_atoms",
+       "value": 48,
+       "threshold": 40,
+       "level": "flag",
+       "reason": "48 heavy atoms, which implies a high total step count",
+       "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+      },
+      {
+       "criterion": "rotatable_bonds",
+       "value": 11,
+       "threshold": 10,
+       "level": "flag",
+       "reason": "11 rotatable bonds, which complicates purification",
+       "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+      }
+     ],
+     "estimated_steps": 18,
+     "sa_score": 4.26,
+     "route_complexity": "specialist",
+     "rationale": "generative pipeline output, ranked by docking score",
+     "affinity": -12.9,
+     "meets_affinity": true
+    },
+    {
+     "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+     "verdict": "fail",
+     "manufacturable": false,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+      "verdict": "fail",
+      "estimated_steps": 16,
+      "sa_score": 4.09,
+      "rejections": [
+       {
+        "criterion": "sa_score",
+        "value": 4.09,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "estimated_steps",
+        "value": 16,
+        "threshold": 14,
+        "level": "fail",
+        "reason": "estimated 16-step linear sequence is too long to be practical",
+        "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "fused_ring_systems",
+        "value": 3,
+        "threshold": 3,
+        "level": "pass",
+        "reason": "3 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.02,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.02 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.02,
+       "logp": 8.54,
+       "tpsa": 133.7,
+       "aromatic_rings": 5,
+       "fsp3": 0.289,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 3,
+       "max_ring_size": 6,
+       "sa_score": 4.09,
+       "stereocentres": 3,
+       "fused_ring_systems": 3,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 49,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 700.2
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+      "verdict": "flag",
+      "route_complexity": "specialist",
+      "route_note": "research-scale chemistry only",
+      "group_flags": [],
+      "rejections": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 49,
+        "threshold": 40,
+        "level": "flag",
+        "reason": "49 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 12,
+        "threshold": 10,
+        "level": "flag",
+        "reason": "12 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "sa_score",
+        "value": 4.09,
+        "threshold": 4.0,
+        "level": "flag",
+        "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "passes": [],
+      "metrics": {
+       "halogen_density": 0.02,
+       "logp": 8.54,
+       "tpsa": 133.7,
+       "aromatic_rings": 5,
+       "fsp3": 0.289,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 3,
+       "max_ring_size": 6,
+       "sa_score": 4.09,
+       "stereocentres": 3,
+       "fused_ring_systems": 3,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 49,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 6,
+       "mw": 700.2
+      }
+     },
+     "rejections": [
+      {
+       "criterion": "estimated_steps",
+       "value": 16,
+       "threshold": 14,
+       "level": "fail",
+       "reason": "estimated 16-step linear sequence is too long to be practical",
+       "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+      },
+      {
+       "criterion": "sa_score",
+       "value": 4.09,
+       "threshold": 4.0,
+       "level": "flag",
+       "reason": "synthetic accessibility score 4.09 (threshold 4.0)",
+       "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+      },
+      {
+       "criterion": "stereocentres",
+       "value": 3,
+       "threshold": 2,
+       "level": "flag",
+       "reason": "3 stereocentres require asymmetric synthesis or resolution",
+       "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+      },
+      {
+       "criterion": "heavy_atoms",
+       "value": 49,
+       "threshold": 40,
+       "level": "flag",
+       "reason": "49 heavy atoms, which implies a high total step count",
+       "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+      },
+      {
+       "criterion": "rotatable_bonds",
+       "value": 12,
+       "threshold": 10,
+       "level": "flag",
+       "reason": "12 rotatable bonds, which complicates purification",
+       "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+      }
+     ],
+     "estimated_steps": 16,
+     "sa_score": 4.09,
+     "route_complexity": "specialist",
+     "rationale": "generative pipeline output, ranked by docking score",
+     "affinity": -12.32,
+     "meets_affinity": true
+    },
+    {
+     "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+     "verdict": "fail",
+     "manufacturable": false,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+      "verdict": "fail",
+      "estimated_steps": 15,
+      "sa_score": 3.94,
+      "rejections": [
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "estimated_steps",
+        "value": 15,
+        "threshold": 14,
+        "level": "fail",
+        "reason": "estimated 15-step linear sequence is too long to be practical",
+        "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "sa_score",
+        "value": 3.94,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 3.94 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "fused_ring_systems",
+        "value": 2,
+        "threshold": 3,
+        "level": "pass",
+        "reason": "2 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.043,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.043 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.043,
+       "logp": 8.35,
+       "tpsa": 95.5,
+       "aromatic_rings": 4,
+       "fsp3": 0.324,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 1,
+       "max_ring_size": 6,
+       "sa_score": 3.94,
+       "stereocentres": 3,
+       "fused_ring_systems": 2,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 46,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 5,
+       "mw": 644.3
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+      "verdict": "flag",
+      "route_complexity": "demanding",
+      "route_note": "long route or a chiral separation needed",
+      "group_flags": [],
+      "rejections": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 46,
+        "threshold": 40,
+        "level": "flag",
+        "reason": "46 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 12,
+        "threshold": 10,
+        "level": "flag",
+        "reason": "12 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 3,
+        "threshold": 2,
+        "level": "flag",
+        "reason": "3 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       }
+      ],
+      "passes": [
+       {
+        "criterion": "sa_score",
+        "value": 3.94,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 3.94 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.043,
+       "logp": 8.35,
+       "tpsa": 95.5,
+       "aromatic_rings": 4,
+       "fsp3": 0.324,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 1,
+       "max_ring_size": 6,
+       "sa_score": 3.94,
+       "stereocentres": 3,
+       "fused_ring_systems": 2,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 46,
+       "rotatable_bonds": 12,
+       "unusual_elements": 0,
+       "rings": 5,
+       "mw": 644.3
+      }
+     },
+     "rejections": [
+      {
+       "criterion": "estimated_steps",
+       "value": 15,
+       "threshold": 14,
+       "level": "fail",
+       "reason": "estimated 15-step linear sequence is too long to be practical",
+       "suggest": "target <=10 steps: simplify the core and reduce stereocentres"
+      },
+      {
+       "criterion": "stereocentres",
+       "value": 3,
+       "threshold": 2,
+       "level": "flag",
+       "reason": "3 stereocentres require asymmetric synthesis or resolution",
+       "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+      },
+      {
+       "criterion": "heavy_atoms",
+       "value": 46,
+       "threshold": 40,
+       "level": "flag",
+       "reason": "46 heavy atoms, which implies a high total step count",
+       "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+      },
+      {
+       "criterion": "rotatable_bonds",
+       "value": 12,
+       "threshold": 10,
+       "level": "flag",
+       "reason": "12 rotatable bonds, which complicates purification",
+       "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+      }
+     ],
+     "estimated_steps": 15,
+     "sa_score": 3.94,
+     "route_complexity": "demanding",
+     "rationale": "generative pipeline output, ranked by docking score",
+     "affinity": -11.2,
+     "meets_affinity": true
+    }
+   ],
+   "trace": [
+    {
+     "t": 2.9,
+     "tool": "seed_scaffolds",
+     "args": {
+      "n": 4
+     },
+     "result": {
+      "scaffolds": [
+       {
+        "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+        "affinity": -12.9
+       },
+       {
+        "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+        "affinity": -12.32
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc3ccccc3c2)cc1",
+        "affinity": -11.63
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(CNC(=O)c2ccc(F)cc2)cc1",
+        "affinity": -11.48
+       }
+      ],
+      "reference": "{'name': 'MK-571', 'smiles': 'CC(C)(C)c1ccc(cc1)/C=C/c1cc(ccn1)CSC(CC(=O)O)SCCc1ccccc1', 'affinity': -9.1}",
+      "unoccupied_space_beside_the_best_seed": {
+       "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+       "regions": [
+        {
+         "rank": 1,
+         "volume_a3": 340.0,
+         "centre": [
+          95.28,
+          58.84,
+          57.04
+         ],
+         "gap_to_ligand_a": 2.2,
+         "nearest_ligand_atom_index": 2,
+         "direction_from_ligand": [
+          0.08,
+          -0.68,
+          0.72
+         ],
+         "lining_residues": [
+          "MET137:D",
+          "MET130:B",
+          "GLY236:B",
+          "GLN133:D",
+          "TRP290:D",
+          "ILE278:B",
+          "TRP240:B",
+          "TYR127:B"
+         ],
+         "lining_counts": {
+          "hydrophobic": 23,
+          "polar": 23,
+          "charged": 10
+         },
+         "character": "mixed",
+         "suggested_chemistry": "an aryl ring carrying one polar substituent suits a lining of this kind",
+         "grid_points": 664
+        },
+        {
+         "rank": 2,
+         "volume_a3": 68.0,
+         "centre": [
+          107.42,
+          67.7,
+          62.77
+         ],
+         "gap_to_ligand_a": 2.2,
+         "nearest_ligand_atom_index": 18,
+         "direction_from_ligand": [
+          0.98,
+          -0.17,
+          0.13
+         ],
+         "lining_residues": [
+          "GLN283:D",
+          "VAL241:B",
+          "ASN37:D",
+          "PRO244:B",
+          "ASN277:B",
+          "LEU273:B",
+          "TYR280:D",
+          "LEU34:D"
+         ],
+         "lining_counts": {
+          "hydrophobic": 11,
+          "polar": 11,
+          "charged": 2
+         },
+         "character": "mixed",
+         "suggested_chemistry": "an aryl ring carrying one polar substituent suits a lining of this kind",
+         "grid_points": 133
+        }
+       ],
+       "summary": "2 unoccupied region(s) next to the pose (~408 \u00c5\u00b3 in total):\n  #1  ~340 \u00c5\u00b3, mixed, 2.2 \u00c5 from the nearest ligand atom; lined by MET137:D, MET130:B, GLY236:B, GLN133:D, TRP290:D\n      \u2192 an aryl ring carrying one polar substituent suits a lining of this kind\n  #2  ~68 \u00c5\u00b3, mixed, 2.2 \u00c5 from the nearest ligand atom; lined by GLN283:D, VAL241:B, ASN37:D, PRO244:B, ASN277:B\n      \u2192 an aryl ring carrying one polar substituent suits a lining of this kind\nGrow the scaffold into these regions rather than adding mass anywhere else; geometric estimate from one rigid pose \u2014 no energy term, no receptor flexibility, volumes depend on probe size.",
+       "caveat": "geometric estimate from one rigid pose \u2014 no energy term, no receptor flexibility, volumes depend on probe size"
+      },
+      "design_instruction": "Grow this seed into the regions above, matching the chemistry to each lining, and say in each candidate's rationale which region it fills. Ask for binding_site_gaps on another docked molecule if you want to compare."
+     }
+    },
+    {
+     "t": 3.1,
+     "tool": "known_binders",
+     "args": {
+      "n": 5
+     },
+     "result": {
+      "target_chembl_id": "CHEMBL3004",
+      "compounds": [
+       {
+        "chembl_id": "CHEMBL58",
+        "name": "MITOXANTRONE",
+        "smiles": "O=C1c2c(O)ccc(O)c2C(=O)c2c(NCCNCCO)ccc(NCCNCCO)c21",
+        "pchembl": 8.82,
+        "assay_type": "IC50",
+        "potency_nm": 1.51,
+        "assay_description": "TP_TRANSPORTER: cell accumulation in MCF7/MRP1-M24 cells"
+       },
+       {
+        "chembl_id": "CHEMBL28629",
+        "name": "CHEMBL28629",
+        "smiles": "Cn1c2ccnc(N3CCOCC3)c2c2ncnc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c21",
+        "pchembl": 8.0,
+        "assay_type": "IC50",
+        "potency_nm": 10.0,
+        "assay_description": "Inhibitory activity against MRP1 (Multidrug resistance associated protein 1) expressed in COR.L23/R cell line in single-dose potentiation assay"
+       },
+       {
+        "chembl_id": "CHEMBL281496",
+        "name": "CHEMBL281496",
+        "smiles": "Cn1c2nccc(C(N)=O)c2c2nc(CN3CCOCC3)nc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c21",
+        "pchembl": 8.0,
+        "assay_type": "IC50",
+        "potency_nm": 10.0,
+        "assay_description": "Inhibitory activity against MRP1 (Multidrug resistance associated protein 1) expressed in COR.L23/R cell line in single-dose potentiation assay"
+       },
+       {
+        "chembl_id": "CHEMBL26779",
+        "name": "CHEMBL26779",
+        "smiles": "Cc1nc2c(c(C(N)=O)c1[N+](=O)[O-])c1ncnc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c1n2C",
+        "pchembl": 7.96,
+        "assay_type": "IC50",
+        "potency_nm": 11.0,
+        "assay_description": "Inhibitory activity against MRP1 (Multidrug resistance associated protein 1) expressed in COR.L23/R cell line in single-dose potentiation assay"
+       },
+       {
+        "chembl_id": "CHEMBL26150",
+        "name": "CHEMBL26150",
+        "smiles": "CN(C)c1nccc2c1c1ncnc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c1n2C",
+        "pchembl": 7.92,
+        "assay_type": "IC50",
+        "potency_nm": 12.0,
+        "assay_description": "Inhibitory activity against MRP1 (Multidrug resistance associated protein 1) expressed in COR.L23/R cell line in single-dose potentiation assay"
+       }
+      ],
+      "count": 5,
+      "ok": true,
+      "from_cache": false,
+      "source": "ChEMBL REST API (EBI), CC-BY-SA 3.0",
+      "summary": "5 published binders of this target, most potent first (ChEMBL, CC-BY-SA 3.0):\n  MITOXANTRONE (CHEMBL58) IC50 1.51 nM (pChEMBL 8.82)\n      O=C1c2c(O)ccc(O)c2C(=O)c2c(NCCNCCO)ccc(NCCNCCO)c21\n  CHEMBL28629 (CHEMBL28629) IC50 10 nM (pChEMBL 8.0)\n      Cn1c2ccnc(N3CCOCC3)c2c2ncnc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c21\n  CHEMBL281496 (CHEMBL281496) IC50 10 nM (pChEMBL 8.0)\n      Cn1c2nccc(C(N)=O)c2c2nc(CN3CCOCC3)nc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c21\n  CHEMBL26779 (CHEMBL26779) IC50 11 nM (pChEMBL 7.96)\n      Cc1nc2c(c(C(N)=O)c1[N+](=O)[O-])c1ncnc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c1n2C\n  CHEMBL26150 (CHEMBL26150) IC50 12 nM (pChEMBL 7.92)\n      CN(C)c1nccc2c1c1ncnc(N3CCN(CCc4ccc(F)c(F)c4)CC3)c1n2C\nUse these as structural inspiration \u2014 what has been made and measured against this protein \u2014 not as molecules to resubmit."
+     }
+    },
+    {
+     "t": 9.5,
+     "tool": "propose_candidates",
+     "args": {
+      "candidates": [
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+        "rationale": "Seed 3 with naphthyl->phenyl: no fused rings, achiral, 30 heavy atoms; aryl into gap 1"
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+        "rationale": "Adds polar carboxamide on distal aryl for polar residues (GLN133/GLN283) in gap 1/2; achiral"
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+        "rationale": "Diaryl ether, rigid, fluoro aryl in gap 1; achiral, few rotors"
+       }
+      ],
+      "avoid": [
+       "estimated_steps",
+       "fused_ring_systems",
+       "heavy_atoms",
+       "rotatable_bonds",
+       "sa_score",
+       "stereocentres"
+      ]
+     },
+     "result": {
+      "registered": [
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+        "rationale": "Seed 3 with naphthyl->phenyl: no fused rings, achiral, 30 heavy atoms; aryl into gap 1",
+        "valid": true,
+        "properties": {
+         "MW": 452.16,
+         "cLogP": 3.78,
+         "HBD": 0,
+         "HBA": 4,
+         "TPSA": 57.7,
+         "RotBonds": 5
+        },
+        "admet_flags": []
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+        "rationale": "Adds polar carboxamide on distal aryl for polar residues (GLN133/GLN283) in gap 1/2; achiral",
+        "valid": true,
+        "properties": {
+         "MW": 495.16,
+         "cLogP": 2.88,
+         "HBD": 1,
+         "HBA": 5,
+         "TPSA": 100.8,
+         "RotBonds": 6
+        },
+        "admet_flags": []
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+        "rationale": "Diaryl ether, rigid, fluoro aryl in gap 1; achiral, few rotors",
+        "valid": true,
+        "properties": {
+         "MW": 472.13,
+         "cLogP": 4.12,
+         "HBD": 0,
+         "HBA": 5,
+         "TPSA": 66.9,
+         "RotBonds": 5
+        },
+        "admet_flags": []
+       }
+      ],
+      "avoiding": [
+       "estimated_steps",
+       "fused_ring_systems",
+       "heavy_atoms",
+       "rotatable_bonds",
+       "sa_score",
+       "stereocentres"
+      ],
+      "valid_count": 3
+     }
+    },
+    {
+     "t": 12.3,
+     "tool": "dock",
+     "args": {
+      "name": "c1",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1"
+     },
+     "result": {
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+      "affinity": -10.82,
+      "pose_path": null,
+      "source": "cache",
+      "seconds": 0.0,
+      "docks_remaining": 3
+     }
+    },
+    {
+     "t": 24.8,
+     "tool": "dock",
+     "args": {
+      "name": "c2",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1"
+     },
+     "result": {
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+      "affinity": -10.74,
+      "pose_path": "targets/mrp1/poses/c2.pdbqt",
+      "source": "vina",
+      "seconds": 12.5,
+      "docks_remaining": 2
+     }
+    },
+    {
+     "t": 35.0,
+     "tool": "dock",
+     "args": {
+      "name": "c3",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1"
+     },
+     "result": {
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+      "affinity": -10.17,
+      "pose_path": "targets/mrp1/poses/c3.pdbqt",
+      "source": "vina",
+      "seconds": 10.2,
+      "docks_remaining": 1
+     }
+    },
+    {
+     "t": 39.3,
+     "tool": "submit",
+     "args": {
+      "candidates": [
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+        "affinity": -10.82,
+        "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1"
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+        "affinity": -10.74,
+        "rationale": "Carboxamide toward polar residues in gaps 1/2; achiral, lower cLogP"
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+        "affinity": -10.17,
+        "rationale": "Diaryl ether, fluoroaryl in gap 1; achiral"
+       }
+      ],
+      "changes_made": "Replaced the 4-stereocentre, fused-polycyclic, 46-49 heavy-atom thioester/cyclohexane seeds with an achiral aryl-piperazine amide scaffold. This fixes stereocentres (0), fused_ring_systems (0), heavy_atoms (30-34), rotatable_bonds (5-6), sa_score and estimated_steps. Each is a ~3-step amide coupling plus SNAr or Buchwald route. All dock better than -9.0."
+     },
+     "result": {
+      "submitted": [
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+        "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1",
+        "affinity": -10.82
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+        "rationale": "Carboxamide toward polar residues in gaps 1/2; achiral, lower cLogP",
+        "affinity": -10.74
+       },
+       {
+        "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+        "rationale": "Diaryl ether, fluoroaryl in gap 1; achiral",
+        "affinity": -10.17
+       }
+      ],
+      "changes_made": "Replaced the 4-stereocentre, fused-polycyclic, 46-49 heavy-atom thioester/cyclohexane seeds with an achiral aryl-piperazine amide scaffold. This fixes stereocentres (0), fused_ring_systems (0), heavy_atoms (30-34), rotatable_bonds (5-6), sa_score and estimated_steps. Each is a ~3-step amide coupling plus SNAr or Buchwald route. All dock better than -9.0."
+     }
+    }
+   ],
+   "candidates": [
+    {
+     "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+     "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1",
+     "affinity": -10.82
+    },
+    {
+     "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+     "rationale": "Carboxamide toward polar residues in gaps 1/2; achiral, lower cLogP",
+     "affinity": -10.74
+    },
+    {
+     "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+     "rationale": "Diaryl ether, fluoroaryl in gap 1; achiral",
+     "affinity": -10.17
+    }
+   ],
+   "changes_made": "Replaced the 4-stereocentre, fused-polycyclic, 46-49 heavy-atom thioester/cyclohexane seeds with an achiral aryl-piperazine amide scaffold. This fixes stereocentres (0), fused_ring_systems (0), heavy_atoms (30-34), rotatable_bonds (5-6), sa_score and estimated_steps. Each is a ~3-step amide coupling plus SNAr or Buchwald route. All dock better than -9.0.",
+   "status": "submitted",
+   "assessed": [
+    {
+     "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+     "verdict": "pass",
+     "manufacturable": true,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+      "verdict": "pass",
+      "estimated_steps": 6,
+      "sa_score": 2.09,
+      "rejections": [],
+      "passes": [
+       {
+        "criterion": "sa_score",
+        "value": 2.09,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 2.09 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 0,
+        "threshold": 2,
+        "level": "pass",
+        "reason": "0 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "fused_ring_systems",
+        "value": 0,
+        "threshold": 3,
+        "level": "pass",
+        "reason": "0 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.031,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.031 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.031,
+       "logp": 3.78,
+       "tpsa": 57.7,
+       "aromatic_rings": 3,
+       "fsp3": 0.24,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 0,
+       "max_ring_size": 6,
+       "sa_score": 2.09,
+       "stereocentres": 0,
+       "fused_ring_systems": 0,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 32,
+       "rotatable_bonds": 5,
+       "unusual_elements": 0,
+       "rings": 4,
+       "mw": 452.2
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+      "verdict": "pass",
+      "route_complexity": "straightforward",
+      "route_note": "short route from common building blocks",
+      "group_flags": [],
+      "rejections": [],
+      "passes": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 32,
+        "threshold": 40,
+        "level": "pass",
+        "reason": "32 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 5,
+        "threshold": 10,
+        "level": "pass",
+        "reason": "5 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 0,
+        "threshold": 2,
+        "level": "pass",
+        "reason": "0 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "sa_score",
+        "value": 2.09,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 2.09 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.031,
+       "logp": 3.78,
+       "tpsa": 57.7,
+       "aromatic_rings": 3,
+       "fsp3": 0.24,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 0,
+       "max_ring_size": 6,
+       "sa_score": 2.09,
+       "stereocentres": 0,
+       "fused_ring_systems": 0,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 32,
+       "rotatable_bonds": 5,
+       "unusual_elements": 0,
+       "rings": 4,
+       "mw": 452.2
+      }
+     },
+     "rejections": [],
+     "estimated_steps": 6,
+     "sa_score": 2.09,
+     "route_complexity": "straightforward",
+     "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1",
+     "affinity": -10.82,
+     "meets_affinity": true
+    },
+    {
+     "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+     "verdict": "pass",
+     "manufacturable": true,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+      "verdict": "pass",
+      "estimated_steps": 6,
+      "sa_score": 2.25,
+      "rejections": [],
+      "passes": [
+       {
+        "criterion": "sa_score",
+        "value": 2.25,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 2.25 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 0,
+        "threshold": 2,
+        "level": "pass",
+        "reason": "0 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "fused_ring_systems",
+        "value": 0,
+        "threshold": 3,
+        "level": "pass",
+        "reason": "0 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.029,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.029 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.029,
+       "logp": 2.88,
+       "tpsa": 100.8,
+       "aromatic_rings": 3,
+       "fsp3": 0.231,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 0,
+       "max_ring_size": 6,
+       "sa_score": 2.25,
+       "stereocentres": 0,
+       "fused_ring_systems": 0,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 35,
+       "rotatable_bonds": 6,
+       "unusual_elements": 0,
+       "rings": 4,
+       "mw": 495.2
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+      "verdict": "pass",
+      "route_complexity": "straightforward",
+      "route_note": "short route from common building blocks",
+      "group_flags": [],
+      "rejections": [],
+      "passes": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 35,
+        "threshold": 40,
+        "level": "pass",
+        "reason": "35 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 6,
+        "threshold": 10,
+        "level": "pass",
+        "reason": "6 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 0,
+        "threshold": 2,
+        "level": "pass",
+        "reason": "0 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "sa_score",
+        "value": 2.25,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 2.25 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.029,
+       "logp": 2.88,
+       "tpsa": 100.8,
+       "aromatic_rings": 3,
+       "fsp3": 0.231,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 0,
+       "max_ring_size": 6,
+       "sa_score": 2.25,
+       "stereocentres": 0,
+       "fused_ring_systems": 0,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 35,
+       "rotatable_bonds": 6,
+       "unusual_elements": 0,
+       "rings": 4,
+       "mw": 495.2
+      }
+     },
+     "rejections": [],
+     "estimated_steps": 6,
+     "sa_score": 2.25,
+     "route_complexity": "straightforward",
+     "rationale": "Carboxamide toward polar residues in gaps 1/2; achiral, lower cLogP",
+     "affinity": -10.74,
+     "meets_affinity": true
+    },
+    {
+     "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+     "verdict": "pass",
+     "manufacturable": true,
+     "synthesisability": {
+      "critic": "synthesisability",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+      "verdict": "pass",
+      "estimated_steps": 6,
+      "sa_score": 2.15,
+      "rejections": [],
+      "passes": [
+       {
+        "criterion": "sa_score",
+        "value": 2.15,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 2.15 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 0,
+        "threshold": 2,
+        "level": "pass",
+        "reason": "0 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "fused_ring_systems",
+        "value": 0,
+        "threshold": 3,
+        "level": "pass",
+        "reason": "0 fused ring systems imply a long linear sequence",
+        "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+       },
+       {
+        "criterion": "spiro_atoms",
+        "value": 0,
+        "threshold": 1,
+        "level": "pass",
+        "reason": "0 spiro centres are specialist, low-availability chemistry",
+        "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+       },
+       {
+        "criterion": "macrocycle_size",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+        "suggest": "open the macrocycle to a linear or biaryl linker"
+       },
+       {
+        "criterion": "unusual_elements",
+        "value": 0,
+        "threshold": 0,
+        "level": "pass",
+        "reason": "contains uncommon element(s) none with limited building-block supply",
+        "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+       },
+       {
+        "criterion": "halogen_density",
+        "value": 0.061,
+        "threshold": 0.18,
+        "level": "pass",
+        "reason": "halogen fraction 0.061 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+        "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.061,
+       "logp": 4.12,
+       "tpsa": 66.9,
+       "aromatic_rings": 3,
+       "fsp3": 0.208,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 0,
+       "max_ring_size": 6,
+       "sa_score": 2.15,
+       "stereocentres": 0,
+       "fused_ring_systems": 0,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 33,
+       "rotatable_bonds": 5,
+       "unusual_elements": 0,
+       "rings": 4,
+       "mw": 472.1
+      }
+     },
+     "process": {
+      "critic": "process",
+      "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+      "verdict": "pass",
+      "route_complexity": "straightforward",
+      "route_note": "short route from common building blocks",
+      "group_flags": [],
+      "rejections": [],
+      "passes": [
+       {
+        "criterion": "heavy_atoms",
+        "value": 33,
+        "threshold": 40,
+        "level": "pass",
+        "reason": "33 heavy atoms, which implies a high total step count",
+        "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+       },
+       {
+        "criterion": "rotatable_bonds",
+        "value": 5,
+        "threshold": 10,
+        "level": "pass",
+        "reason": "5 rotatable bonds, which complicates purification",
+        "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+       },
+       {
+        "criterion": "stereocentres",
+        "value": 0,
+        "threshold": 2,
+        "level": "pass",
+        "reason": "0 stereocentres require asymmetric synthesis or resolution",
+        "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+       },
+       {
+        "criterion": "sa_score",
+        "value": 2.15,
+        "threshold": 4.0,
+        "level": "pass",
+        "reason": "synthetic accessibility score 2.15 (threshold 4.0)",
+        "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+       }
+      ],
+      "metrics": {
+       "halogen_density": 0.061,
+       "logp": 4.12,
+       "tpsa": 66.9,
+       "aromatic_rings": 3,
+       "fsp3": 0.208,
+       "bridgehead_atoms": 0,
+       "unassigned_stereo": 0,
+       "max_ring_size": 6,
+       "sa_score": 2.15,
+       "stereocentres": 0,
+       "fused_ring_systems": 0,
+       "spiro_atoms": 0,
+       "macrocycle_size": 0,
+       "heavy_atoms": 33,
+       "rotatable_bonds": 5,
+       "unusual_elements": 0,
+       "rings": 4,
+       "mw": 472.1
+      }
+     },
+     "rejections": [],
+     "estimated_steps": 6,
+     "sa_score": 2.15,
+     "route_complexity": "straightforward",
+     "rationale": "Diaryl ether, fluoroaryl in gap 1; achiral",
+     "affinity": -10.17,
+     "meets_affinity": true
+    }
+   ]
+  }
+ ],
+ "dock_mode": "hybrid",
+ "model": "api:claude-sonnet-5-5",
+ "target": "MRP1",
+ "reference": {
+  "name": "MK-571",
+  "smiles": "CC(C)(C)c1ccc(cc1)/C=C/c1cc(ccn1)CSC(CC(=O)O)SCCc1ccccc1",
+  "affinity": -9.1
+ },
+ "history": [
+  {
+   "round": 1,
+   "n": 3,
+   "manufacturable": 0,
+   "meets_both": 0,
+   "changes_made": "round 1 is the generative pipeline's own output, ranked by docking score \u2014 no manufacturability filter applied",
+   "avoided": [],
+   "stop_reason": "pool",
+   "tool_calls": 0,
+   "docks_used": 0
+  },
+  {
+   "round": 2,
+   "n": 3,
+   "manufacturable": 3,
+   "meets_both": 3,
+   "changes_made": "Replaced the 4-stereocentre, fused-polycyclic, 46-49 heavy-atom thioester/cyclohexane seeds with an achiral aryl-piperazine amide scaffold. This fixes stereocentres (0), fused_ring_systems (0), heavy_atoms (30-34), rotatable_bonds (5-6), sa_score and estimated_steps. Each is a ~3-step amide coupling plus SNAr or Buchwald route. All dock better than -9.0.",
+   "avoided": [
+    "estimated_steps",
+    "fused_ring_systems",
+    "heavy_atoms",
+    "rotatable_bonds",
+    "sa_score",
+    "stereocentres"
+   ],
+   "stop_reason": "submitted",
+   "tool_calls": 7,
+   "docks_used": 3
+  }
+ ],
+ "decision_table": [
+  {
+   "rank": 1,
+   "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+   "verdict": "pass",
+   "affinity": -10.82,
+   "affinity_sd": null,
+   "affinity_n": null,
+   "sa_score": 2.09,
+   "estimated_steps": 6,
+   "stereocentres": 0,
+   "rotatable_bonds": 5,
+   "mw": 452.2,
+   "route_complexity": "straightforward",
+   "recommendation": "make_first",
+   "recommendation_label": "MAKE FIRST",
+   "recommendation_why": "best binding among the molecules you can actually make",
+   "pros": [
+    "binds better than the reference (-10.82 vs -9.10 kcal/mol)",
+    "no manufacturability concerns flagged",
+    "achiral \u2014 no asymmetric synthesis or resolution needed",
+    "short estimated route (~6 steps)",
+    "low synthetic complexity (SA 2.09)",
+    "no macrocycle or spiro centre",
+    "rigid (5 rotatable bonds) \u2014 more reproducible docking"
+   ],
+   "cons": [
+    "none identified"
+   ],
+   "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1"
+  },
+  {
+   "rank": 2,
+   "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+   "verdict": "pass",
+   "affinity": -10.74,
+   "affinity_sd": null,
+   "affinity_n": null,
+   "sa_score": 2.25,
+   "estimated_steps": 6,
+   "stereocentres": 0,
+   "rotatable_bonds": 6,
+   "mw": 495.2,
+   "route_complexity": "straightforward",
+   "recommendation": "make",
+   "recommendation_label": "MAKE",
+   "recommendation_why": "solid candidate, no blocking manufacturability concern",
+   "pros": [
+    "binds better than the reference (-10.74 vs -9.10 kcal/mol)",
+    "no manufacturability concerns flagged",
+    "achiral \u2014 no asymmetric synthesis or resolution needed",
+    "short estimated route (~6 steps)",
+    "low synthetic complexity (SA 2.25)",
+    "no macrocycle or spiro centre",
+    "rigid (6 rotatable bonds) \u2014 more reproducible docking"
+   ],
+   "cons": [
+    "none identified"
+   ],
+   "rationale": "Carboxamide toward polar residues in gaps 1/2; achiral, lower cLogP"
+  },
+  {
+   "rank": 3,
+   "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+   "verdict": "pass",
+   "affinity": -10.17,
+   "affinity_sd": null,
+   "affinity_n": null,
+   "sa_score": 2.15,
+   "estimated_steps": 6,
+   "stereocentres": 0,
+   "rotatable_bonds": 5,
+   "mw": 472.1,
+   "route_complexity": "straightforward",
+   "recommendation": "make",
+   "recommendation_label": "MAKE",
+   "recommendation_why": "solid candidate, no blocking manufacturability concern",
+   "pros": [
+    "binds better than the reference (-10.17 vs -9.10 kcal/mol)",
+    "no manufacturability concerns flagged",
+    "achiral \u2014 no asymmetric synthesis or resolution needed",
+    "short estimated route (~6 steps)",
+    "low synthetic complexity (SA 2.15)",
+    "no macrocycle or spiro centre",
+    "rigid (5 rotatable bonds) \u2014 more reproducible docking"
+   ],
+   "cons": [
+    "none identified"
+   ],
+   "rationale": "Diaryl ether, fluoroaryl in gap 1; achiral"
+  },
+  {
+   "rank": 4,
+   "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+   "verdict": "fail",
+   "affinity": -12.9,
+   "affinity_sd": null,
+   "affinity_n": null,
+   "sa_score": 4.26,
+   "estimated_steps": 18,
+   "stereocentres": 4,
+   "rotatable_bonds": 11,
+   "mw": 682.3,
+   "route_complexity": "specialist",
+   "recommendation": "redesign",
+   "recommendation_label": "REDESIGN",
+   "recommendation_why": "needs a structural change before it is worth making",
+   "pros": [
+    "binds better than the reference (-12.90 vs -9.10 kcal/mol)",
+    "no macrocycle or spiro centre"
+   ],
+   "cons": [
+    "blocker: estimated 18-step linear sequence is too long to be practical",
+    "caution: synthetic accessibility score 4.26 (threshold 4.0)",
+    "caution: 4 stereocentres require asymmetric synthesis or resolution",
+    "caution: 4 fused ring systems imply a long linear sequence",
+    "caution: 48 heavy atoms, which implies a high total step count",
+    "caution: 11 rotatable bonds, which complicates purification"
+   ],
+   "rationale": "generative pipeline output, ranked by docking score"
+  },
+  {
+   "rank": 5,
+   "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+   "verdict": "fail",
+   "affinity": -12.32,
+   "affinity_sd": null,
+   "affinity_n": null,
+   "sa_score": 4.09,
+   "estimated_steps": 16,
+   "stereocentres": 3,
+   "rotatable_bonds": 12,
+   "mw": 700.2,
+   "route_complexity": "specialist",
+   "recommendation": "redesign",
+   "recommendation_label": "REDESIGN",
+   "recommendation_why": "needs a structural change before it is worth making",
+   "pros": [
+    "binds better than the reference (-12.32 vs -9.10 kcal/mol)",
+    "no macrocycle or spiro centre"
+   ],
+   "cons": [
+    "blocker: estimated 16-step linear sequence is too long to be practical",
+    "caution: synthetic accessibility score 4.09 (threshold 4.0)",
+    "caution: 3 stereocentres require asymmetric synthesis or resolution",
+    "caution: 49 heavy atoms, which implies a high total step count",
+    "caution: 12 rotatable bonds, which complicates purification"
+   ],
+   "rationale": "generative pipeline output, ranked by docking score"
+  },
+  {
+   "rank": 6,
+   "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+   "verdict": "fail",
+   "affinity": -11.2,
+   "affinity_sd": null,
+   "affinity_n": null,
+   "sa_score": 3.94,
+   "estimated_steps": 15,
+   "stereocentres": 3,
+   "rotatable_bonds": 12,
+   "mw": 644.3,
+   "route_complexity": "demanding",
+   "recommendation": "redesign",
+   "recommendation_label": "REDESIGN",
+   "recommendation_why": "needs a structural change before it is worth making",
+   "pros": [
+    "binds better than the reference (-11.20 vs -9.10 kcal/mol)",
+    "no macrocycle or spiro centre"
+   ],
+   "cons": [
+    "blocker: estimated 15-step linear sequence is too long to be practical",
+    "caution: 3 stereocentres require asymmetric synthesis or resolution",
+    "caution: 46 heavy atoms, which implies a high total step count",
+    "caution: 12 rotatable bonds, which complicates purification"
+   ],
+   "rationale": "generative pipeline output, ranked by docking score"
+  }
+ ],
+ "result": {
+  "decision_table": [
+   {
+    "rank": 1,
+    "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+    "verdict": "pass",
+    "affinity": -10.82,
+    "affinity_sd": null,
+    "affinity_n": null,
+    "sa_score": 2.09,
+    "estimated_steps": 6,
+    "stereocentres": 0,
+    "rotatable_bonds": 5,
+    "mw": 452.2,
+    "route_complexity": "straightforward",
+    "recommendation": "make_first",
+    "recommendation_label": "MAKE FIRST",
+    "recommendation_why": "best binding among the molecules you can actually make",
+    "pros": [
+     "binds better than the reference (-10.82 vs -9.10 kcal/mol)",
+     "no manufacturability concerns flagged",
+     "achiral \u2014 no asymmetric synthesis or resolution needed",
+     "short estimated route (~6 steps)",
+     "low synthetic complexity (SA 2.09)",
+     "no macrocycle or spiro centre",
+     "rigid (5 rotatable bonds) \u2014 more reproducible docking"
+    ],
+    "cons": [
+     "none identified"
+    ],
+    "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1"
+   },
+   {
+    "rank": 2,
+    "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+    "verdict": "pass",
+    "affinity": -10.74,
+    "affinity_sd": null,
+    "affinity_n": null,
+    "sa_score": 2.25,
+    "estimated_steps": 6,
+    "stereocentres": 0,
+    "rotatable_bonds": 6,
+    "mw": 495.2,
+    "route_complexity": "straightforward",
+    "recommendation": "make",
+    "recommendation_label": "MAKE",
+    "recommendation_why": "solid candidate, no blocking manufacturability concern",
+    "pros": [
+     "binds better than the reference (-10.74 vs -9.10 kcal/mol)",
+     "no manufacturability concerns flagged",
+     "achiral \u2014 no asymmetric synthesis or resolution needed",
+     "short estimated route (~6 steps)",
+     "low synthetic complexity (SA 2.25)",
+     "no macrocycle or spiro centre",
+     "rigid (6 rotatable bonds) \u2014 more reproducible docking"
+    ],
+    "cons": [
+     "none identified"
+    ],
+    "rationale": "Carboxamide toward polar residues in gaps 1/2; achiral, lower cLogP"
+   },
+   {
+    "rank": 3,
+    "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1",
+    "verdict": "pass",
+    "affinity": -10.17,
+    "affinity_sd": null,
+    "affinity_n": null,
+    "sa_score": 2.15,
+    "estimated_steps": 6,
+    "stereocentres": 0,
+    "rotatable_bonds": 5,
+    "mw": 472.1,
+    "route_complexity": "straightforward",
+    "recommendation": "make",
+    "recommendation_label": "MAKE",
+    "recommendation_why": "solid candidate, no blocking manufacturability concern",
+    "pros": [
+     "binds better than the reference (-10.17 vs -9.10 kcal/mol)",
+     "no manufacturability concerns flagged",
+     "achiral \u2014 no asymmetric synthesis or resolution needed",
+     "short estimated route (~6 steps)",
+     "low synthetic complexity (SA 2.15)",
+     "no macrocycle or spiro centre",
+     "rigid (5 rotatable bonds) \u2014 more reproducible docking"
+    ],
+    "cons": [
+     "none identified"
+    ],
+    "rationale": "Diaryl ether, fluoroaryl in gap 1; achiral"
+   },
+   {
+    "rank": 4,
+    "smiles": "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1",
+    "verdict": "fail",
+    "affinity": -12.9,
+    "affinity_sd": null,
+    "affinity_n": null,
+    "sa_score": 4.26,
+    "estimated_steps": 18,
+    "stereocentres": 4,
+    "rotatable_bonds": 11,
+    "mw": 682.3,
+    "route_complexity": "specialist",
+    "recommendation": "redesign",
+    "recommendation_label": "REDESIGN",
+    "recommendation_why": "needs a structural change before it is worth making",
+    "pros": [
+     "binds better than the reference (-12.90 vs -9.10 kcal/mol)",
+     "no macrocycle or spiro centre"
+    ],
+    "cons": [
+     "blocker: estimated 18-step linear sequence is too long to be practical",
+     "caution: synthetic accessibility score 4.26 (threshold 4.0)",
+     "caution: 4 stereocentres require asymmetric synthesis or resolution",
+     "caution: 4 fused ring systems imply a long linear sequence",
+     "caution: 48 heavy atoms, which implies a high total step count",
+     "caution: 11 rotatable bonds, which complicates purification"
+    ],
+    "rationale": "generative pipeline output, ranked by docking score"
+   },
+   {
+    "rank": 5,
+    "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+    "verdict": "fail",
+    "affinity": -12.32,
+    "affinity_sd": null,
+    "affinity_n": null,
+    "sa_score": 4.09,
+    "estimated_steps": 16,
+    "stereocentres": 3,
+    "rotatable_bonds": 12,
+    "mw": 700.2,
+    "route_complexity": "specialist",
+    "recommendation": "redesign",
+    "recommendation_label": "REDESIGN",
+    "recommendation_why": "needs a structural change before it is worth making",
+    "pros": [
+     "binds better than the reference (-12.32 vs -9.10 kcal/mol)",
+     "no macrocycle or spiro centre"
+    ],
+    "cons": [
+     "blocker: estimated 16-step linear sequence is too long to be practical",
+     "caution: synthetic accessibility score 4.09 (threshold 4.0)",
+     "caution: 3 stereocentres require asymmetric synthesis or resolution",
+     "caution: 49 heavy atoms, which implies a high total step count",
+     "caution: 12 rotatable bonds, which complicates purification"
+    ],
+    "rationale": "generative pipeline output, ranked by docking score"
+   },
+   {
+    "rank": 6,
+    "smiles": "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1",
+    "verdict": "fail",
+    "affinity": -11.2,
+    "affinity_sd": null,
+    "affinity_n": null,
+    "sa_score": 3.94,
+    "estimated_steps": 15,
+    "stereocentres": 3,
+    "rotatable_bonds": 12,
+    "mw": 644.3,
+    "route_complexity": "demanding",
+    "recommendation": "redesign",
+    "recommendation_label": "REDESIGN",
+    "recommendation_why": "needs a structural change before it is worth making",
+    "pros": [
+     "binds better than the reference (-11.20 vs -9.10 kcal/mol)",
+     "no macrocycle or spiro centre"
+    ],
+    "cons": [
+     "blocker: estimated 15-step linear sequence is too long to be practical",
+     "caution: 3 stereocentres require asymmetric synthesis or resolution",
+     "caution: 46 heavy atoms, which implies a high total step count",
+     "caution: 12 rotatable bonds, which complicates purification"
+    ],
+    "rationale": "generative pipeline output, ranked by docking score"
+   }
+  ],
+  "verdict_reason": "converged: all candidates manufacturable and on target",
+  "rounds": 2,
+  "elapsed_s": 39.3,
+  "history": [
+   {
+    "round": 1,
+    "n": 3,
+    "manufacturable": 0,
+    "meets_both": 0,
+    "changes_made": "round 1 is the generative pipeline's own output, ranked by docking score \u2014 no manufacturability filter applied",
+    "avoided": [],
+    "stop_reason": "pool",
+    "tool_calls": 0,
+    "docks_used": 0
+   },
+   {
+    "round": 2,
+    "n": 3,
+    "manufacturable": 3,
+    "meets_both": 3,
+    "changes_made": "Replaced the 4-stereocentre, fused-polycyclic, 46-49 heavy-atom thioester/cyclohexane seeds with an achiral aryl-piperazine amide scaffold. This fixes stereocentres (0), fused_ring_systems (0), heavy_atoms (30-34), rotatable_bonds (5-6), sa_score and estimated_steps. Each is a ~3-step amide coupling plus SNAr or Buchwald route. All dock better than -9.0.",
+    "avoided": [
+     "estimated_steps",
+     "fused_ring_systems",
+     "heavy_atoms",
+     "rotatable_bonds",
+     "sa_score",
+     "stereocentres"
+    ],
+    "stop_reason": "submitted",
+    "tool_calls": 7,
+    "docks_used": 3
+   }
+  ],
+  "best": {
+   "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+   "verdict": "pass",
+   "manufacturable": true,
+   "synthesisability": {
+    "critic": "synthesisability",
+    "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+    "verdict": "pass",
+    "estimated_steps": 6,
+    "sa_score": 2.09,
+    "rejections": [],
+    "passes": [
+     {
+      "criterion": "sa_score",
+      "value": 2.09,
+      "threshold": 4.0,
+      "level": "pass",
+      "reason": "synthetic accessibility score 2.09 (threshold 4.0)",
+      "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+     },
+     {
+      "criterion": "stereocentres",
+      "value": 0,
+      "threshold": 2,
+      "level": "pass",
+      "reason": "0 stereocentres require asymmetric synthesis or resolution",
+      "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+     },
+     {
+      "criterion": "fused_ring_systems",
+      "value": 0,
+      "threshold": 3,
+      "level": "pass",
+      "reason": "0 fused ring systems imply a long linear sequence",
+      "suggest": "use a single aromatic core with substituents instead of a fused polycycle"
+     },
+     {
+      "criterion": "spiro_atoms",
+      "value": 0,
+      "threshold": 1,
+      "level": "pass",
+      "reason": "0 spiro centres are specialist, low-availability chemistry",
+      "suggest": "replace the spirocycle with a monocyclic ring such as piperidine or morpholine"
+     },
+     {
+      "criterion": "macrocycle_size",
+      "value": 0,
+      "threshold": 0,
+      "level": "pass",
+      "reason": "0-membered macrocycle requires a dedicated macrocyclisation",
+      "suggest": "open the macrocycle to a linear or biaryl linker"
+     },
+     {
+      "criterion": "unusual_elements",
+      "value": 0,
+      "threshold": 0,
+      "level": "pass",
+      "reason": "contains uncommon element(s) none with limited building-block supply",
+      "suggest": "restrict to H, B, C, N, O, F, P, S and halogens"
+     },
+     {
+      "criterion": "halogen_density",
+      "value": 0.031,
+      "threshold": 0.18,
+      "level": "pass",
+      "reason": "halogen fraction 0.031 of heavy atoms: densely halogenated cores must be purchased and usually cannot be",
+      "suggest": "reduce to <=0.18 halogen fraction; keep 1-3 halogens on commercially available aryl rings"
+     }
+    ],
+    "metrics": {
+     "halogen_density": 0.031,
+     "logp": 3.78,
+     "tpsa": 57.7,
+     "aromatic_rings": 3,
+     "fsp3": 0.24,
+     "bridgehead_atoms": 0,
+     "unassigned_stereo": 0,
+     "max_ring_size": 6,
+     "sa_score": 2.09,
+     "stereocentres": 0,
+     "fused_ring_systems": 0,
+     "spiro_atoms": 0,
+     "macrocycle_size": 0,
+     "heavy_atoms": 32,
+     "rotatable_bonds": 5,
+     "unusual_elements": 0,
+     "rings": 4,
+     "mw": 452.2
+    }
+   },
+   "process": {
+    "critic": "process",
+    "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1",
+    "verdict": "pass",
+    "route_complexity": "straightforward",
+    "route_note": "short route from common building blocks",
+    "group_flags": [],
+    "rejections": [],
+    "passes": [
+     {
+      "criterion": "heavy_atoms",
+      "value": 32,
+      "threshold": 40,
+      "level": "pass",
+      "reason": "32 heavy atoms, which implies a high total step count",
+      "suggest": "trim to <=40 heavy atoms by removing peripheral groups"
+     },
+     {
+      "criterion": "rotatable_bonds",
+      "value": 5,
+      "threshold": 10,
+      "level": "pass",
+      "reason": "5 rotatable bonds, which complicates purification",
+      "suggest": "rigidify the linker, for example a ring in place of a flexible chain"
+     },
+     {
+      "criterion": "stereocentres",
+      "value": 0,
+      "threshold": 2,
+      "level": "pass",
+      "reason": "0 stereocentres require asymmetric synthesis or resolution",
+      "suggest": "reduce to <=2 stereocentres; prefer achiral or single-centre scaffolds"
+     },
+     {
+      "criterion": "sa_score",
+      "value": 2.09,
+      "threshold": 4.0,
+      "level": "pass",
+      "reason": "synthetic accessibility score 2.09 (threshold 4.0)",
+      "suggest": "simplify the scaffold: fewer rings and fewer contiguous substituents"
+     }
+    ],
+    "metrics": {
+     "halogen_density": 0.031,
+     "logp": 3.78,
+     "tpsa": 57.7,
+     "aromatic_rings": 3,
+     "fsp3": 0.24,
+     "bridgehead_atoms": 0,
+     "unassigned_stereo": 0,
+     "max_ring_size": 6,
+     "sa_score": 2.09,
+     "stereocentres": 0,
+     "fused_ring_systems": 0,
+     "spiro_atoms": 0,
+     "macrocycle_size": 0,
+     "heavy_atoms": 32,
+     "rotatable_bonds": 5,
+     "unusual_elements": 0,
+     "rings": 4,
+     "mw": 452.2
+    }
+   },
+   "rejections": [],
+   "estimated_steps": 6,
+   "sa_score": 2.09,
+   "route_complexity": "straightforward",
+   "rationale": "Achiral, no fused rings, 30 heavy atoms, 5 rotors; phenyl fills gap 1",
+   "affinity": -10.82,
+   "meets_affinity": true
+  }
+ }
+}

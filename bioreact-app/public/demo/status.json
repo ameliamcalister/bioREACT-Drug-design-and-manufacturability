@@ -1,0 +1,24 @@
+{
+ "loop": {
+  "running": false,
+  "label": "",
+  "console": ""
+ },
+ "manufacture": {
+  "running": false,
+  "label": "",
+  "console": ""
+ },
+ "running": false,
+ "label": "",
+ "console": "",
+ "backend": {
+  "designer": "not available in the demo",
+  "api_key_set": false,
+  "vina": false,
+  "obabel": false,
+  "dock_mode": "recorded",
+  "chemistry": "recorded run"
+ },
+ "demo": true
+}

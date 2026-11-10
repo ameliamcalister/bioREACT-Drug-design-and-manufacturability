@@ -1,0 +1,29 @@
+# The Python side, on every push.
+#
+# These tests need neither the network nor an API key: the critics, the
+# cost model, the property screen, the cavity analysis and the agents'
+# tool layer are all exercised offline.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r loop/requirements.txt
+
+      - name: Run the test suite
+        working-directory: loop
+        run: python -m pytest -q

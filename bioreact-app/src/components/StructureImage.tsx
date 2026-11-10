@@ -1,12 +1,14 @@
 /**
- * StructureImage.tsx — a 2D structure, drawn by RDKit on the server.
+ * StructureImage.tsx — a 2D structure, drawn by RDKit.
  *
- * Structures are requested as SVG from /svg rather than drawn in the
- * browser: the same RDKit that computes every descriptor also draws the
- * molecule, so the picture and the numbers can never disagree.
+ * Structures come from the same RDKit that computes every descriptor, so
+ * the picture and the numbers can never disagree. The drawing is asked
+ * for in a palette that matches the theme, which is why this component
+ * needs to know whether the page is currently dark.
  */
 import { useState } from 'react';
 import { structureUrl } from '../api';
+import { useTheme } from '../theme';
 
 export function StructureImage({
   smiles,
@@ -19,29 +21,32 @@ export function StructureImage({
   height?: number;
   className?: string;
 }) {
+  const { dark } = useTheme();
   const [failed, setFailed] = useState(false);
+  const source = structureUrl(smiles, width, height, dark);
 
-  if (failed) {
+  if (failed || !source) {
     return (
       <div
-        className={`flex items-center justify-center rounded border border-slate-200 bg-slate-50 text-[11px] text-slate-500 ${className}`}
-        style={{ minHeight: height / 2 }}
+        className={`structure-stage flex items-center justify-center px-2 text-center text-[11px] text-ink-3 ${className}`}
+        style={{ minHeight: Math.max(48, height / 2) }}
       >
-        structure could not be drawn
+        structure not available
       </div>
     );
   }
 
   return (
     <img
-      src={structureUrl(smiles, width, height)}
+      key={source}
+      src={source}
       alt={`structure of ${smiles}`}
       title={smiles}
       width={width}
       height={height}
       loading="lazy"
       onError={() => setFailed(true)}
-      className={`h-auto max-w-full rounded bg-white ${className}`}
+      className={`h-auto w-full max-w-full ${className}`}
     />
   );
 }
@@ -49,7 +54,7 @@ export function StructureImage({
 /** The SMILES itself, monospaced and selectable — chemists copy these. */
 export function SmilesText({ smiles }: { smiles: string }) {
   return (
-    <code className="block break-all font-mono text-[10.5px] leading-snug text-slate-500">
+    <code className="block break-all font-mono text-[10.5px] leading-snug text-ink-3">
       {smiles}
     </code>
   );

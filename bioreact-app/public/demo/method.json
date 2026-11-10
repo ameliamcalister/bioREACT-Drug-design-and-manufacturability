@@ -1,0 +1,491 @@
+{
+ "rubric": [
+  {
+   "criterion": "sa_score",
+   "flag_above": 4.0,
+   "fail_above": 6.0
+  },
+  {
+   "criterion": "stereocentres",
+   "flag_above": 2,
+   "fail_above": 4
+  },
+  {
+   "criterion": "fused_ring_systems",
+   "flag_above": 3,
+   "fail_above": 5
+  },
+  {
+   "criterion": "spiro_atoms",
+   "flag_above": 1,
+   "fail_above": 2
+  },
+  {
+   "criterion": "macrocycle_size",
+   "flag_above": 0,
+   "fail_above": 12
+  },
+  {
+   "criterion": "heavy_atoms",
+   "flag_above": 40,
+   "fail_above": 55
+  },
+  {
+   "criterion": "rotatable_bonds",
+   "flag_above": 10,
+   "fail_above": 14
+  },
+  {
+   "criterion": "unusual_elements",
+   "flag_above": 0,
+   "fail_above": 1
+  },
+  {
+   "criterion": "halogen_density",
+   "flag_above": 0.18,
+   "fail_above": 0.3
+  },
+  {
+   "criterion": "estimated_steps",
+   "flag_above": 10,
+   "fail_above": 14
+  }
+ ],
+ "rubric_note": "Both critics compare computed descriptors against these numbers. Above the flag threshold a candidate proceeds with a caveat; above the fail threshold it is rejected and the designer is told which criterion to fix. The thresholds live in critics.py and are meant to be edited by a chemist.",
+ "property_rule_sets": [
+  {
+   "key": "lipinski",
+   "name": "Lipinski rule of five",
+   "citation": "Lipinski et al., Adv Drug Deliv Rev 1997",
+   "what_for": "oral absorption",
+   "allowed_violations": 1,
+   "rules": [
+    "molecular weight \u2264 500 Da",
+    "cLogP \u2264 5",
+    "hydrogen-bond donors \u2264 5",
+    "hydrogen-bond acceptors \u2264 10"
+   ]
+  },
+  {
+   "key": "veber",
+   "name": "Veber rules",
+   "citation": "Veber et al., J Med Chem 2002",
+   "what_for": "oral bioavailability",
+   "allowed_violations": 0,
+   "rules": [
+    "rotatable bonds \u2264 10",
+    "topological polar surface area \u2264 140 \u00c5\u00b2"
+   ]
+  },
+  {
+   "key": "ghose",
+   "name": "Ghose filter",
+   "citation": "Ghose et al., J Comb Chem 1999",
+   "what_for": "drug-likeness, a second opinion on Lipinski",
+   "allowed_violations": 1,
+   "rules": [
+    "molecular weight 160\u2013480 Da",
+    "cLogP \u22120.4 to 5.6",
+    "molar refractivity 40\u2013130",
+    "20\u201370 heavy atoms"
+   ]
+  },
+  {
+   "key": "egan",
+   "name": "Egan egg",
+   "citation": "Egan et al., J Med Chem 2000",
+   "what_for": "passive intestinal absorption",
+   "allowed_violations": 0,
+   "rules": [
+    "cLogP \u2264 5.88",
+    "topological polar surface area \u2264 131.6 \u00c5\u00b2"
+   ]
+  }
+ ],
+ "assumptions": [
+  {
+   "key": "step_yield",
+   "value": 0.8,
+   "default": 0.8,
+   "overridden": false,
+   "unit": "fraction",
+   "min": 0.65,
+   "max": 0.9,
+   "provenance": "rule of thumb",
+   "note": "Average isolated yield per step. Overall yield is this raised to the number of steps, which is why step count dominates everything downstream."
+  },
+  {
+   "key": "pmi_per_step",
+   "value": 8.0,
+   "default": 8.0,
+   "overridden": false,
+   "unit": "kg input / kg product / step",
+   "min": 5,
+   "max": 15,
+   "provenance": "rule of thumb",
+   "note": "Process mass intensity contributed by one step at 100% yield \u2014 solvents, reagents, water, work-up. Divided by overall yield to give the route's PMI."
+  },
+  {
+   "key": "material_cost_per_kg",
+   "value": 150.0,
+   "default": 150.0,
+   "overridden": false,
+   "unit": "USD / kg input",
+   "min": 60,
+   "max": 400,
+   "provenance": "uncalibrated",
+   "note": "Blended cost of everything that goes in, at 10 kg scale: building blocks, reagents, solvent, and its disposal. Scaled for smaller campaigns by procurement_scale_exponent."
+  },
+  {
+   "key": "operator_day_cost",
+   "value": 1800.0,
+   "default": 1800.0,
+   "overridden": false,
+   "unit": "USD / operator-day",
+   "min": 900,
+   "max": 3000,
+   "provenance": "uncalibrated",
+   "note": "Fully loaded cost of one person-day in a kilo-lab, including plant time, analytics and overhead. A CRO quote sits at the top of this range; an academic lab far below."
+  },
+  {
+   "key": "days_per_step",
+   "value": 3.0,
+   "default": 3.0,
+   "overridden": false,
+   "unit": "operator-days / step / batch",
+   "min": 1.5,
+   "max": 6,
+   "provenance": "rule of thumb",
+   "note": "Charge, react, quench, work up, isolate. Purification is charged separately."
+  },
+  {
+   "key": "purification_days",
+   "value": 1.5,
+   "default": 1.5,
+   "overridden": false,
+   "unit": "operator-days / step / batch",
+   "min": 0.5,
+   "max": 4,
+   "provenance": "rule of thumb",
+   "note": "Crystallisation if you are lucky. Chromatography costs more and is charged a premium on top."
+  },
+  {
+   "key": "batch_size_kg",
+   "value": 2.0,
+   "default": 2.0,
+   "overridden": false,
+   "unit": "kg product / batch",
+   "min": 0.5,
+   "max": 20,
+   "provenance": "convention",
+   "note": "Kilo-lab batch size. More product means repeat batches, which is why cost per gram falls sub-linearly with scale."
+  },
+  {
+   "key": "batch_learning_exponent",
+   "value": 0.8,
+   "default": 0.8,
+   "overridden": false,
+   "unit": "exponent",
+   "min": 0.6,
+   "max": 1.0,
+   "provenance": "rule of thumb",
+   "note": "Operator time for n batches goes as n^exponent: the second batch of the same step is quicker than the first."
+  },
+  {
+   "key": "procurement_scale_exponent",
+   "value": -0.12,
+   "default": -0.12,
+   "overridden": false,
+   "unit": "exponent",
+   "min": -0.3,
+   "max": 0.0,
+   "provenance": "uncalibrated",
+   "note": "Material cost per kg against scale. Buying 10\u00d7 more material makes it modestly cheaper per kg."
+  },
+  {
+   "key": "chiral_resolution_premium",
+   "value": 1.35,
+   "default": 1.35,
+   "overridden": false,
+   "unit": "multiplier per resolved centre",
+   "min": 1.1,
+   "max": 2.0,
+   "provenance": "rule of thumb",
+   "note": "Classical resolution throws away at least half the material and needs a separation; asymmetric catalysis trades that for catalyst cost."
+  },
+  {
+   "key": "precious_metal_premium",
+   "value": 1.18,
+   "default": 1.18,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.05,
+   "max": 1.5,
+   "provenance": "uncalibrated",
+   "note": "Palladium-catalysed coupling: catalyst and ligand, plus metal scavenging and ICP-MS release testing."
+  },
+  {
+   "key": "chromatography_premium",
+   "value": 1.25,
+   "default": 1.25,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.1,
+   "max": 1.8,
+   "provenance": "rule of thumb",
+   "note": "Charged when the structure gives little hope of a crystalline intermediate: silica, solvent and time."
+  },
+  {
+   "key": "specialist_building_block_premium",
+   "value": 1.3,
+   "default": 1.3,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.05,
+   "max": 2.5,
+   "provenance": "uncalibrated",
+   "note": "Densely halogenated or unusual-element cores must be bought rather than made, and often cannot be bought at all."
+  },
+  {
+   "key": "enzyme_cost_per_kg_product",
+   "value": 900.0,
+   "default": 900.0,
+   "overridden": false,
+   "unit": "USD / kg product",
+   "min": 200,
+   "max": 4000,
+   "provenance": "uncalibrated",
+   "note": "Immobilised enzyme consumed per kg of product in a biocatalytic step, assuming it is recycled a few times."
+  },
+  {
+   "key": "enzyme_development_cost",
+   "value": 80000.0,
+   "default": 80000.0,
+   "overridden": false,
+   "unit": "USD, one-off",
+   "min": 20000,
+   "max": 400000,
+   "provenance": "uncalibrated",
+   "note": "Screening a panel and, if needed, a round of directed evolution to make one step work on your substrate. Paid once, not per gram."
+  },
+  {
+   "key": "biocatalysis_step_yield",
+   "value": 0.88,
+   "default": 0.88,
+   "overridden": false,
+   "unit": "fraction",
+   "min": 0.75,
+   "max": 0.96,
+   "provenance": "rule of thumb",
+   "note": "An enzymatic step that works tends to be high-yielding and selective, which is the point of using one."
+  },
+  {
+   "key": "fermentation_titre_g_per_l",
+   "value": 0.5,
+   "default": 0.5,
+   "overridden": false,
+   "unit": "g / L broth",
+   "min": 0.05,
+   "max": 5.0,
+   "provenance": "uncalibrated",
+   "note": "Titre of a secondary metabolite in an engineered host after initial strain work. Orders of magnitude of headroom exist here, which is why the cost range is wide."
+  },
+  {
+   "key": "fermenter_volume_l",
+   "value": 2000.0,
+   "default": 2000.0,
+   "overridden": false,
+   "unit": "L",
+   "min": 100,
+   "max": 20000,
+   "provenance": "convention",
+   "note": "Working volume of the vessel assumed for a campaign."
+  },
+  {
+   "key": "fermentation_batch_cost",
+   "value": 45000.0,
+   "default": 45000.0,
+   "overridden": false,
+   "unit": "USD / batch",
+   "min": 15000,
+   "max": 150000,
+   "provenance": "uncalibrated",
+   "note": "Media, utilities, sterilisation, operators and QC for one fermentation, excluding recovery."
+  },
+  {
+   "key": "downstream_recovery",
+   "value": 0.45,
+   "default": 0.45,
+   "overridden": false,
+   "unit": "fraction",
+   "min": 0.2,
+   "max": 0.75,
+   "provenance": "rule of thumb",
+   "note": "Fraction of the titre that survives extraction and purification to isolated compound."
+  },
+  {
+   "key": "downstream_cost_fraction",
+   "value": 0.7,
+   "default": 0.7,
+   "overridden": false,
+   "unit": "fraction of fermentation cost",
+   "min": 0.3,
+   "max": 1.5,
+   "provenance": "uncalibrated",
+   "note": "Recovery and purification cost, as a fraction of the fermentation cost it follows."
+  },
+  {
+   "key": "strain_development_cost",
+   "value": 350000.0,
+   "default": 350000.0,
+   "overridden": false,
+   "unit": "USD, one-off",
+   "min": 100000,
+   "max": 2000000,
+   "provenance": "uncalibrated",
+   "note": "Pathway assembly, host engineering and titre improvement to reach the assumed titre. Paid once."
+  },
+  {
+   "key": "release_testing_weeks",
+   "value": 3.0,
+   "default": 3.0,
+   "overridden": false,
+   "unit": "weeks",
+   "min": 2,
+   "max": 8,
+   "provenance": "rule of thumb",
+   "note": "Analytical release of the final batch: identity, assay, impurities, residual solvent and metals."
+  },
+  {
+   "key": "uncertainty_factor",
+   "value": 2.2,
+   "default": 2.2,
+   "overridden": false,
+   "unit": "multiplier",
+   "min": 1.5,
+   "max": 4.0,
+   "provenance": "convention",
+   "note": "The quoted range is the point estimate divided and multiplied by this. It is deliberately wide: an uncalibrated model with a narrow error bar would be worse than no number at all."
+  }
+ ],
+ "scales": [
+  {
+   "grams": 10.0,
+   "label": "10 g",
+   "purpose": "in vivo pharmacology"
+  },
+  {
+   "grams": 100.0,
+   "label": "100 g",
+   "purpose": "GLP toxicology batch"
+  },
+  {
+   "grams": 1000.0,
+   "label": "1 kg",
+   "purpose": "first clinical supply"
+  },
+  {
+   "grams": 10000.0,
+   "label": "10 kg",
+   "purpose": "Phase II campaign"
+  }
+ ],
+ "routes": {
+  "chemical_synthesis": "Organic chemical synthesis",
+  "chemo_enzymatic": "Chemo-enzymatic synthesis (biocatalytic step)",
+  "fermentation": "Fermentation in an engineered host",
+  "spps": "Solid-phase peptide synthesis"
+ },
+ "enzyme_classes": [
+  {
+   "key": "kred",
+   "enzyme": "ketoreductase (KRED)",
+   "replaces": "asymmetric reduction of the corresponding ketone, or resolution of the racemic alcohol",
+   "why": "a secondary alcohol is the classic ketoreductase product: reduce the ketone enantioselectively instead of resolving the racemate"
+  },
+  {
+   "key": "transaminase",
+   "enzyme": "\u03c9-transaminase (ATA)",
+   "replaces": "reductive amination plus chiral resolution",
+   "why": "a chiral amine on a carbon skeleton is what transaminases are used for at scale; sitagliptin is the textbook case"
+  },
+  {
+   "key": "lipase",
+   "enzyme": "lipase / esterase (e.g. CAL-B)",
+   "replaces": "chemical hydrolysis or classical resolution of an ester",
+   "why": "selective ester hydrolysis or kinetic resolution under mild conditions, with no protecting-group work"
+  },
+  {
+   "key": "nitrilase",
+   "enzyme": "nitrilase / nitrile hydratase",
+   "replaces": "strong-acid or strong-base nitrile hydrolysis",
+   "why": "converts the nitrile to the acid or amide without the forcing conditions the chemical route needs"
+  },
+  {
+   "key": "epoxide_hydrolase",
+   "enzyme": "epoxide hydrolase",
+   "replaces": "non-selective epoxide opening",
+   "why": "enantioselective opening to the diol, and it removes a reactive group the process critic flags anyway"
+  },
+  {
+   "key": "p450",
+   "enzyme": "cytochrome P450 / unspecific peroxygenase",
+   "replaces": "directed ortho-metalation or a protecting-group sequence to install the phenol",
+   "why": "late-stage aromatic hydroxylation avoids carrying a protected phenol through the route, though substrate scope is the limiting factor in practice"
+  },
+  {
+   "key": "amide_synthetase",
+   "enzyme": "amide bond synthetase / acyltransferase",
+   "replaces": "carbodiimide or acid-chloride amide coupling",
+   "why": "removes a coupling reagent and its by-product from the waste stream; newer than the others, so treat as exploratory rather than routine"
+  }
+ ],
+ "pocket_method": {
+  "spacing_a": 0.8,
+  "clash_a": 3.1,
+  "burial_axes": "9/13",
+  "min_volume_a3": 25.0,
+  "note": "Unoccupied space is found on a grid: a point counts if no receptor atom is within the clash distance, it is enclosed on enough ray axes to be inside a pocket rather than in solvent, and it is clear of the ligand. Connected points are clustered. Geometry only \u2014 no energy term, one rigid pose."
+ },
+ "docking": {
+  "engine": "AutoDock Vina",
+  "mode": "hybrid",
+  "exhaustiveness": 8,
+  "note": "Rigid receptor, one grid, nine binding modes kept. Scores rank candidates; they are not binding free energies, and Vina is stochastic, so repeat runs of one molecule differ."
+ },
+ "target": {
+  "name": "MRP1",
+  "slug": "mrp1",
+  "description": "ABCC1, a multidrug-resistance efflux transporter. Blocking it is intended to restore the activity of chemotherapy agents the transporter pumps out of tumour cells.",
+  "grid_source": "docked MK-571 pose",
+  "blind": false,
+  "box": [
+   24.0,
+   24.0,
+   24.0
+  ],
+  "centre": [
+   97.497,
+   62.007,
+   57.852
+  ],
+  "reference_name": "MK-571",
+  "reference_smiles": "CC(C)(C)c1ccc(cc1)/C=C/c1cc(ccn1)CSC(CC(=O)O)SCCc1ccccc1",
+  "reference_affinity": -9.1,
+  "receptor_atoms": null,
+  "chembl_target_id": "CHEMBL3004"
+ },
+ "limitations": [
+  "The step count is a heuristic from rings, stereocentres and heavy atoms \u2014 not a retrosynthesis. No reaction is ever proposed, so no real route is costed.",
+  "Cost and time factors are uncalibrated defaults inside published ranges for early-phase manufacture. Nothing here is validated against real process data, so read the ranking between candidates rather than the absolute figures.",
+  "Docking is rigid-receptor AutoDock Vina on a single grid. Scores rank; they do not predict affinity.",
+  "The property screen applies published rule sets and structural alerts. There is no trained ADMET model anywhere in this project, so nothing here predicts absorption or toxicity.",
+  "Building-block availability is approximated from elements and halogen density, not from a supplier catalogue.",
+  "The critics are deterministic rules, not a model \u2014 deliberately, so every rejection points at a number and a threshold that can be defended or changed."
+ ],
+ "attribution": [
+  "Docking: AutoDock Vina. Structure handling: RDKit and Open Babel. Synthetic accessibility: Ertl & Schuffenhauer SA score as shipped with RDKit.",
+  "Published activity and analogue data: ChEMBL (EMBL-EBI), CC-BY-SA 3.0, retrieved through the public REST API.",
+  "Structural alerts: PAINS (Baell & Holloway) and the Brenk set, both as shipped in RDKit's filter catalogue."
+ ]
+}

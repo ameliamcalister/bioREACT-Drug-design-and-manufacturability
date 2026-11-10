@@ -1,0 +1,80 @@
+{
+ "ok": true,
+ "voids": [
+  {
+   "rank": 1,
+   "volume_a3": 430.0,
+   "centre": [
+    95.08,
+    58.57,
+    57.23
+   ],
+   "gap_to_ligand_a": 2.2,
+   "nearest_ligand_atom_index": 27,
+   "direction_from_ligand": [
+    -0.29,
+    0.09,
+    0.95
+   ],
+   "lining_residues": [
+    "ARG293:D",
+    "GLN137:B",
+    "MET137:D",
+    "ASN277:B",
+    "THR286:D",
+    "TYR127:B",
+    "TRP290:D",
+    "MET26:B"
+   ],
+   "lining_counts": {
+    "hydrophobic": 28,
+    "polar": 27,
+    "charged": 11
+   },
+   "character": "mixed",
+   "suggested_chemistry": "an aryl ring carrying one polar substituent suits a lining of this kind",
+   "grid_points": 848
+  },
+  {
+   "rank": 2,
+   "volume_a3": 48.0,
+   "centre": [
+    102.67,
+    68.53,
+    63.03
+   ],
+   "gap_to_ligand_a": 2.3,
+   "nearest_ligand_atom_index": 15,
+   "direction_from_ligand": [
+    0.95,
+    0.29,
+    0.09
+   ],
+   "lining_residues": [
+    "GLY140:D",
+    "HIS30:D",
+    "ASN29:D",
+    "ASN144:D",
+    "GLN283:D",
+    "PHE26:D",
+    "SER33:D",
+    "VAL241:B"
+   ],
+   "lining_counts": {
+    "hydrophobic": 11,
+    "polar": 8,
+    "charged": 3
+   },
+   "character": "mixed",
+   "suggested_chemistry": "an aryl ring carrying one polar substituent suits a lining of this kind",
+   "grid_points": 93
+  }
+ ],
+ "receptor_atoms": 9858,
+ "ligand_atoms": 35,
+ "unoccupied_volume_a3": 478,
+ "method": "grid 0.8 \u00c5, probe clash 3.1 \u00c5, burial 9/13 ray axes, clusters above 25 \u00c5\u00b3",
+ "caveat": "geometric estimate from one rigid pose \u2014 no energy term, no receptor flexibility, volumes depend on probe size",
+ "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+ "summary": "2 unoccupied region(s) next to the pose (~478 \u00c5\u00b3 in total):\n  #1  ~430 \u00c5\u00b3, mixed, 2.2 \u00c5 from the nearest ligand atom; lined by ARG293:D, GLN137:B, MET137:D, ASN277:B, THR286:D\n      \u2192 an aryl ring carrying one polar substituent suits a lining of this kind\n  #2  ~48 \u00c5\u00b3, mixed, 2.3 \u00c5 from the nearest ligand atom; lined by GLY140:D, HIS30:D, ASN29:D, ASN144:D, GLN283:D\n      \u2192 an aryl ring carrying one polar substituent suits a lining of this kind\nGrow the scaffold into these regions rather than adding mass anywhere else; geometric estimate from one rigid pose \u2014 no energy term, no receptor flexibility, volumes depend on probe size."
+}

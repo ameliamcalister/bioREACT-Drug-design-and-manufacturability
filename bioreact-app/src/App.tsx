@@ -15,7 +15,7 @@
  * slow when nothing is running and quick while a job is.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api, ApiError } from './api';
+import { api, ApiError, sourceMode } from './api';
 import type {
   EvaluationResults,
   ManufactureReport,
@@ -30,7 +30,9 @@ import { DecisionView } from './components/DecisionView';
 import { DesignLoopView } from './components/DesignLoopView';
 import { ManufacturabilityView } from './components/ManufacturabilityView';
 import { MethodView } from './components/MethodView';
+import { DemoBanner } from './components/DemoBanner';
 import { TargetPanel } from './components/TargetPanel';
+import { ThemeControl } from './components/ThemeControl';
 import { Chip, ErrorText, Spinner } from './components/ui';
 
 type Screen = 'loop' | 'site' | 'manufacture' | 'decide' | 'method';
@@ -173,6 +175,8 @@ export default function App() {
     setScreen('site');
   };
 
+  const demo = sourceMode() === 'demo';
+
   const scales = method?.scales ?? [
     { grams: 10, label: '10 g', purpose: 'in vivo pharmacology' },
     { grams: 100, label: '100 g', purpose: 'GLP toxicology batch' },
@@ -181,17 +185,27 @@ export default function App() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F8FAFC] text-slate-900">
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-3 px-6 py-3">
-          <div className="min-w-0">
-            <h1 className="text-base font-bold tracking-tight text-slate-900">bioREACT</h1>
-            <p className="text-[11px] leading-tight text-slate-600">
-              Design a molecule that binds — and that someone can actually make.
-            </p>
-          </div>
+    <div className="flex min-h-screen flex-col bg-canvas text-ink">
+      <header className="sticky top-0 z-20 border-b border-line bg-surface/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-6 gap-y-2 px-6 py-2.5">
+          <button
+            type="button"
+            onClick={() => setScreen('loop')}
+            className="group min-w-0 text-left"
+            title="back to the design loop"
+          >
+            <span className="block text-[15px] font-bold leading-none tracking-[-0.02em] text-ink">
+              bioREACT
+            </span>
+            <span className="mt-1 block text-[11px] leading-tight text-ink-3">
+              Design a molecule that binds — and that someone can make.
+            </span>
+          </button>
 
-          <nav className="order-3 flex w-full flex-wrap gap-1 lg:order-none lg:w-auto">
+          <nav
+            aria-label="Sections"
+            className="order-3 -mx-1 flex w-full gap-0.5 overflow-x-auto px-1 lg:order-none lg:mx-0 lg:w-auto lg:overflow-visible lg:px-0"
+          >
             {SCREENS.map((item) => {
               const active = screen === item.id;
               return (
@@ -199,41 +213,50 @@ export default function App() {
                   key={item.id}
                   type="button"
                   onClick={() => setScreen(item.id)}
-                  title={item.blurb}
-                  className={`rounded-md px-3 py-1.5 text-left text-xs transition-colors ${
-                    active
-                      ? 'bg-slate-900 text-white'
-                      : 'text-slate-700 hover:bg-slate-100'
+                  aria-current={active ? 'page' : undefined}
+                  aria-label={`${item.label} — ${item.blurb}`}
+                  className={`relative shrink-0 rounded-[5px] px-2.5 py-1.5 text-left transition-colors ${
+                    active ? 'bg-surface-3 text-ink' : 'text-ink-2 hover:bg-surface-2 hover:text-ink'
                   }`}
                 >
-                  <span className="block font-semibold">{item.label}</span>
-                  <span
-                    className={`block text-[10.5px] ${active ? 'text-slate-300' : 'text-slate-500'}`}
-                  >
+                  <span className="block text-[12.5px] font-semibold leading-tight">
+                    {item.label}
+                  </span>
+                  <span className="block text-[10.5px] leading-tight text-ink-3">
                     {item.blurb}
                   </span>
+                  {active && (
+                    <span className="absolute inset-x-2.5 -bottom-[9px] hidden h-[2px] rounded-full bg-accent lg:block" />
+                  )}
                 </button>
               );
             })}
           </nav>
 
           <div className="ml-auto flex items-center gap-3">
+            {activeTarget && (
+              <span
+                className="hidden items-center gap-1.5 font-mono text-[11px] text-ink-3 md:inline-flex"
+                title={activeTarget.description || activeTarget.name}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                {activeTarget.name}
+              </span>
+            )}
             {status?.running ? (
               <Spinner label={status.label || 'running'} />
             ) : (
               <Chip tone="neutral">idle</Chip>
             )}
-            {activeTarget && (
-              <span className="hidden font-mono text-[11px] text-slate-500 sm:inline">
-                {activeTarget.name}
-              </span>
-            )}
+            <ThemeControl />
           </div>
         </div>
       </header>
 
+      {demo && <DemoBanner />}
+
       <main className="mx-auto w-full max-w-[1400px] flex-1 space-y-5 px-6 py-6">
-        {offline && (
+        {offline && !demo && (
           <ErrorText>
             {offline}. The design service runs separately from this page — start both with{' '}
             <code>./start.sh</code> from the repository root, then reload. Nothing on these
@@ -295,8 +318,8 @@ export default function App() {
         {screen === 'method' && <MethodView method={method} />}
       </main>
 
-      <footer className="border-t border-slate-200 bg-white px-6 py-5">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-2 text-[11px] leading-relaxed text-slate-500 sm:flex-row sm:items-start sm:justify-between">
+      <footer className="border-t border-line bg-surface px-6 py-5">
+        <div className="mx-auto flex max-w-[1400px] flex-col gap-2 text-[11px] leading-relaxed text-ink-3 sm:flex-row sm:items-start sm:justify-between">
           <p className="max-w-3xl">
             Docking ranks candidates and does not predict affinity; step counts, costs and
             timelines are modelled estimates from stated assumptions, not quotations. No synthesis

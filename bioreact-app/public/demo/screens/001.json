@@ -1,0 +1,177 @@
+{
+ "ok": true,
+ "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+ "verdict": "fail",
+ "descriptors": {
+  "mw": 700.9,
+  "clogp": 8.54,
+  "hbd": 3,
+  "hba": 7,
+  "tpsa": 133.7,
+  "rotatable_bonds": 12,
+  "aromatic_rings": 5,
+  "heavy_atoms": 49,
+  "molar_refractivity": 190.7,
+  "fsp3": 0.289,
+  "qed": 0.067
+ },
+ "rule_sets": [
+  {
+   "key": "lipinski",
+   "name": "Lipinski rule of five",
+   "citation": "Lipinski et al., Adv Drug Deliv Rev 1997",
+   "what_for": "oral absorption",
+   "violations": 2,
+   "allowed_violations": 1,
+   "pass": false,
+   "checks": [
+    {
+     "descriptor": "mw",
+     "value": 700.9,
+     "requirement": "molecular weight \u2264 500 Da",
+     "pass": false
+    },
+    {
+     "descriptor": "clogp",
+     "value": 8.54,
+     "requirement": "cLogP \u2264 5",
+     "pass": false
+    },
+    {
+     "descriptor": "hbd",
+     "value": 3,
+     "requirement": "hydrogen-bond donors \u2264 5",
+     "pass": true
+    },
+    {
+     "descriptor": "hba",
+     "value": 7,
+     "requirement": "hydrogen-bond acceptors \u2264 10",
+     "pass": true
+    }
+   ]
+  },
+  {
+   "key": "veber",
+   "name": "Veber rules",
+   "citation": "Veber et al., J Med Chem 2002",
+   "what_for": "oral bioavailability",
+   "violations": 1,
+   "allowed_violations": 0,
+   "pass": false,
+   "checks": [
+    {
+     "descriptor": "rotatable_bonds",
+     "value": 12,
+     "requirement": "rotatable bonds \u2264 10",
+     "pass": false
+    },
+    {
+     "descriptor": "tpsa",
+     "value": 133.7,
+     "requirement": "topological polar surface area \u2264 140 \u00c5\u00b2",
+     "pass": true
+    }
+   ]
+  },
+  {
+   "key": "ghose",
+   "name": "Ghose filter",
+   "citation": "Ghose et al., J Comb Chem 1999",
+   "what_for": "drug-likeness, a second opinion on Lipinski",
+   "violations": 3,
+   "allowed_violations": 1,
+   "pass": false,
+   "checks": [
+    {
+     "descriptor": "mw",
+     "value": 700.9,
+     "requirement": "molecular weight 160\u2013480 Da",
+     "pass": false
+    },
+    {
+     "descriptor": "clogp",
+     "value": 8.54,
+     "requirement": "cLogP \u22120.4 to 5.6",
+     "pass": false
+    },
+    {
+     "descriptor": "molar_refractivity",
+     "value": 190.7,
+     "requirement": "molar refractivity 40\u2013130",
+     "pass": false
+    },
+    {
+     "descriptor": "heavy_atoms",
+     "value": 49,
+     "requirement": "20\u201370 heavy atoms",
+     "pass": true
+    }
+   ]
+  },
+  {
+   "key": "egan",
+   "name": "Egan egg",
+   "citation": "Egan et al., J Med Chem 2000",
+   "what_for": "passive intestinal absorption",
+   "violations": 2,
+   "allowed_violations": 0,
+   "pass": false,
+   "checks": [
+    {
+     "descriptor": "clogp",
+     "value": 8.54,
+     "requirement": "cLogP \u2264 5.88",
+     "pass": false
+    },
+    {
+     "descriptor": "tpsa",
+     "value": 133.7,
+     "requirement": "topological polar surface area \u2264 131.6 \u00c5\u00b2",
+     "pass": false
+    }
+   ]
+  }
+ ],
+ "rule_sets_broken": [
+  "Lipinski rule of five",
+  "Veber rules",
+  "Ghose filter",
+  "Egan egg"
+ ],
+ "alerts": [
+  {
+   "name": "Polycyclic aromatic hydrocarbon 2",
+   "family": "Brenk",
+   "scope": "unwanted functionality due to potential tox reasons or unfavourable pharmacokinetic properties",
+   "reference": "Brenk R et al. Lessons Learnt from Assembling Screening Libraries for Drug Discovery for Neglected Diseases. ChemMedChem 3 (2008) 435-444.",
+   "means": "a substructure associated with reactivity, instability or unwanted metabolism"
+  },
+  {
+   "name": "Sulfonic acid 2",
+   "family": "Brenk",
+   "scope": "unwanted functionality due to potential tox reasons or unfavourable pharmacokinetic properties",
+   "reference": "Brenk R et al. Lessons Learnt from Assembling Screening Libraries for Drug Discovery for Neglected Diseases. ChemMedChem 3 (2008) 435-444.",
+   "means": "a substructure associated with reactivity, instability or unwanted metabolism"
+  }
+ ],
+ "qed": 0.067,
+ "proxies": [
+  {
+   "property": "oral absorption",
+   "expectation": "doubtful",
+   "basis": "TPSA 133.7 \u00c5\u00b2, 12 rotatable bonds, 700.9 Da against the Veber and Lipinski ranges"
+  },
+  {
+   "property": "CNS exposure",
+   "expectation": "unlikely",
+   "basis": "TPSA 133.7 \u00c5\u00b2, cLogP 8.54, 700.9 Da against the ranges typical of marketed CNS drugs"
+  },
+  {
+   "property": "aqueous solubility risk",
+   "expectation": "elevated",
+   "basis": "cLogP 8.54 with 5 aromatic rings \u2014 flat lipophilic molecules tend to be poorly soluble"
+  }
+ ],
+ "disclaimer": "Published rule sets over computed descriptors, plus RDKit's PAINS and Brenk structural alerts. No trained ADMET model is used anywhere in this project, so nothing here is a prediction of absorption, metabolism or toxicity \u2014 passing is clearing a filter, not an assay."
+}

@@ -1,0 +1,66 @@
+# Publish the interface to GitHub Pages.
+#
+# The page it deploys is the real interface running against a recorded
+# run: loop/build_demo.py freezes a run into bioreact-app/public/demo,
+# and the interface falls back to those files when no design service
+# answers. So the published page is browsable in full — structures,
+# docked poses in 3D, critic verdicts, costs — while the buttons that
+# would start a computation say plainly that they need a local install.
+#
+# Enable it once under Settings → Pages → Source: GitHub Actions.
+name: Deploy the demo to Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'bioreact-app/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bioreact-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: bioreact-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Type-check
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: bioreact-app/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

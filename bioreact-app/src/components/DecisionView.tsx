@@ -10,6 +10,7 @@
  */
 import { useState } from 'react';
 import { Download, FileJson, FileSpreadsheet } from 'lucide-react';
+import { api } from '../api';
 import type { DecisionRow, ManufactureReport, RunLog } from '../types';
 import { StructureImage } from './StructureImage';
 import {
@@ -43,6 +44,7 @@ export function DecisionView({
   onInspect: (smiles: string) => void;
 }) {
   const rows: DecisionRow[] = runLog?.decision_table ?? [];
+  const downloads = api.downloads();
   const costed = new Map((report?.candidates ?? []).map((item) => [item.smiles, item]));
   const reference = runLog?.reference;
 
@@ -75,17 +77,17 @@ export function DecisionView({
         aside={
           <div className="flex items-center gap-2">
             <a
-              href="/candidates.csv"
+              href={downloads.csv}
               download
-              className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-md border border-line-strong bg-surface px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-surface-2"
             >
               <FileSpreadsheet className="h-3.5 w-3.5" />
               Table as CSV
             </a>
             <a
-              href="/export.json"
+              href={downloads.json}
               download
-              className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-800 hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-md border border-line-strong bg-surface px-2.5 py-1.5 text-xs font-medium text-ink hover:bg-surface-2"
             >
               <FileJson className="h-3.5 w-3.5" />
               Whole run as JSON
@@ -119,7 +121,7 @@ export function DecisionView({
                     type="button"
                     onClick={() => onInspect(row.smiles)}
                     title="show this pose in the binding site"
-                    className="block rounded border border-transparent hover:border-slate-300"
+                    className="structure-stage block p-1 transition-colors hover:border-ink-3"
                   >
                     <StructureImage smiles={row.smiles} width={112} height={72} />
                   </button>
@@ -146,7 +148,7 @@ export function DecisionView({
                 <Cell numeric>
                   {row.affinity === null ? '—' : row.affinity.toFixed(2)}
                   {row.affinity_sd != null && (
-                    <span className="text-slate-500"> ±{row.affinity_sd.toFixed(2)}</span>
+                    <span className="text-ink-3"> ±{row.affinity_sd.toFixed(2)}</span>
                   )}
                 </Cell>
                 <Cell numeric>{row.sa_score}</Cell>
@@ -157,14 +159,14 @@ export function DecisionView({
                   {manufacturability ? (
                     <BandValue band={manufacturability.cost.cost_per_gram_usd} prefix="$" />
                   ) : (
-                    <span className="text-slate-400">not costed</span>
+                    <span className="text-ink-3">not costed</span>
                   )}
                 </Cell>
                 <Cell numeric>
                   {manufacturability ? (
                     weeksText(manufacturability.time.total_weeks)
                   ) : (
-                    <span className="text-slate-400">—</span>
+                    <span className="text-ink-3">—</span>
                   )}
                 </Cell>
                 <Cell className="min-w-[260px]">
@@ -216,12 +218,12 @@ function StrengthsAndConcerns({ pros, cons }: { pros: string[]; cons: string[] }
     <div>
       <ul className="space-y-0.5 text-xs leading-relaxed">
         {pros.slice(0, limit).map((pro, index) => (
-          <li key={`pro-${index}`} className="text-emerald-800">
+          <li key={`pro-${index}`} className="text-pass">
             + {pro}
           </li>
         ))}
         {realCons.slice(0, limit).map((con, index) => (
-          <li key={`con-${index}`} className="text-rose-800">
+          <li key={`con-${index}`} className="text-fail">
             − {con}
           </li>
         ))}
@@ -230,7 +232,7 @@ function StrengthsAndConcerns({ pros, cons }: { pros: string[]; cons: string[] }
         <button
           type="button"
           onClick={() => setExpanded((value) => !value)}
-          className="mt-1 text-[11px] text-slate-500 underline-offset-2 hover:underline"
+          className="mt-1 text-[11px] text-ink-3 underline-offset-2 hover:underline"
         >
           {expanded ? 'show fewer' : `${hidden} more`}
         </button>

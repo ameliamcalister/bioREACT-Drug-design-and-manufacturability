@@ -24,6 +24,20 @@ const PROTEIN_COLOUR = '#94a3b8';
 const CONTACT_COLOUR = '#f59e0b';
 const LIGAND_COLOUR = '#0ea5e9';
 
+/**
+ * The 3D view stays dark in both themes. Molecular viewers conventionally
+ * are, the four marker colours were chosen against a dark ground, and a
+ * white protein on a white page loses the depth cue entirely. The exact
+ * value comes from the theme tokens so it still belongs to the palette.
+ */
+function viewerBackground(): string {
+  if (typeof window === 'undefined') return '#0b1018';
+  const token = getComputedStyle(document.documentElement)
+    .getPropertyValue('--c-viewer-bg')
+    .trim();
+  return token || '#0b1018';
+}
+
 interface Atom {
   x: number;
   y: number;
@@ -152,7 +166,7 @@ export function PoseViewer({
     if (!host.current || viewer.current) return;
     try {
       viewer.current = $3Dmol.createViewer(host.current, {
-        backgroundColor: '#0b1220',
+        backgroundColor: viewerBackground(),
         antialias: true,
       });
     } catch (problem) {
@@ -241,15 +255,15 @@ export function PoseViewer({
     <div className="relative">
       <div
         ref={host}
-        className="h-[420px] w-full overflow-hidden rounded-md border border-slate-800 bg-[#0b1220]"
+        className="h-[420px] w-full overflow-hidden rounded-[5px] border border-line bg-viewer-bg"
       />
       {(!receptorPdb || !posePdb) && !failure && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs text-slate-400">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-xs text-ink-3">
           loading structure…
         </div>
       )}
       {failure && (
-        <div className="absolute inset-0 flex items-center justify-center px-6 text-center text-xs text-rose-200">
+        <div className="absolute inset-0 flex items-center justify-center px-6 text-center text-xs text-fail">
           {failure}
         </div>
       )}
@@ -266,7 +280,7 @@ function Legend() {
     [VOID_COLOUR, 'unoccupied cavity space'],
   ];
   return (
-    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-600">
+    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-ink-2">
       {items.map(([colour, label]) => (
         <span key={label} className="inline-flex items-center gap-1.5">
           <span

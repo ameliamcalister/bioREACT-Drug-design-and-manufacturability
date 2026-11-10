@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>bioREACT — design a molecule someone can make</title>
     <meta
       name="description"
@@ -16,6 +17,17 @@
     />
   </head>
   <body>
+    <script>
+      // Apply the saved theme before the first paint, so the page never
+      // flashes light then switches. "system" stores nothing, which lets
+      // the stylesheet fall through to prefers-color-scheme.
+      try {
+        var saved = localStorage.getItem('bioreact.theme');
+        if (saved === 'light' || saved === 'dark') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

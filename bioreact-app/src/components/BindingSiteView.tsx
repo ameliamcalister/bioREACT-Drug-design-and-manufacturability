@@ -155,7 +155,7 @@ export function BindingSiteView({
           <div>
             <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
               <label className="flex min-w-0 flex-col gap-1">
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-3">
                   Molecule
                 </span>
                 <Select
@@ -169,7 +169,7 @@ export function BindingSiteView({
               </label>
               {(pose?.mode_scores?.length ?? 0) > 1 && (
                 <label className="flex flex-col gap-1">
-                  <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                  <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-3">
                     Binding mode
                   </span>
                   <Select
@@ -202,7 +202,11 @@ export function BindingSiteView({
           </div>
 
           <div className="space-y-4">
-            {active && <StructureImage smiles={active} width={320} height={180} />}
+            {active && (
+              <div className="structure-stage p-2">
+                <StructureImage smiles={active} width={320} height={180} />
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-3">
               <Stat
                 label="Best score"
@@ -234,15 +238,15 @@ export function BindingSiteView({
               />
             </div>
             {target && (
-              <div className="rounded-md border border-slate-200 bg-slate-50/70 p-3 text-xs leading-relaxed text-slate-600">
-                <div className="font-medium text-slate-800">{target.name}</div>
+              <div className="rounded-md border border-line bg-surface-2 p-3 text-xs leading-relaxed text-ink-2">
+                <div className="font-medium text-ink">{target.name}</div>
                 {target.description && <p className="mt-1">{target.description}</p>}
                 <p className="mt-1.5 font-mono text-[11px]">
                   site from {target.grid_source} · box {target.box.filter(Boolean).join(' × ')} Å
                   {target.receptor_atoms ? ` · ${target.receptor_atoms.toLocaleString()} atoms` : ''}
                 </p>
                 {target.blind && (
-                  <p className="mt-1 text-amber-800">
+                  <p className="mt-1 text-flag">
                     No reference ligand was given, so this docks blind against the whole protein —
                     slower and much less reliable than boxing the known site.
                   </p>
@@ -258,7 +262,7 @@ export function BindingSiteView({
         help="Each region is a cluster of empty grid points inside the cavity. Volume is approximate and depends on the probe size; the lining tells you what chemistry belongs there."
         aside={
           voids?.method ? (
-            <span className="font-mono text-[11px] text-slate-500">{voids.method}</span>
+            <span className="font-mono text-[11px] text-ink-3">{voids.method}</span>
           ) : null
         }
       >
@@ -272,14 +276,14 @@ export function BindingSiteView({
             {regions.map((region) => (
               <div
                 key={region.rank}
-                className="rounded-md border border-slate-200 bg-white p-3"
+                className="rounded-md border border-line bg-surface p-3"
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <span
                     className="inline-block h-3 w-3 rounded-sm"
                     style={{ backgroundColor: VOID_COLOUR }}
                   />
-                  <span className="font-mono text-sm font-semibold tabular-nums text-slate-900">
+                  <span className="font-mono text-sm font-semibold tabular-nums text-ink">
                     {Math.round(region.volume_a3)} Å³
                   </span>
                   <Chip tone={region.character === 'polar' ? 'info' : 'neutral'}
@@ -287,17 +291,17 @@ export function BindingSiteView({
                     {region.character}
                   </Chip>
                   {region.gap_to_ligand_a !== null && (
-                    <span className="inline-flex items-center gap-1 font-mono text-[11px] text-slate-500">
+                    <span className="inline-flex items-center gap-1 font-mono text-[11px] text-ink-3">
                       <Ruler className="h-3 w-3" />
                       {region.gap_to_ligand_a} Å from the molecule
                     </span>
                   )}
                 </div>
-                <p className="mt-2 text-xs leading-relaxed text-slate-700">
+                <p className="mt-2 text-xs leading-relaxed text-ink-2">
                   <span className="font-medium">What to do here: </span>
                   {region.suggested_chemistry}
                 </p>
-                <p className="mt-1.5 font-mono text-[11px] leading-relaxed text-slate-500">
+                <p className="mt-1.5 font-mono text-[11px] leading-relaxed text-ink-3">
                   lined by {region.lining_residues.join(', ')} ·{' '}
                   {region.lining_counts.hydrophobic} non-polar, {region.lining_counts.polar} polar
                   {region.lining_counts.charged

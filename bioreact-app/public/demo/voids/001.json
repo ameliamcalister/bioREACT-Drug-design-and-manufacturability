@@ -1,0 +1,114 @@
+{
+ "ok": true,
+ "voids": [
+  {
+   "rank": 1,
+   "volume_a3": 260.0,
+   "centre": [
+    91.19,
+    58.57,
+    59.07
+   ],
+   "gap_to_ligand_a": 2.2,
+   "nearest_ligand_atom_index": 13,
+   "direction_from_ligand": [
+    -0.93,
+    -0.17,
+    0.34
+   ],
+   "lining_residues": [
+    "ARG293:D",
+    "MET137:D",
+    "PHE281:B",
+    "TYR127:B",
+    "TRP290:D",
+    "TRP240:B",
+    "GLN133:D",
+    "PHE76:B"
+   ],
+   "lining_counts": {
+    "hydrophobic": 17,
+    "polar": 10,
+    "charged": 6
+   },
+   "character": "mixed",
+   "suggested_chemistry": "an aryl ring carrying one polar substituent suits a lining of this kind",
+   "grid_points": 508
+  },
+  {
+   "rank": 2,
+   "volume_a3": 110.0,
+   "centre": [
+    102.91,
+    58.2,
+    52.1
+   ],
+   "gap_to_ligand_a": 2.2,
+   "nearest_ligand_atom_index": 7,
+   "direction_from_ligand": [
+    0.94,
+    0.34,
+    -0.06
+   ],
+   "lining_residues": [
+    "GLN137:B",
+    "ASN289:D",
+    "GLU248:D",
+    "MET26:B",
+    "THR286:D",
+    "GLN64:B",
+    "LEU282:D",
+    "HIS69:B"
+   ],
+   "lining_counts": {
+    "hydrophobic": 17,
+    "polar": 16,
+    "charged": 5
+   },
+   "character": "mixed",
+   "suggested_chemistry": "an aryl ring carrying one polar substituent suits a lining of this kind",
+   "grid_points": 212
+  },
+  {
+   "rank": 3,
+   "volume_a3": 38.0,
+   "centre": [
+    99.79,
+    67.81,
+    62.75
+   ],
+   "gap_to_ligand_a": 2.2,
+   "nearest_ligand_atom_index": 47,
+   "direction_from_ligand": [
+    0.67,
+    0.68,
+    0.3
+   ],
+   "lining_residues": [
+    "GLY140:D",
+    "ASN29:D",
+    "PHE26:D",
+    "ARG280:B",
+    "VAL241:B",
+    "ASN144:D",
+    "HIS30:D",
+    "TRP240:B"
+   ],
+   "lining_counts": {
+    "hydrophobic": 9,
+    "polar": 9,
+    "charged": 3
+   },
+   "character": "mixed",
+   "suggested_chemistry": "an aryl ring carrying one polar substituent suits a lining of this kind",
+   "grid_points": 74
+  }
+ ],
+ "receptor_atoms": 9858,
+ "ligand_atoms": 49,
+ "unoccupied_volume_a3": 408,
+ "method": "grid 0.8 \u00c5, probe clash 3.1 \u00c5, burial 9/13 ray axes, clusters above 25 \u00c5\u00b3",
+ "caveat": "geometric estimate from one rigid pose \u2014 no energy term, no receptor flexibility, volumes depend on probe size",
+ "smiles": "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1",
+ "summary": "3 unoccupied region(s) next to the pose (~408 \u00c5\u00b3 in total):\n  #1  ~260 \u00c5\u00b3, mixed, 2.2 \u00c5 from the nearest ligand atom; lined by ARG293:D, MET137:D, PHE281:B, TYR127:B, TRP290:D\n      \u2192 an aryl ring carrying one polar substituent suits a lining of this kind\n  #2  ~110 \u00c5\u00b3, mixed, 2.2 \u00c5 from the nearest ligand atom; lined by GLN137:B, ASN289:D, GLU248:D, MET26:B, THR286:D\n      \u2192 an aryl ring carrying one polar substituent suits a lining of this kind\n  #3  ~38 \u00c5\u00b3, mixed, 2.2 \u00c5 from the nearest ligand atom; lined by GLY140:D, ASN29:D, PHE26:D, ARG280:B, VAL241:B\n      \u2192 an aryl ring carrying one polar substituent suits a lining of this kind\nGrow the scaffold into these regions rather than adding mass anywhere else; geometric estimate from one rigid pose \u2014 no energy term, no receptor flexibility, volumes depend on probe size."
+}

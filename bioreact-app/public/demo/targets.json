@@ -1,0 +1,70 @@
+{
+ "active": {
+  "name": "MRP1",
+  "slug": "mrp1",
+  "description": "ABCC1, a multidrug-resistance efflux transporter. Blocking it is intended to restore the activity of chemotherapy agents the transporter pumps out of tumour cells.",
+  "grid_source": "docked MK-571 pose",
+  "blind": false,
+  "box": [
+   24.0,
+   24.0,
+   24.0
+  ],
+  "centre": [
+   97.497,
+   62.007,
+   57.852
+  ],
+  "reference_name": "MK-571",
+  "reference_smiles": "CC(C)(C)c1ccc(cc1)/C=C/c1cc(ccn1)CSC(CC(=O)O)SCCc1ccccc1",
+  "reference_affinity": -9.1,
+  "receptor_atoms": null,
+  "chembl_target_id": "CHEMBL3004"
+ },
+ "targets": [
+  {
+   "name": "EGFR",
+   "slug": "egfr",
+   "description": "The kinase domain of the epidermal growth factor receptor. Inhibiting it blocks the growth signalling that drives several cancers.",
+   "grid_source": "reference ligand",
+   "blind": false,
+   "box": [
+    35.7,
+    24.7,
+    27.1
+   ],
+   "centre": [
+    21.697,
+    0.303,
+    52.093
+   ],
+   "reference_name": "erlotinib",
+   "reference_smiles": "COCCOc1cc2ncnc(Nc3cccc(C#C)c3)c2cc1OCCOC",
+   "reference_affinity": -6.99,
+   "receptor_atoms": 2560,
+   "chembl_target_id": "CHEMBL203"
+  },
+  {
+   "name": "MRP1",
+   "slug": "mrp1",
+   "description": "ABCC1, a multidrug-resistance efflux transporter. Blocking it is intended to restore the activity of chemotherapy agents the transporter pumps out of tumour cells.",
+   "grid_source": "docked MK-571 pose",
+   "blind": false,
+   "box": [
+    24.0,
+    24.0,
+    24.0
+   ],
+   "centre": [
+    97.497,
+    62.007,
+    57.852
+   ],
+   "reference_name": "MK-571",
+   "reference_smiles": "CC(C)(C)c1ccc(cc1)/C=C/c1cc(ccn1)CSC(CC(=O)O)SCCc1ccccc1",
+   "reference_affinity": -9.1,
+   "receptor_atoms": null,
+   "chembl_target_id": "CHEMBL3004"
+  }
+ ]
+}

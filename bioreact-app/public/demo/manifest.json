@@ -1,0 +1,60 @@
+{
+ "generated_at": "2026-11-10",
+ "verdict": "converged: all candidates manufacturable and on target",
+ "target": "MRP1",
+ "target_description": "ABCC1, a multidrug-resistance efflux transporter. Blocking it is intended to restore the activity of chemotherapy agents the transporter pumps out of tumour cells.",
+ "rounds": 2,
+ "headline": "MAKE FIRST \u00b7 -10.82 kcal/mol \u00b7 ~6 steps",
+ "structures": {
+  "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1": {
+   "light": "structures/000.svg",
+   "dark": "structures/000-dark.svg"
+  },
+  "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1": {
+   "light": "structures/001.svg",
+   "dark": "structures/001-dark.svg"
+  },
+  "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1": {
+   "light": "structures/002.svg",
+   "dark": "structures/002-dark.svg"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1": {
+   "light": "structures/003.svg",
+   "dark": "structures/003-dark.svg"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1": {
+   "light": "structures/004.svg",
+   "dark": "structures/004-dark.svg"
+  },
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1": {
+   "light": "structures/005.svg",
+   "dark": "structures/005-dark.svg"
+  }
+ },
+ "screens": {
+  "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1": "screens/000.json",
+  "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1": "screens/001.json",
+  "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1": "screens/002.json",
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccccc2)cc1": "screens/003.json",
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1": "screens/004.json",
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1": "screens/005.json"
+ },
+ "poses": {
+  "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1": "poses/000.json",
+  "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1": "poses/001.json",
+  "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1": "poses/002.json",
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1": "poses/004.json",
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1": "poses/005.json"
+ },
+ "voids": {
+  "CS(=O)(=O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(C)c2ccc3ccccc3c2)cc1": "voids/000.json",
+  "CC(c1ccc(NC2CCCCC2C(=O)CCSC3=CC(F)=C(S(=O)(=O)O)C(C(=O)O)=C3)cc1)Cc1ccc2nc3ccccc3cc2c1": "voids/001.json",
+  "O=C(O)c1cc2ccc(F)cc2cc1SC(=O)CCNc1ccc(C(C)[C@@H]2CCCC[C@H]2NC(=O)CCc2ccc(F)cc2)cc1": "voids/002.json",
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1": "voids/004.json",
+  "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Oc2ccc(F)cc2)cc1": "voids/005.json"
+ },
+ "note": "A recorded run, frozen into static files. Every number, structure and pose here came out of the real pipeline; what the demo cannot do is start a new run, because that needs RDKit, AutoDock Vina and an API key on your own machine.",
+ "rubric_version": 9,
+ "assumptions_version": 24,
+ "dock_mode": "hybrid"
+}

@@ -1,0 +1,167 @@
+{
+ "ok": true,
+ "smiles": "CS(=O)(=O)c1cc(F)ccc1C(=O)N1CCN(CC1)c1ccc(Cc2ccc(C(N)=O)cc2)cc1",
+ "verdict": "flag",
+ "descriptors": {
+  "mw": 495.6,
+  "clogp": 2.88,
+  "hbd": 1,
+  "hba": 5,
+  "tpsa": 100.8,
+  "rotatable_bonds": 6,
+  "aromatic_rings": 3,
+  "heavy_atoms": 35,
+  "molar_refractivity": 131.8,
+  "fsp3": 0.231,
+  "qed": 0.567
+ },
+ "rule_sets": [
+  {
+   "key": "lipinski",
+   "name": "Lipinski rule of five",
+   "citation": "Lipinski et al., Adv Drug Deliv Rev 1997",
+   "what_for": "oral absorption",
+   "violations": 0,
+   "allowed_violations": 1,
+   "pass": true,
+   "checks": [
+    {
+     "descriptor": "mw",
+     "value": 495.6,
+     "requirement": "molecular weight \u2264 500 Da",
+     "pass": true
+    },
+    {
+     "descriptor": "clogp",
+     "value": 2.88,
+     "requirement": "cLogP \u2264 5",
+     "pass": true
+    },
+    {
+     "descriptor": "hbd",
+     "value": 1,
+     "requirement": "hydrogen-bond donors \u2264 5",
+     "pass": true
+    },
+    {
+     "descriptor": "hba",
+     "value": 5,
+     "requirement": "hydrogen-bond acceptors \u2264 10",
+     "pass": true
+    }
+   ]
+  },
+  {
+   "key": "veber",
+   "name": "Veber rules",
+   "citation": "Veber et al., J Med Chem 2002",
+   "what_for": "oral bioavailability",
+   "violations": 0,
+   "allowed_violations": 0,
+   "pass": true,
+   "checks": [
+    {
+     "descriptor": "rotatable_bonds",
+     "value": 6,
+     "requirement": "rotatable bonds \u2264 10",
+     "pass": true
+    },
+    {
+     "descriptor": "tpsa",
+     "value": 100.8,
+     "requirement": "topological polar surface area \u2264 140 \u00c5\u00b2",
+     "pass": true
+    }
+   ]
+  },
+  {
+   "key": "ghose",
+   "name": "Ghose filter",
+   "citation": "Ghose et al., J Comb Chem 1999",
+   "what_for": "drug-likeness, a second opinion on Lipinski",
+   "violations": 2,
+   "allowed_violations": 1,
+   "pass": false,
+   "checks": [
+    {
+     "descriptor": "mw",
+     "value": 495.6,
+     "requirement": "molecular weight 160\u2013480 Da",
+     "pass": false
+    },
+    {
+     "descriptor": "clogp",
+     "value": 2.88,
+     "requirement": "cLogP \u22120.4 to 5.6",
+     "pass": true
+    },
+    {
+     "descriptor": "molar_refractivity",
+     "value": 131.8,
+     "requirement": "molar refractivity 40\u2013130",
+     "pass": false
+    },
+    {
+     "descriptor": "heavy_atoms",
+     "value": 35,
+     "requirement": "20\u201370 heavy atoms",
+     "pass": true
+    }
+   ]
+  },
+  {
+   "key": "egan",
+   "name": "Egan egg",
+   "citation": "Egan et al., J Med Chem 2000",
+   "what_for": "passive intestinal absorption",
+   "violations": 0,
+   "allowed_violations": 0,
+   "pass": true,
+   "checks": [
+    {
+     "descriptor": "clogp",
+     "value": 2.88,
+     "requirement": "cLogP \u2264 5.88",
+     "pass": true
+    },
+    {
+     "descriptor": "tpsa",
+     "value": 100.8,
+     "requirement": "topological polar surface area \u2264 131.6 \u00c5\u00b2",
+     "pass": true
+    }
+   ]
+  }
+ ],
+ "rule_sets_broken": [
+  "Ghose filter"
+ ],
+ "alerts": [
+  {
+   "name": "anil di alk E(186)",
+   "family": "PAINS",
+   "scope": "PAINS filters (family A)",
+   "reference": "Baell JB, Holloway GA. New Substructure Filters for Removal of Pan Assay Interference Compounds (PAINS) from Screening Libraries and for Their Exclusion in Bioassays. J Med Chem 53 (2010) 2719D40.",
+   "means": "associated with frequent-hitter behaviour in assays: a hit may not be real binding"
+  }
+ ],
+ "qed": 0.567,
+ "proxies": [
+  {
+   "property": "oral absorption",
+   "expectation": "plausible",
+   "basis": "TPSA 100.8 \u00c5\u00b2, 6 rotatable bonds, 495.6 Da against the Veber and Lipinski ranges"
+  },
+  {
+   "property": "CNS exposure",
+   "expectation": "unlikely",
+   "basis": "TPSA 100.8 \u00c5\u00b2, cLogP 2.88, 495.6 Da against the ranges typical of marketed CNS drugs"
+  },
+  {
+   "property": "aqueous solubility risk",
+   "expectation": "ordinary",
+   "basis": "cLogP 2.88 with 3 aromatic rings \u2014 flat lipophilic molecules tend to be poorly soluble"
+  }
+ ],
+ "disclaimer": "Published rule sets over computed descriptors, plus RDKit's PAINS and Brenk structural alerts. No trained ADMET model is used anywhere in this project, so nothing here is a prediction of absorption, metabolism or toxicity \u2014 passing is clearing a filter, not an assay."
+}

@@ -22,6 +22,8 @@ import {
   Square,
   TriangleAlert,
 } from 'lucide-react';
+import { sourceMode } from '../api';
+import { DemoNotice } from './DemoBanner';
 import type {
   Assumption,
   ManufactureReport,
@@ -89,6 +91,7 @@ export function ManufacturabilityView({
   const [overrides, setOverrides] = useState<Record<string, number>>({});
   const [error, setError] = useState<string | null>(null);
 
+  const demo = sourceMode() === 'demo';
   const running = status?.manufacture.running ?? false;
   const candidates = report?.candidates ?? [];
   const assumptions = report?.assumptions ?? [];
@@ -165,9 +168,9 @@ export function ManufacturabilityView({
                 <Button
                   tone="primary"
                   icon={<Play className="h-3.5 w-3.5" />}
-                  disabled={busy}
+                  disabled={busy || demo}
                   onClick={() => act(() => onRun({ scale_g: scale, rules_only: rulesOnly, overrides }))}
-                  hint="about ten seconds a candidate"
+                  hint={demo ? 'not available in the demo' : 'about ten seconds a candidate'}
                 >
                   Estimate cost and time
                 </Button>
@@ -175,7 +178,8 @@ export function ManufacturabilityView({
             </div>
           </div>
 
-          {!rulesOnly && !status?.backend.api_key_set && (
+          {demo && <DemoNotice action="Re-costing the shortlist" />}
+          {!demo && !rulesOnly && !status?.backend.api_key_set && (
             <ErrorText>
               No <code>ANTHROPIC_API_KEY</code> is set, so the agents cannot run. The rules-only
               mode produces the same figures without one.
@@ -184,19 +188,19 @@ export function ManufacturabilityView({
           {error && <ErrorText>{error}</ErrorText>}
 
           {report && !running && candidates.length > 0 && (
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-ink-3">
               <span>
                 {candidates.length} candidate{candidates.length === 1 ? '' : 's'} at{' '}
-                <span className="font-mono text-slate-700">{report.scale_label}</span>
+                <span className="font-mono text-ink-2">{report.scale_label}</span>
               </span>
               <span>
                 mode{' '}
-                <span className="font-mono text-slate-700">
+                <span className="font-mono text-ink-2">
                   {report.mode === 'agent' ? `agents · ${report.model}` : 'deterministic rules'}
                 </span>
               </span>
               <span>
-                took <span className="font-mono text-slate-700">{report.elapsed_s} s</span>
+                took <span className="font-mono text-ink-2">{report.elapsed_s} s</span>
               </span>
             </div>
           )}
@@ -264,8 +268,10 @@ function SideBySide({
         {candidates.map((candidate) => (
           <tr key={candidate.smiles} className="align-top">
             <Cell numeric>{candidate.rank}</Cell>
-            <Cell className="w-[120px]">
-              <StructureImage smiles={candidate.smiles} width={112} height={72} />
+            <Cell className="w-[124px]">
+              <div className="structure-stage p-1">
+                <StructureImage smiles={candidate.smiles} width={112} height={72} />
+              </div>
             </Cell>
             <Cell>
               <Chip
@@ -291,8 +297,8 @@ function SideBySide({
                 : candidate.affinity.toFixed(2)}
             </Cell>
             <Cell>
-              <div className="text-xs font-medium text-slate-800">{candidate.route_label}</div>
-              <div className="text-[11px] text-slate-500">
+              <div className="text-xs font-medium text-ink">{candidate.route_label}</div>
+              <div className="text-[11px] text-ink-3">
                 ~{candidate.estimated_steps} steps · {candidate.route_complexity}
               </div>
             </Cell>
@@ -328,8 +334,8 @@ function CandidateAssessment({ assessment }: { assessment: Manufacturability }) 
       tone={redesign ? 'warning' : 'default'}
       title={
         <span className="flex items-center gap-2">
-          <span className="font-mono text-slate-500">#{assessment.rank}</span>
-          <Icon className="h-4 w-4 text-slate-500" />
+          <span className="font-mono text-ink-3">#{assessment.rank}</span>
+          <Icon className="h-4 w-4 text-ink-3" />
           {assessment.route_label}
           {redesign && <Chip tone="fail">no viable route as drawn</Chip>}
           <Chip tone={assessment.mode === 'agent' ? 'accent' : 'neutral'}>
@@ -342,7 +348,9 @@ function CandidateAssessment({ assessment }: { assessment: Manufacturability }) 
       <div className="space-y-5">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,200px)_minmax(0,1fr)]">
           <div className="space-y-2">
-            <StructureImage smiles={assessment.smiles} width={200} height={130} />
+            <div className="structure-stage p-2">
+              <StructureImage smiles={assessment.smiles} width={200} height={130} />
+            </div>
             <SmilesText smiles={assessment.smiles} />
           </div>
 
@@ -381,15 +389,15 @@ function CandidateAssessment({ assessment }: { assessment: Manufacturability }) 
             )}
 
             <div>
-              <h3 className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <h3 className="text-[11px] font-semibold uppercase tracking-wide text-ink-3">
                 Why this route
               </h3>
               {assessment.mode === 'agent' ? (
-                <p className="mt-1 text-sm leading-relaxed text-slate-800">
+                <p className="mt-1 text-sm leading-relaxed text-ink">
                   {assessment.agent.justification}
                 </p>
               ) : (
-                <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                <p className="mt-1 text-xs leading-relaxed text-ink-2">
                   No agent ran for this candidate, so the route came from the decision rules
                   alone. The figures are identical either way — an agent changes the reasoning,
                   never the arithmetic.
@@ -398,8 +406,8 @@ function CandidateAssessment({ assessment }: { assessment: Manufacturability }) 
               {assessment.route_reasons.length > 0 && (
                 <ul className="mt-2 space-y-1">
                   {assessment.route_reasons.map((reason, index) => (
-                    <li key={index} className="flex gap-2 text-xs leading-relaxed text-slate-600">
-                      <span className="text-slate-400">·</span>
+                    <li key={index} className="flex gap-2 text-xs leading-relaxed text-ink-2">
+                      <span className="text-ink-3">·</span>
                       <span>{reason}</span>
                     </li>
                   ))}
@@ -408,19 +416,19 @@ function CandidateAssessment({ assessment }: { assessment: Manufacturability }) 
             </div>
 
             {assessment.enzymes.length > 0 && (
-              <div className="rounded-md border border-emerald-300 bg-emerald-50/60 p-3">
-                <h3 className="text-[11px] font-semibold uppercase tracking-wide text-emerald-900">
+              <div className="rounded-md border border-pass/40 bg-pass-soft p-3">
+                <h3 className="text-[11px] font-semibold uppercase tracking-wide text-pass">
                   Enzyme classes this structure suits
                 </h3>
                 <ul className="mt-1.5 space-y-1.5">
                   {assessment.enzymes.map((enzyme) => (
-                    <li key={enzyme.key} className="text-xs leading-relaxed text-emerald-950">
+                    <li key={enzyme.key} className="text-xs leading-relaxed text-ink">
                       <span className="font-medium">{enzyme.enzyme}</span> — {enzyme.why}.{' '}
-                      <span className="text-emerald-800">Replaces: {enzyme.replaces}.</span>
+                      <span className="text-pass">Replaces: {enzyme.replaces}.</span>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-2 text-[11px] leading-relaxed text-emerald-800">
+                <p className="mt-2 text-[11px] leading-relaxed text-pass">
                   Matched from substructure: this says the chemistry is plausible, not that an
                   enzyme accepts this substrate. Screening a panel is the first experiment.
                 </p>
@@ -429,14 +437,14 @@ function CandidateAssessment({ assessment }: { assessment: Manufacturability }) 
 
             {assessment.agent.risks.length > 0 && (
               <div>
-                <h3 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                <h3 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-3">
                   <TriangleAlert className="h-3.5 w-3.5" />
                   What could go wrong
                 </h3>
                 <ul className="mt-1.5 space-y-1.5">
                   {assessment.agent.risks.map((risk, index) => (
-                    <li key={index} className="flex gap-2 text-xs leading-relaxed text-slate-700">
-                      <span className="text-amber-600">▲</span>
+                    <li key={index} className="flex gap-2 text-xs leading-relaxed text-ink-2">
+                      <span className="text-flag">▲</span>
                       <span>{risk}</span>
                     </li>
                   ))}
@@ -473,8 +481,8 @@ function CostBreakdown({ assessment }: { assessment: Manufacturability }) {
   const total = cost.breakdown.reduce((sum, item) => sum + item.usd_per_gram, 0) || 1;
 
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-3">
-      <h3 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+    <div className="rounded-md border border-line bg-surface p-3">
+      <h3 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-3">
         <CircleDollarSign className="h-3.5 w-3.5" />
         Where the cost comes from
       </h3>
@@ -483,31 +491,31 @@ function CostBreakdown({ assessment }: { assessment: Manufacturability }) {
         {cost.breakdown.map((item) => (
           <div key={item.item}>
             <div className="flex items-baseline justify-between gap-3 text-xs">
-              <span className="text-slate-800">{item.item}</span>
-              <span className="font-mono tabular-nums text-slate-900">
+              <span className="text-ink">{item.item}</span>
+              <span className="font-mono tabular-nums text-ink">
                 {money(item.usd_per_gram)}/g
               </span>
             </div>
-            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-100">
+            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-3">
               <div
-                className="h-full rounded-full bg-slate-700"
+                className="h-full rounded-full bg-ink-2"
                 style={{ width: `${Math.max(2, (item.usd_per_gram / total) * 100)}%` }}
               />
             </div>
-            <p className="mt-0.5 font-mono text-[10.5px] text-slate-500">{item.basis}</p>
+            <p className="mt-0.5 font-mono text-[10.5px] text-ink-3">{item.basis}</p>
           </div>
         ))}
       </div>
 
       {cost.premiums.length > 0 && (
-        <div className="mt-3 border-t border-slate-100 pt-2">
-          <h4 className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+        <div className="mt-3 border-t border-line pt-2">
+          <h4 className="text-[11px] font-semibold uppercase tracking-wide text-ink-3">
             Premiums this structure forces
           </h4>
           <ul className="mt-1.5 space-y-1.5">
             {cost.premiums.map((premium) => (
-              <li key={premium.label} className="text-xs leading-relaxed text-slate-700">
-                <span className="font-mono tabular-nums text-slate-900">
+              <li key={premium.label} className="text-xs leading-relaxed text-ink-2">
+                <span className="font-mono tabular-nums text-ink">
                   ×{premium.factor.toFixed(2)}
                 </span>{' '}
                 <span className="font-medium">{premium.label}</span> — {premium.detail}
@@ -517,7 +525,7 @@ function CostBreakdown({ assessment }: { assessment: Manufacturability }) {
         </div>
       )}
 
-      <dl className="mt-3 grid grid-cols-3 gap-2 border-t border-slate-100 pt-2 text-[11px]">
+      <dl className="mt-3 grid grid-cols-3 gap-2 border-t border-line pt-2 text-[11px]">
         {cost.steps !== undefined && (
           <Figure label="steps" value={`~${cost.steps}`} />
         )}
@@ -537,13 +545,13 @@ function CostBreakdown({ assessment }: { assessment: Manufacturability }) {
       </dl>
 
       {cost.one_off_development_usd > 0 && (
-        <p className="mt-2 text-[11px] leading-relaxed text-slate-600">
+        <p className="mt-2 text-[11px] leading-relaxed text-ink-2">
           Plus <span className="font-mono">{money(cost.one_off_development_usd)}</span> of one-off
           development, paid before the first gram and not included in the per-gram figure.
         </p>
       )}
 
-      <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-slate-500">{cost.method}</p>
+      <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-ink-3">{cost.method}</p>
     </div>
   );
 }
@@ -553,8 +561,8 @@ function Timeline({ assessment }: { assessment: Manufacturability }) {
   const longest = Math.max(...phases.map((phase) => phase.weeks), 1);
 
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-3">
-      <h3 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+    <div className="rounded-md border border-line bg-surface p-3">
+      <h3 className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-3">
         <Clock className="h-3.5 w-3.5" />
         Time to the first delivery
       </h3>
@@ -563,30 +571,30 @@ function Timeline({ assessment }: { assessment: Manufacturability }) {
         {phases.map((phase) => (
           <div key={phase.phase}>
             <div className="flex items-baseline justify-between gap-3 text-xs">
-              <span className="text-slate-800">{phase.phase}</span>
-              <span className="font-mono tabular-nums text-slate-900">
+              <span className="text-ink">{phase.phase}</span>
+              <span className="font-mono tabular-nums text-ink">
                 {phase.weeks.toFixed(0)} wk
               </span>
             </div>
-            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-100">
+            <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-3">
               <div
-                className="h-full rounded-full bg-sky-700"
+                className="h-full rounded-full bg-accent"
                 style={{ width: `${Math.max(2, (phase.weeks / longest) * 100)}%` }}
               />
             </div>
-            <p className="mt-0.5 text-[10.5px] leading-relaxed text-slate-500">{phase.detail}</p>
+            <p className="mt-0.5 text-[10.5px] leading-relaxed text-ink-3">{phase.detail}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-3 flex items-baseline justify-between border-t border-slate-100 pt-2 text-xs">
-        <span className="font-medium text-slate-800">Total</span>
-        <span className="font-mono tabular-nums text-slate-900">
+      <div className="mt-3 flex items-baseline justify-between border-t border-line pt-2 text-xs">
+        <span className="font-medium text-ink">Total</span>
+        <span className="font-mono tabular-nums text-ink">
           {weeksText(assessment.time.total_weeks)} ·{' '}
           <BandValue band={assessment.time.total_months} digits={1} unit="months" />
         </span>
       </div>
-      <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-slate-500">
+      <p className="mt-2 font-mono text-[10.5px] leading-relaxed text-ink-3">
         {assessment.time.method}
       </p>
     </div>
@@ -596,10 +604,10 @@ function Timeline({ assessment }: { assessment: Manufacturability }) {
 function Figure({ label, value }: { label: string; value: string | number }) {
   return (
     <div className="min-w-0">
-      <dt className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+      <dt className="truncate text-[10px] font-semibold uppercase tracking-wide text-ink-3">
         {label}
       </dt>
-      <dd className="truncate font-mono tabular-nums text-slate-900">{value}</dd>
+      <dd className="truncate font-mono tabular-nums text-ink">{value}</dd>
     </div>
   );
 }
@@ -609,22 +617,22 @@ function AlternativeRoutes({ assessment }: { assessment: Manufacturability }) {
   const optionsByRoute = new Map(assessment.route_options.map((option) => [option.route, option]));
 
   return (
-    <div className="rounded-md border border-slate-200">
+    <div className="rounded-md border border-line">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-600 hover:bg-slate-50"
+        className="flex w-full items-center justify-between px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-2 hover:bg-surface-2"
       >
         <span className="inline-flex items-center gap-1.5">
           {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
           The routes that were not chosen ({assessment.alternatives.length})
         </span>
-        <span className="font-normal normal-case text-slate-500">
+        <span className="font-normal normal-case text-ink-3">
           costed the same way, for comparison
         </span>
       </button>
       {open && (
-        <div className="border-t border-slate-200 p-3">
+        <div className="border-t border-line p-3">
           <Table head={['route', 'fit', 'cost per gram', 'first delivery', 'development', 'why not']}>
             {assessment.alternatives.map((alternative) => {
               const option = optionsByRoute.get(alternative.route);
@@ -646,7 +654,7 @@ function AlternativeRoutes({ assessment }: { assessment: Manufacturability }) {
                       : '—'}
                   </Cell>
                   <Cell>
-                    <ul className="space-y-1 text-xs leading-relaxed text-slate-600">
+                    <ul className="space-y-1 text-xs leading-relaxed text-ink-2">
                       {(option?.caveats ?? []).slice(0, 2).map((caveat, index) => (
                         <li key={index}>{caveat}</li>
                       ))}
@@ -665,35 +673,35 @@ function AlternativeRoutes({ assessment }: { assessment: Manufacturability }) {
 function AgentTrace({ assessment }: { assessment: Manufacturability }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-md border border-slate-200">
+    <div className="rounded-md border border-line">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-600 hover:bg-slate-50"
+        className="flex w-full items-center justify-between px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-2 hover:bg-surface-2"
       >
         <span className="inline-flex items-center gap-1.5">
           {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
           What the agent did ({assessment.trace.length} tool calls)
         </span>
-        <span className="font-normal normal-case text-slate-500">
+        <span className="font-normal normal-case text-ink-3">
           every figure above came from one of these
         </span>
       </button>
       {open && (
-        <div className="border-t border-slate-200">
+        <div className="border-t border-line">
           {assessment.trace.map((event, index) => (
             <div
               key={index}
-              className="flex gap-3 border-b border-slate-100 px-3 py-1.5 font-mono text-[11px] last:border-0"
+              className="flex gap-3 border-b border-line px-3 py-1.5 font-mono text-[11px] last:border-0"
             >
-              <span className="w-10 shrink-0 text-right text-slate-400">{event.t}s</span>
-              <span className="w-40 shrink-0 text-sky-800">{event.tool}</span>
-              <span className={`min-w-0 flex-1 ${event.ok ? 'text-slate-600' : 'text-rose-700'}`}>
+              <span className="w-10 shrink-0 text-right text-ink-3">{event.t}s</span>
+              <span className="w-40 shrink-0 text-accent">{event.tool}</span>
+              <span className={`min-w-0 flex-1 ${event.ok ? 'text-ink-2' : 'text-fail'}`}>
                 {event.summary}
               </span>
             </div>
           ))}
-          <p className="px-3 py-2 text-[11px] leading-relaxed text-slate-500">
+          <p className="px-3 py-2 text-[11px] leading-relaxed text-ink-3">
             The agent cannot report a number it did not obtain from a tool: the submission is
             rejected if it names a route it never costed.
           </p>
@@ -756,7 +764,16 @@ export function AssumptionsPanel({
               Reset
             </Button>
           )}
-          <Button tone={changed ? 'primary' : 'secondary'} disabled={disabled} onClick={onApply}>
+          <Button
+            tone={changed ? 'primary' : 'secondary'}
+            disabled={disabled || sourceMode() === 'demo'}
+            onClick={onApply}
+            title={
+              sourceMode() === 'demo'
+                ? 'the demo cannot recompute; clone the repository to change these'
+                : undefined
+            }
+          >
             Re-estimate
           </Button>
         </div>
@@ -765,7 +782,7 @@ export function AssumptionsPanel({
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 hover:underline"
+        className="mb-3 inline-flex items-center gap-1.5 text-xs font-medium text-ink-2 hover:underline"
       >
         {open ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
         {open ? 'Hide' : 'Show'} the {assumptions.length} factors
@@ -776,18 +793,18 @@ export function AssumptionsPanel({
           {Object.entries(grouped).map(([group, items]) =>
             items.length === 0 ? null : (
               <div key={group}>
-                <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-ink-3">
                   {group}
                 </h3>
                 <div className="space-y-2">
                   {items.map((assumption) => (
                     <div
                       key={assumption.key}
-                      className="grid grid-cols-1 gap-2 rounded-md border border-slate-200 p-2.5 sm:grid-cols-[minmax(0,1fr)_150px]"
+                      className="grid grid-cols-1 gap-2 rounded-md border border-line p-2.5 sm:grid-cols-[minmax(0,1fr)_150px]"
                     >
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <code className="font-mono text-xs text-slate-900">
+                          <code className="font-mono text-xs text-ink">
                             {assumption.key}
                           </code>
                           <Chip
@@ -812,10 +829,10 @@ export function AssumptionsPanel({
                             <Chip tone="accent">changed</Chip>
                           )}
                         </div>
-                        <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                        <p className="mt-1 text-xs leading-relaxed text-ink-2">
                           {assumption.note}
                         </p>
-                        <p className="mt-0.5 font-mono text-[10.5px] text-slate-500">
+                        <p className="mt-0.5 font-mono text-[10.5px] text-ink-3">
                           {assumption.unit} · plausible {assumption.min}–{assumption.max} ·
                           default {assumption.default}
                         </p>

@@ -15,6 +15,8 @@ import {
   Square,
   Terminal,
 } from 'lucide-react';
+import { sourceMode } from '../api';
+import { DemoNotice } from './DemoBanner';
 import type {
   AssessedCandidate,
   EvaluationResults,
@@ -76,6 +78,7 @@ export function RunControls({
   const [error, setError] = useState<string | null>(null);
   const [showConsole, setShowConsole] = useState(false);
 
+  const demo = sourceMode() === 'demo';
   const running = status?.loop.running ?? false;
   const backend = status?.backend;
   const canGoLive = Boolean(backend?.api_key_set);
@@ -152,16 +155,16 @@ export function RunControls({
               <Button
                 tone="primary"
                 icon={<Play className="h-3.5 w-3.5" />}
-                disabled={busy}
+                disabled={busy || demo}
                 onClick={() => act(() => onRun({ mode, rounds, candidates }))}
-                hint="designs, docks and judges"
+                hint={demo ? 'not available in the demo' : 'designs, docks and judges'}
               >
                 Run loop
               </Button>
             )}
             <Button
               tone="secondary"
-              disabled={running || busy}
+              disabled={running || busy || demo}
               onClick={() => act(onEvaluate)}
               hint="scores them against 34 molecules we know the answer for"
             >
@@ -170,14 +173,15 @@ export function RunControls({
           </div>
         </div>
 
-        {mode === 'live' && !canGoLive && (
+        {demo && <DemoNotice action="Running the loop" />}
+        {!demo && mode === 'live' && !canGoLive && (
           <ErrorText>
             No <code>ANTHROPIC_API_KEY</code> is set, so the live designer cannot run. Put a key
             in <code>loop/.env</code>, or choose the offline demo mode — it uses docking results
             committed to this repository and needs nothing.
           </ErrorText>
         )}
-        {(mode === 'live' || mode === 'fresh') && !canDock && (
+        {!demo && (mode === 'live' || mode === 'fresh') && !canDock && (
           <ErrorText>
             AutoDock Vina or Open Babel was not found, so nothing can be docked for real. Run{' '}
             <code>python3 loop/doctor.py</code> for the exact fix, or use cached poses instead.
@@ -185,14 +189,14 @@ export function RunControls({
         )}
         {error && <ErrorText>{error}</ErrorText>}
 
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-ink-3">
           {evaluation && (
             <span>
               critics{' '}
               <button
                 type="button"
                 onClick={onOpenMethod}
-                className="font-mono text-slate-700 underline-offset-2 hover:underline"
+                className="font-mono text-ink-2 underline-offset-2 hover:underline"
                 title="see the breakdown, and the molecules they got wrong, on the Method screen"
               >
                 {evaluation.combined.correct}/{evaluation.combined.n} correct (
@@ -201,21 +205,21 @@ export function RunControls({
             </span>
           )}
           <span>
-            designer <span className="font-mono text-slate-700">{backend?.designer ?? '—'}</span>
+            designer <span className="font-mono text-ink-2">{backend?.designer ?? '—'}</span>
           </span>
           <span>
             docking{' '}
-            <span className="font-mono text-slate-700">
+            <span className="font-mono text-ink-2">
               {backend?.vina ? `AutoDock Vina · ${backend.dock_mode}` : 'not installed'}
             </span>
           </span>
           <span>
-            chemistry <span className="font-mono text-slate-700">{backend?.chemistry ?? '—'}</span>
+            chemistry <span className="font-mono text-ink-2">{backend?.chemistry ?? '—'}</span>
           </span>
           <button
             type="button"
             onClick={() => setShowConsole((value) => !value)}
-            className="inline-flex items-center gap-1 text-slate-600 underline-offset-2 hover:underline"
+            className="inline-flex items-center gap-1 text-ink-2 underline-offset-2 hover:underline"
           >
             <Terminal className="h-3 w-3" />
             {showConsole ? 'hide' : 'show'} console
@@ -223,7 +227,7 @@ export function RunControls({
         </div>
 
         {showConsole && (
-          <pre className="max-h-64 overflow-auto rounded-md bg-slate-900 p-3 font-mono text-[11px] leading-relaxed text-slate-200">
+          <pre className="max-h-64 overflow-auto rounded-md bg-ink p-3 font-mono text-[11px] leading-relaxed text-canvas">
             {status?.console?.trim() || 'nothing has run yet'}
           </pre>
         )}
@@ -311,7 +315,7 @@ export function DesignLoopView({
           </div>
 
           {improved && (
-            <div className="mt-4 rounded-md border border-emerald-300 bg-emerald-50/70 px-3 py-2 text-sm text-emerald-950">
+            <div className="mt-4 rounded-md border border-pass/40 bg-pass-soft px-3 py-2 text-sm text-ink">
               <strong className="font-semibold">
                 Manufacturable fraction {fraction(first)} → {fraction(last)} after critic feedback.
               </strong>{' '}
@@ -380,7 +384,7 @@ function RoundBlock({
           : 'Designed by the agent, against the critics’ feedback from the previous round.'
       }
       aside={
-        <span className="font-mono text-[11px] text-slate-500">
+        <span className="font-mono text-[11px] text-ink-3">
           {assessed.length ? `${madeCount}/${assessed.length} manufacturable` : round.status} ·{' '}
           {round.trace?.length ?? 0} tool calls
         </span>
@@ -388,12 +392,12 @@ function RoundBlock({
     >
       <div className="space-y-4">
         {mustFix.length > 0 && (
-          <div className="rounded-md border border-sky-300 bg-sky-50/70 px-3 py-2">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-sky-900">
+          <div className="rounded-md border border-accent/40 bg-accent-soft px-3 py-2">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-accent">
               <ArrowDownToLine className="h-3.5 w-3.5" />
               feedback in from the critics
             </div>
-            <p className="mt-1 text-xs text-sky-950">
+            <p className="mt-1 text-xs text-ink">
               {feedback.length} candidate{feedback.length === 1 ? '' : 's'} rejected as
               unmanufacturable. The designer was told to fix:
             </p>
@@ -408,12 +412,12 @@ function RoundBlock({
         )}
 
         {round.changes_made && !fromPool && (
-          <div className="rounded-md border border-emerald-300 bg-emerald-50/60 px-3 py-2">
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-900">
+          <div className="rounded-md border border-pass/40 bg-pass-soft px-3 py-2">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-pass">
               <CornerDownRight className="h-3.5 w-3.5" />
               what the designer changed
             </div>
-            <p className="mt-1 text-xs leading-relaxed text-emerald-950">{round.changes_made}</p>
+            <p className="mt-1 text-xs leading-relaxed text-ink">{round.changes_made}</p>
           </div>
         )}
 
@@ -429,7 +433,7 @@ function RoundBlock({
             ))}
           </Grid>
         ) : (
-          <p className="text-xs text-slate-500">designing…</p>
+          <p className="text-xs text-ink-3">designing…</p>
         )}
 
         {(round.trace?.length ?? 0) > 0 && <ToolTrace round={round} />}
@@ -442,32 +446,32 @@ function ToolTrace({ round }: { round: Round }) {
   const [open, setOpen] = useState(false);
   const trace = round.trace ?? [];
   return (
-    <div className="rounded-md border border-slate-200">
+    <div className="rounded-md border border-line">
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-600 hover:bg-slate-50"
+        className="flex w-full items-center justify-between px-3 py-2 text-left text-[11px] font-semibold uppercase tracking-wide text-ink-2 hover:bg-surface-2"
       >
         <span>
           Tool calls the agent chose to make ({trace.length})
         </span>
-        <span className="font-normal normal-case text-slate-500">{open ? 'hide' : 'show'}</span>
+        <span className="font-normal normal-case text-ink-3">{open ? 'hide' : 'show'}</span>
       </button>
       {open && (
-        <div className="max-h-72 overflow-auto border-t border-slate-200">
+        <div className="max-h-72 overflow-auto border-t border-line">
           {trace.map((event, index) => (
             <div
               key={index}
-              className="flex gap-3 border-b border-slate-100 px-3 py-1.5 font-mono text-[11px] last:border-0"
+              className="flex gap-3 border-b border-line px-3 py-1.5 font-mono text-[11px] last:border-0"
             >
-              <span className="w-10 shrink-0 text-right text-slate-400">{event.t}s</span>
-              <span className="w-44 shrink-0 text-sky-800">{event.tool}</span>
-              <span className="min-w-0 flex-1 truncate text-slate-500">
+              <span className="w-10 shrink-0 text-right text-ink-3">{event.t}s</span>
+              <span className="w-44 shrink-0 text-accent">{event.tool}</span>
+              <span className="min-w-0 flex-1 truncate text-ink-3">
                 {JSON.stringify(event.args).slice(0, 180)}
               </span>
             </div>
           ))}
-          <p className="px-3 py-2 text-[11px] leading-relaxed text-slate-500">
+          <p className="px-3 py-2 text-[11px] leading-relaxed text-ink-3">
             The agent decides which molecules to propose, which to spend a docking run on, where
             in the cavity to grow them and when it has enough. Only the tool surface and the
             budget are fixed.

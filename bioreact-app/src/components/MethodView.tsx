@@ -70,12 +70,12 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
             ],
           ].map(([title, body], index) => (
             <li key={title} className="flex gap-3">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-900 font-mono text-[11px] text-white">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ink font-mono text-[11px] text-canvas">
                 {index + 1}
               </span>
               <div>
-                <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
-                <p className="mt-0.5 text-xs leading-relaxed text-slate-600">{body}</p>
+                <h3 className="text-sm font-semibold text-ink">{title}</h3>
+                <p className="mt-0.5 text-xs leading-relaxed text-ink-2">{body}</p>
               </div>
             </li>
           ))}
@@ -86,7 +86,7 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
         title="The critics’ rubric"
         help={method.rubric_note}
         aside={
-          <code className="font-mono text-[11px] text-slate-500">loop/critics.py</code>
+          <code className="font-mono text-[11px] text-ink-3">loop/critics.py</code>
         }
       >
         <Table head={['criterion', 'flag above', 'fail above']}>
@@ -110,18 +110,18 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
       >
         <div className="space-y-3">
           {method.property_rule_sets.map((set) => (
-            <div key={set.key} className="rounded-md border border-slate-200 p-3">
+            <div key={set.key} className="rounded-md border border-line p-3">
               <div className="flex flex-wrap items-baseline gap-2">
-                <h3 className="text-sm font-semibold text-slate-900">{set.name}</h3>
-                <span className="text-[11px] text-slate-500">{set.citation}</span>
+                <h3 className="text-sm font-semibold text-ink">{set.name}</h3>
+                <span className="text-[11px] text-ink-3">{set.citation}</span>
                 <Chip tone="neutral">{set.what_for}</Chip>
               </div>
-              <ul className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
+              <ul className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-ink-2">
                 {set.rules.map((rule) => (
                   <li key={rule}>{rule}</li>
                 ))}
               </ul>
-              <p className="mt-1 text-[11px] text-slate-500">
+              <p className="mt-1 text-[11px] text-ink-3">
                 {set.allowed_violations === 0
                   ? 'no violations allowed'
                   : `up to ${set.allowed_violations} violation allowed`}
@@ -158,22 +158,22 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
         title="Production routes considered"
         help="A route is proposed only when the structure supports it. Biocatalysis needs a matching motif; fermentation needs a scaffold that is plausibly biosynthetic."
       >
-        <ul className="space-y-1.5 text-xs leading-relaxed text-slate-700">
+        <ul className="space-y-1.5 text-xs leading-relaxed text-ink-2">
           {Object.entries(method.routes).map(([key, label]) => (
             <li key={key}>
-              <code className="font-mono text-[11px] text-slate-500">{key}</code> — {label}
+              <code className="font-mono text-[11px] text-ink-3">{key}</code> — {label}
             </li>
           ))}
         </ul>
-        <h3 className="mt-4 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+        <h3 className="mt-4 text-[11px] font-semibold uppercase tracking-wide text-ink-3">
           Enzyme classes matched from substructure
         </h3>
         <Table head={['enzyme', 'replaces', 'why it is proposed']}>
           {method.enzyme_classes.map((enzyme) => (
             <tr key={enzyme.key} className="align-top">
               <Cell>{enzyme.enzyme}</Cell>
-              <Cell className="text-xs text-slate-600">{enzyme.replaces}</Cell>
-              <Cell className="text-xs text-slate-600">{enzyme.why}</Cell>
+              <Cell className="text-xs text-ink-2">{enzyme.replaces}</Cell>
+              <Cell className="text-xs text-ink-2">{enzyme.why}</Cell>
             </tr>
           ))}
         </Table>
@@ -190,8 +190,8 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
                 <code className="font-mono text-xs">{assumption.key}</code>
               </Cell>
               <Cell numeric>{assumption.value}</Cell>
-              <Cell className="text-xs text-slate-600">{assumption.unit}</Cell>
-              <Cell numeric className="text-slate-600">
+              <Cell className="text-xs text-ink-2">{assumption.unit}</Cell>
+              <Cell numeric className="text-ink-2">
                 {assumption.min}–{assumption.max}
               </Cell>
               <Cell>
@@ -207,7 +207,7 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
                   {assumption.provenance}
                 </Chip>
               </Cell>
-              <Cell className="min-w-[280px] text-xs leading-relaxed text-slate-600">
+              <Cell className="min-w-[280px] text-xs leading-relaxed text-ink-2">
                 {assumption.note}
               </Cell>
             </tr>
@@ -220,7 +220,7 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
           title="Published binders of this target"
           help="Retrieved from ChEMBL through its public API and used as design inspiration. Potency is as deposited; assays differ, so these are comparable only loosely."
           aside={
-            <span className="text-[11px] text-slate-500">
+            <span className="text-[11px] text-ink-3">
               {actives.from_cache
                 ? `from cache${actives.cached_at ? `, fetched ${actives.cached_at}` : ''}`
                 : 'fetched live'}
@@ -235,17 +235,17 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
                     href={`https://www.ebi.ac.uk/chembl/compound_report_card/${compound.chembl_id}/`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-slate-900 underline-offset-2 hover:underline"
+                    className="inline-flex items-center gap-1 text-ink underline-offset-2 hover:underline"
                   >
                     {compound.name}
-                    <ExternalLink className="h-3 w-3 text-slate-400" />
+                    <ExternalLink className="h-3 w-3 text-ink-3" />
                   </a>
                 </Cell>
-                <Cell className="text-xs text-slate-600">{compound.assay_type}</Cell>
+                <Cell className="text-xs text-ink-2">{compound.assay_type}</Cell>
                 <Cell numeric>{formatPotency(compound.potency_nm)}</Cell>
                 <Cell numeric>{compound.pchembl}</Cell>
                 <Cell>
-                  <code className="break-all font-mono text-[10.5px] text-slate-500">
+                  <code className="break-all font-mono text-[10.5px] text-ink-3">
                     {compound.smiles}
                   </code>
                 </Cell>
@@ -265,8 +265,8 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
       >
         <ul className="space-y-2">
           {method.limitations.map((limitation, index) => (
-            <li key={index} className="flex gap-2 text-xs leading-relaxed text-slate-700">
-              <span className="text-slate-400">—</span>
+            <li key={index} className="flex gap-2 text-xs leading-relaxed text-ink-2">
+              <span className="text-ink-3">—</span>
               <span>{limitation}</span>
             </li>
           ))}
@@ -276,8 +276,8 @@ export function MethodView({ method }: { method: MethodDocument | null }) {
       <Panel title="Software and data" tone="quiet">
         <ul className="space-y-1.5">
           {method.attribution.map((line, index) => (
-            <li key={index} className="flex gap-2 text-xs leading-relaxed text-slate-700">
-              <BookOpen className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
+            <li key={index} className="flex gap-2 text-xs leading-relaxed text-ink-2">
+              <BookOpen className="mt-0.5 h-3.5 w-3.5 shrink-0 text-ink-3" />
               <span>{line}</span>
             </li>
           ))}
@@ -321,34 +321,34 @@ function EvaluationPanel({ evaluation }: { evaluation: EvaluationResults }) {
       title="How often are the critics right?"
       help="Measured against molecules whose makeability is known from how they are actually produced. Press “Check the critics” on the design loop screen to reproduce this."
       aside={
-        <span className="font-mono text-xs text-slate-700">
+        <span className="font-mono text-xs text-ink-2">
           {combined.correct}/{combined.n} = {(combined.accuracy * 100).toFixed(0)}% overall
         </span>
       }
     >
       <div className="space-y-4">
         {tiers.map(({ key, tier, label, what, caveat }) => (
-          <div key={key} className="rounded-md border border-slate-200 p-3">
+          <div key={key} className="rounded-md border border-line p-3">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h3 className="text-sm font-semibold text-slate-900">{label}</h3>
-              <span className="font-mono text-sm tabular-nums text-slate-900">
+              <h3 className="text-sm font-semibold text-ink">{label}</h3>
+              <span className="font-mono text-sm tabular-nums text-ink">
                 {tier.tp + tier.tn}/{tier.n} = {(tier.accuracy * 100).toFixed(0)}%
               </span>
             </div>
-            <p className="mt-0.5 text-xs leading-relaxed text-slate-600">{what}</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-ink-2">{what}</p>
             <dl className="mt-2 grid grid-cols-4 gap-2 font-mono text-[11px]">
               <Pair label="correct pass" value={String(tier.tp)} />
               <Pair label="correct reject" value={String(tier.tn)} />
               <Pair label="false pass" value={String(tier.fp)} />
               <Pair label="false reject" value={String(tier.fn)} />
             </dl>
-            <p className="mt-2 text-[11px] leading-relaxed text-slate-500">{caveat}</p>
+            <p className="mt-2 text-[11px] leading-relaxed text-ink-3">{caveat}</p>
             {tier.misses.length > 0 && (
-              <div className="mt-2 border-t border-slate-100 pt-2">
-                <h4 className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <div className="mt-2 border-t border-line pt-2">
+                <h4 className="text-[11px] font-semibold uppercase tracking-wide text-ink-3">
                   What it got wrong, by name
                 </h4>
-                <ul className="mt-1 space-y-1 text-xs leading-relaxed text-slate-700">
+                <ul className="mt-1 space-y-1 text-xs leading-relaxed text-ink-2">
                   {tier.misses.map((miss) => (
                     <li key={miss.name}>
                       <span className="font-medium">{miss.name}</span> — the critics said{' '}
@@ -385,10 +385,10 @@ function formatPotency(nanomolar: number): string {
 function Pair({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+      <dt className="text-[10px] font-semibold uppercase tracking-wide text-ink-3">
         {label}
       </dt>
-      <dd className="text-slate-900">{value}</dd>
+      <dd className="text-ink">{value}</dd>
     </div>
   );
 }

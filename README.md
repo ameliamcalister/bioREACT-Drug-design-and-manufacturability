@@ -18,6 +18,20 @@ It is one application with two halves that talk to each other:
 The output is a side-by-side table that answers the question a project
 meeting actually asks: **which of these should we make first?**
 
+### [Open the demo →](https://ameliamcalister.github.io/bioREACT-Drug-design-and-manufacturability/)
+
+The whole interface, running against a real recorded run: the molecules,
+the critic rejections, the docked poses in 3D, the costs. Nothing to
+install. Starting a *new* run needs the tools below, and the demo says so
+where those buttons are.
+
+| | |
+|---|---|
+| ![The design loop](docs/screenshots/design-loop.jpg) | ![The binding site](docs/screenshots/binding-site.jpg) |
+| **Design loop** — each round, what the critics sent back and what the designer changed | **Binding site** — the docked pose with the cavity space it leaves empty, in magenta |
+| ![Manufacturability](docs/screenshots/manufacturability.jpg) | ![The decision](docs/screenshots/decide.jpg) |
+| **Manufacturability** — route, cost per gram and time, itemised | **Decide** — ranked, with an explicit call and the evidence behind it |
+
 ```
             ┌──────────────────────────────────────────┐
             │                                          │
@@ -126,6 +140,10 @@ citations, every cost assumption with its provenance, how the cavity
 analysis works, how accurate the critics are, and a plain list of what the
 tool cannot do.
 
+The interface follows your system's light or dark setting, and the control
+in the top right overrides it either way. Structures are redrawn in a
+palette that matches.
+
 ---
 
 ## What a run produces
@@ -218,6 +236,9 @@ reports.
 | `loop/serve.py` | the JSON API |
 | `loop/tests/` | 51 tests: `cd loop && python3 -m pytest` |
 | `bioreact-app/` | the interface (React, Vite, Express) |
+| `bioreact-app/src/index.css` | the design tokens — both themes come from here |
+| `loop/build_demo.py` | freezes a run into the static demo |
+| `.github/workflows/` | the test run, and the Pages deploy |
 
 ---
 
@@ -269,3 +290,25 @@ accessibility: the Ertl & Schuffenhauer SA score shipped with RDKit.
 Structural alerts: PAINS (Baell & Holloway) and the Brenk set, from RDKit's
 filter catalogue. Published activity and analogue data: ChEMBL (EMBL-EBI),
 CC-BY-SA 3.0, through the public REST API.
+
+---
+
+## Publishing the demo
+
+The demo page is the same interface with a recorded run bundled into it,
+so it needs no server:
+
+```bash
+cd bioreact-app && npm run demo
+```
+
+That freezes the current run (`loop/build_demo.py`) into
+`bioreact-app/public/demo/` and builds the static site into
+`bioreact-app/dist/`. Check it locally with `npm run preview`.
+
+Pushing to `main` deploys it through `.github/workflows/pages.yml`. The
+one thing that cannot be done from here is switching Pages on: in the
+repository, **Settings → Pages → Source: GitHub Actions**, once.
+
+To publish a different run, run the loop and the agents, then `npm run
+demo` again and commit the result.

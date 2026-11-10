@@ -1,24 +1,218 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/**
+ * The design system, in one place.
+ *
+ * Every colour in the interface comes from a semantic token below —
+ * surface, line, ink, accent, and the three verdict colours — so a
+ * component never names a literal colour and both themes come free.
+ *
+ * Tailwind utilities resolve through the `@theme` block: `bg-surface`,
+ * `text-ink-2`, `border-line` and so on map onto the custom properties,
+ * which are redefined for dark. Three states have to work, because the
+ * viewer's theme has three: an explicit light choice, an explicit dark
+ * choice, and the system default where neither attribute is set.
+ */
 
 @theme {
-  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  --color-canvas: var(--c-canvas);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-surface-3: var(--c-surface-3);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+  --color-ink: var(--c-ink);
+  --color-ink-2: var(--c-ink-2);
+  --color-ink-3: var(--c-ink-3);
+  --color-accent: var(--c-accent);
+  --color-accent-ink: var(--c-accent-ink);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-pass: var(--c-pass);
+  --color-pass-soft: var(--c-pass-soft);
+  --color-flag: var(--c-flag);
+  --color-flag-soft: var(--c-flag-soft);
+  --color-fail: var(--c-fail);
+  --color-fail-soft: var(--c-fail-soft);
+  --color-viewer-bg: var(--c-viewer-bg);
+
+  --radius-panel: 7px;
+  --radius-control: 5px;
+}
+
+/* Light — the default, and the complete set. Every token is defined here
+   first; the dark blocks only redefine. */
+:root {
+  --c-canvas: #f6f7f9;
+  --c-surface: #ffffff;
+  --c-surface-2: #f1f4f8;
+  --c-surface-3: #e8edf4;
+  --c-line: #e2e7ee;
+  --c-line-strong: #c9d2de;
+  --c-ink: #0f141b;
+  --c-ink-2: #58626f;
+  --c-ink-3: #8691a0;
+  --c-accent: #1b5fd0;
+  --c-accent-ink: #ffffff;
+  --c-accent-soft: #eaf1fd;
+  --c-pass: #116b43;
+  --c-pass-soft: #e6f5ed;
+  --c-flag: #7f5307;
+  --c-flag-soft: #fdf2e0;
+  --c-fail: #ab1f34;
+  --c-fail-soft: #fdebee;
+  --c-viewer-bg: #0b1018;
+
+  --shadow-panel: 0 1px 2px rgb(15 20 27 / 0.04);
+  --shadow-raised: 0 4px 14px -4px rgb(15 20 27 / 0.12);
+  color-scheme: light;
+}
+
+/* Dark, for viewers on the system default. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --c-canvas: #0b0e13;
+    --c-surface: #131920;
+    --c-surface-2: #1a212a;
+    --c-surface-3: #222b36;
+    --c-line: #242e3a;
+    --c-line-strong: #36424f;
+    --c-ink: #e7edf4;
+    --c-ink-2: #9aa7b6;
+    --c-ink-3: #6d7a8a;
+    --c-accent: #6aa5ff;
+    --c-accent-ink: #06101f;
+    --c-accent-soft: #14233a;
+    --c-pass: #5ed39a;
+    --c-pass-soft: #11271d;
+    --c-flag: #e7b864;
+    --c-flag-soft: #2a2113;
+    --c-fail: #ff8a9b;
+    --c-fail-soft: #2c1418;
+    --c-viewer-bg: #080c12;
+
+    --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.5);
+    --shadow-raised: 0 6px 20px -6px rgb(0 0 0 / 0.7);
+    color-scheme: dark;
+  }
+}
+
+/* Dark, chosen explicitly — the same values, so the toggle wins either way. */
+:root[data-theme='dark'] {
+  --c-canvas: #0b0e13;
+  --c-surface: #131920;
+  --c-surface-2: #1a212a;
+  --c-surface-3: #222b36;
+  --c-line: #242e3a;
+  --c-line-strong: #36424f;
+  --c-ink: #e7edf4;
+  --c-ink-2: #9aa7b6;
+  --c-ink-3: #6d7a8a;
+  --c-accent: #6aa5ff;
+  --c-accent-ink: #06101f;
+  --c-accent-soft: #14233a;
+  --c-pass: #5ed39a;
+  --c-pass-soft: #11271d;
+  --c-flag: #e7b864;
+  --c-flag-soft: #2a2113;
+  --c-fail: #ff8a9b;
+  --c-fail-soft: #2c1418;
+  --c-viewer-bg: #080c12;
+
+  --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-raised: 0 6px 20px -6px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
 }
 
 @layer base {
-  body {
-    font-family: var(--font-sans);
-    background-color: #F8FAFC;
-    color: #0F172A;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  html {
+    -webkit-text-size-adjust: 100%;
   }
 
-  code, pre, .font-mono {
+  body {
+    background-color: var(--c-canvas);
+    color: var(--c-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+  }
+
+  code,
+  pre,
+  .font-mono {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
+
+  /* Keyboard focus is visible everywhere, and never on a mouse click. */
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: var(--c-accent);
+    color: var(--c-accent-ink);
+  }
+
+  /* Scrollbars inside panels, kept quiet. */
+  * {
+    scrollbar-color: var(--c-line-strong) transparent;
+    scrollbar-width: thin;
+  }
 }
 
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+@layer components {
+  /* A molecule drawn by RDKit sits on its own small stage: light always,
+     because the structure is drawn with a light-background palette, except
+     where the server was asked for the dark one. */
+  .structure-stage {
+    background: var(--c-surface-2);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-control);
+  }
+
+  .panel-shadow {
+    box-shadow: var(--shadow-panel);
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The thin progress stripe used while a job runs. */
+  .running-stripe {
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--c-accent) 50%,
+      transparent 100%
+    );
+    background-size: 220% 100%;
+    animation: sweep 1.6s linear infinite;
+  }
+}
+
+@keyframes sweep {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

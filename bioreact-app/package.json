@@ -8,7 +8,9 @@
     "start": "NODE_ENV=production node --experimental-strip-types server.ts",
     "build": "vite build",
     "lint": "tsc --noEmit",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "preview": "vite preview --port 4173",
+    "demo": "python3 ../loop/build_demo.py && vite build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
